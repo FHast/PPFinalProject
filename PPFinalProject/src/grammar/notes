@@ -1,0 +1,68 @@
+data types
+    integer     0
+    boolean     false
+    Strings     ""
+    arrays      []
+    pointer     null
+primitive value denotation
+equality (content based)
+nested scopes
+assignments
+if
+while / repeat
+concurrency (fork/join)
+functions
+exception handling (undefined/throwable)
+
+
+
+
+program "name" 
+	defines { }
+
+let "name" be "type" assign "value" 
+
+let array "name" be "type" assign ["value","value"]
+let array "name" be "type" sized "int"
+
+let string "name" assign "..."
+
+"name" assign "value"
+
+pointer "name" to "var"
+
+if () 
+    then do { }
+    else do { }
+while ()
+    do { }
+
+fork "name" { }
+join "name"
+
+not "bool"
+"bool" and "bool"
+"bool" or "bool"
+
+"num" plus "num"
+"num" minus "num"
+"num" times "num"
+
+"sth" equals "sth"
+"sth" smaller "sth"
+"sth" greater "sth"
+
+function "name" uses (type "name", type "name") returns "type" catchable 
+    defines { }
+
+fail
+
+do { } (catch { }) (finally { })
+
+lock "num"
+unlock "num"
+
+comment "text"
+
+call "name" with ()
+
