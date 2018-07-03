@@ -26,8 +26,15 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlockStat(@NotNull SycoraxParser.BlockStatContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code arrayDef}
+	 * labeled alternative in {@link SycoraxParser#varDef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayDef(@NotNull SycoraxParser.ArrayDefContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code boolArrType}
-	 * labeled alternative in {@link SycoraxParser#type}.
+	 * labeled alternative in {@link SycoraxParser#arrayType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -38,6 +45,12 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitProgram(@NotNull SycoraxParser.ProgramContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SycoraxParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitType(@NotNull SycoraxParser.TypeContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code parExpr}
 	 * labeled alternative in {@link SycoraxParser#expr}.
@@ -87,7 +100,7 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	T visitDefs(@NotNull SycoraxParser.DefsContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code charType}
-	 * labeled alternative in {@link SycoraxParser#type}.
+	 * labeled alternative in {@link SycoraxParser#basicType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -135,13 +148,6 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNumExpr(@NotNull SycoraxParser.NumExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code indexExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIndexExpr(@NotNull SycoraxParser.IndexExprContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code notExpr}
 	 * labeled alternative in {@link SycoraxParser#expr}.
 	 * @param ctx the parse tree
@@ -156,17 +162,11 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	T visitFunDef(@NotNull SycoraxParser.FunDefContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code intArrType}
-	 * labeled alternative in {@link SycoraxParser#type}.
+	 * labeled alternative in {@link SycoraxParser#arrayType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitIntArrType(@NotNull SycoraxParser.IntArrTypeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SycoraxParser#varDef}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarDef(@NotNull SycoraxParser.VarDefContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code printStat}
 	 * labeled alternative in {@link SycoraxParser#stat}.
@@ -189,7 +189,7 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	T visitIntOp(@NotNull SycoraxParser.IntOpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code boolType}
-	 * labeled alternative in {@link SycoraxParser#type}.
+	 * labeled alternative in {@link SycoraxParser#basicType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -201,6 +201,13 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLockStat(@NotNull SycoraxParser.LockStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code basicDef}
+	 * labeled alternative in {@link SycoraxParser#varDef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBasicDef(@NotNull SycoraxParser.BasicDefContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SycoraxParser#array}.
 	 * @param ctx the parse tree
@@ -215,7 +222,7 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	T visitArg(@NotNull SycoraxParser.ArgContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code stringType}
-	 * labeled alternative in {@link SycoraxParser#type}.
+	 * labeled alternative in {@link SycoraxParser#arrayType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -227,6 +234,13 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCallExpr(@NotNull SycoraxParser.CallExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code targetExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTargetExpr(@NotNull SycoraxParser.TargetExprContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SycoraxParser#boolOp}.
 	 * @param ctx the parse tree
@@ -249,7 +263,7 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	T visitPointerStat(@NotNull SycoraxParser.PointerStatContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code charArrType}
-	 * labeled alternative in {@link SycoraxParser#type}.
+	 * labeled alternative in {@link SycoraxParser#arrayType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -277,7 +291,7 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	T visitCallStat(@NotNull SycoraxParser.CallStatContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code intType}
-	 * labeled alternative in {@link SycoraxParser#type}.
+	 * labeled alternative in {@link SycoraxParser#basicType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -336,11 +350,4 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitUnlockStat(@NotNull SycoraxParser.UnlockStatContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code idExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIdExpr(@NotNull SycoraxParser.IdExprContext ctx);
 }

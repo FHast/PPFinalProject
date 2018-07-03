@@ -11,21 +11,12 @@ import symbTable.Data.Func;
 public class SymbolTable {
 	private final Stack<Scope> scopes;
 
-	private final Scope global;
-
-	private final Map<String, Func> functions;
-
-	private final Set<String> threads;
-
-	private final Set<String> locks;
+	private int maxSize;
 
 	public SymbolTable() {
 		this.scopes = new Stack<>();
-		this.functions = new HashMap<>();
-		this.threads = new HashSet<>();
-		this.locks = new HashSet<>();
 		openFunScope(null);
-		global = scopes.peek();
+		maxSize = 0;
 	}
 
 	public void openBlockScope(boolean catches) {
@@ -40,48 +31,26 @@ public class SymbolTable {
 		if (this.scopes.size() == 1) {
 			throw new IllegalStateException("Can't close outer scope");
 		}
+		if (currentSize() > this.maxSize) {
+			this.maxSize = currentSize();
+		}
 		this.scopes.pop();
 	}
 
-	public boolean put(String id, Data type, boolean global) {
-		if (global) {
-			if (get(id) != null) {
-				return false;
-			}
-			return this.global.put(id, type);
+	public int getMaxSize() {
+		return this.maxSize;
+	}
+
+	private int currentSize() {
+		int size = 0;
+		for (Scope s : scopes) {
+			size += s.size();
 		}
-		if (!this.global.contains(id)) {
-			return this.scopes.peek().put(id, type);
-		}
-		return false;
+		return size;
 	}
 
-	public boolean putFunction(String id, Func fun) {
-		if (functions.containsKey(id)) {
-			return false;
-		}
-		functions.put(id, fun);
-		return true;
-	}
-
-	public boolean putThread(String id) {
-		return threads.add(id);
-	}
-
-	public boolean removeThread(String id) {
-		return threads.remove(id);
-	}
-
-	public boolean putLock(String id) {
-		return locks.add(id);
-	}
-
-	public boolean removeLock(String id) {
-		return locks.remove(id);
-	}
-
-	public boolean isGlobalScope() {
-		return scopes.size() == 1;
+	public boolean put(String id, Data type) {
+		return this.scopes.peek().put(id, type);
 	}
 
 	public boolean isMissingCatchable() {
@@ -100,10 +69,6 @@ public class SymbolTable {
 			}
 		}
 		return null;
-	}
-
-	public Func getFunction(String id) {
-		return functions.get(id);
 	}
 
 	public boolean setFails() {
@@ -140,14 +105,6 @@ public class SymbolTable {
 			}
 		}
 		return result;
-	}
-
-	public Func function(String id) {
-		if (functions.containsKey(id)) {
-			return functions.get(id);
-		} else {
-			return null;
-		}
 	}
 
 	public int offset(String id) {

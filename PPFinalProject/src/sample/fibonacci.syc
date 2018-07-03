@@ -51,7 +51,7 @@ defines {
 		return account
 	}
 	
-	function arrays uses (booleans sized 10 s, integers sized 10 in) returns integers sized 10
+	function arrays uses (booleans s, integers in) returns integers
 	defines {
 		let data be integers sized 10
 		do {

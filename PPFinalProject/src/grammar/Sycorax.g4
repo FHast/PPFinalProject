@@ -13,7 +13,8 @@ defs
 	;
 	
 varDef
-	: LET GLOBAL? ID BE type (ASSIGN expr)?
+	: LET GLOBAL? ID BE basicType (ASSIGN expr)?				#basicDef
+	| LET GLOBAL? ID BE arrayType (SIZED expr | ASSIGN expr)	#arrayDef
 	;
 	
 funDef
@@ -55,9 +56,8 @@ expr
 	| expr compOp expr				#compOpExpr
 	| array							#arrayExpr
 	| SIZE expr						#sizeExpr
-	| ID LBRACK expr RBRACK			#indexExpr
 	| CALL ID (WITH args)?			#callExpr
-	| ID							#idExpr
+	| target						#targetExpr
 	| NEGATIVE? NUM					#numExpr
 	| CHAR							#charExpr
 	| STR							#strExpr
@@ -85,8 +85,8 @@ args
 	;
 	
 target
-	: ID							#idTarget
-	| ID LBRACK expr RBRACK			#arrayTarget
+	: GLOBAL? ID						#idTarget
+	| GLOBAL? ID LBRACK expr RBRACK		#arrayTarget
 	;
 
 block
@@ -96,11 +96,17 @@ block
 	;
 
 type
+	: basicType | arrayType;
+
+basicType
 	: INTEGER 						#intType
 	| BOOLEAN						#boolType
 	| CHARACTER						#charType
-	| INTEGERS SIZED NUM			#intArrType
-	| BOOLEANS SIZED NUM			#boolArrType
-	| CHARACTERS SIZED NUM			#charArrType
-	| STRING SIZED NUM				#stringType
 	;	
+	
+arrayType
+	: INTEGERS						#intArrType
+	| BOOLEANS						#boolArrType
+	| CHARACTERS					#charArrType
+	| STRING						#stringType
+	;

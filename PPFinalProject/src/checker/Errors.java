@@ -15,4 +15,5 @@ public abstract class Errors {
 	public static final String FUNCTION_NOT_DEFINED = "Function '%s' not defined.";
 	public static final String EXPECTED_NUM_ARGUMENTS = "Expected %s arguments but found %s.";
 	public static final String EXCEPTION_NOT_CAUGHT = "Exception is never caught.";
+	public static final String MISSING_ASSIGN_OR_SIZE = "Missing assignment or size.";
 }

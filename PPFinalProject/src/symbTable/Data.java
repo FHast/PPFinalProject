@@ -13,8 +13,6 @@ public abstract class Data {
 	/** Size in Bytes */
 	protected int size;
 
-	protected boolean global;
-
 	public Data(Type type) {
 		this(type, BASIC_SIZE);
 	}
@@ -22,14 +20,6 @@ public abstract class Data {
 	public Data(Type type, int size) {
 		this.type = type;
 		this.size = size;
-	}
-
-	public boolean global() {
-		return this.global;
-	}
-
-	public void setGlobal() {
-		this.global = true;
 	}
 
 	public Type type() {
@@ -47,7 +37,7 @@ public abstract class Data {
 	}
 
 	public enum Type {
-		INTEGER, BOOLEAN, CHARACTER, ARRAY, FUNCTION, POINTER;
+		INTEGER, BOOLEAN, CHARACTER, ARRAY, FUNCTION, POINTER, LOCK;
 	}
 
 	static public class Int extends Data {
@@ -57,7 +47,7 @@ public abstract class Data {
 
 		@Override
 		public String toString() {
-			return "Integer";
+			return "int";
 		}
 	}
 
@@ -88,12 +78,12 @@ public abstract class Data {
 		private String name;
 		private static int idcount = 0;
 
-		public Arr(Data elem, int size) {
-			this(elem, size, "Array" + idcount++);
+		public Arr(Data elem) {
+			this(elem, "Array" + idcount++);
 		}
 
-		public Arr(Data elem, int size, String id) {
-			super(Type.ARRAY, (size + 1) * BASIC_SIZE);
+		public Arr(Data elem, String id) {
+			super(Type.ARRAY, 0);
 			this.elemData = elem;
 			this.name = id;
 		}
@@ -119,7 +109,8 @@ public abstract class Data {
 				return false;
 			} else {
 				Arr other = (Arr) obj;
-				return this.elem().equals(other.elem()) && this.size == other.size;
+				boolean flag = true;
+				return this.elem().equals(other.elem()) && flag;
 			}
 		}
 	}
@@ -202,6 +193,12 @@ public abstract class Data {
 			} else {
 				return this.target.equals(((Data) obj));
 			}
+		}
+	}
+	
+	static public class Lock extends Data {
+		public Lock() {
+			super(Type.LOCK);
 		}
 	}
 }
