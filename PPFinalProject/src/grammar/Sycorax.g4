@@ -9,63 +9,71 @@ program
 	;
 	
 defs
-	: (funDef | varDef | comment)*
+	: (funDef | varDef)*
 	;
 	
 varDef
-	: LET ID BE basicType (ASSIGN expr)?		#basicDef
-	| LET ID BE arrayType 
-	  (ASSIGN array | SIZED NUM)				#arrayDef
-	| LET ID BE STRING (ASSIGN STR)?			#stringDef
+	: LET GLOBAL? ID BE type (ASSIGN expr)?
 	;
 	
 funDef
 	: FUNCTION ID 
-	  (USES LPAR (type ID (COMMA type ID)*))? 
+	  (USES LPAR (arg (COMMA arg)*) RPAR)? 
 	  (RETURNS type)? 
 	  CATCHABLE?
 	  DEFINES LBRACE stat* RBRACE
 	;
 	
+arg
+	: type ID
+	;
+	
 stat
 	: block							#blockStat
 	| varDef						#vardefStat
-	| comment						#commentStat
 	| FAIL							#failStat
 	| FORK ID block					#forkStat
 	| JOIN ID						#joinStat
-	| LOCK NUM						#lockStat
-	| UNLOCK NUM					#unlockStat
-	| RETURN expr					#returnStat
+	| LOCK ID						#lockStat
+	| UNLOCK ID						#unlockStat
+	| RETURN expr?					#returnStat
 	| target ASSIGN expr			#assignStat
-	| POINTER ID TO ID				#pointerStat
+	| POINTER ID TO target			#pointerStat
 	| IF LPAR expr RPAR 
 	  THEN block
 	  (ELSE block)?					#ifstat
 	| WHILE LPAR expr RPAR
 	  block							#whileStat
 	| CALL ID (WITH args)?			#callStat
+	| PRINT expr					#printStat
 	;
 	
 expr
-	: ID							#idExpr
-	| NUM							#numExpr
+	: LPAR expr RPAR				#parExpr
+	| expr boolOp expr				#boolOpExpr
+	| expr intOp expr				#intOpExpr
+	| expr compOp expr				#compOpExpr
+	| array							#arrayExpr
+	| SIZE expr						#sizeExpr
+	| ID LBRACK expr RBRACK			#indexExpr
+	| CALL ID (WITH args)?			#callExpr
+	| ID							#idExpr
+	| NEGATIVE? NUM					#numExpr
+	| CHAR							#charExpr
 	| STR							#strExpr
 	| TRUE							#trueExpr
 	| FALSE							#falseExpr
 	| NOT expr						#notExpr
-	| NEGATIVE NUM					#negExpr
-	| expr AND expr					#andExpr
-	| expr OR expr					#orExpr
-	| expr PLUS expr				#plusExpr
-	| expr MINUS expr				#minusExpr
-	| expr TIMES expr				#timesExpr
-	| expr EQUALS expr				#equalsExpr
-	| expr SMALLER expr				#smallerExpr
-	| expr GREATER expr				#greaterExpr
-	| array							#arrayExpr
-	| ID LBRACK expr RBRACK			#indexExpr
-	| CALL ID (WITH args)?			#callExpr
+	;
+	
+boolOp
+	: AND | OR
+	;
+intOp
+	: PLUS | MINUS | TIMES
+	;
+compOp
+	: EQUALS | SMALLER | GREATER
 	;
 	
 array
@@ -73,7 +81,7 @@ array
 	;
 	
 args
-	: LPAR (expr (COMMA expr)*)
+	: LPAR (expr (COMMA expr)*) RPAR
 	;
 	
 target
@@ -81,26 +89,18 @@ target
 	| ID LBRACK expr RBRACK			#arrayTarget
 	;
 
-comment
-	: COMMENT .*? '\n'
-	;
-
 block
 	: DO LBRACE stat* RBRACE 
 	  (CATCH LBRACE stat* RBRACE)?
 	  (FINALLY LBRACE stat* RBRACE)?	
 	;
-	
-basicType
-	: INTEGER 						#intType
-	| BOOLEAN						#boolType
-	;
-
-arrayType
-	: INTEGERS 						#intArrType
-	| BOOLEANS						#boolArrType
-	;
 
 type
-	: basicType | arrayType | STRING
+	: INTEGER 						#intType
+	| BOOLEAN						#boolType
+	| CHARACTER						#charType
+	| INTEGERS SIZED NUM			#intArrType
+	| BOOLEANS SIZED NUM			#boolArrType
+	| CHARACTERS SIZED NUM			#charArrType
+	| STRING SIZED NUM				#stringType
 	;	

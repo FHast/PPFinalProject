@@ -41,30 +41,6 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArrayDef(@NotNull SycoraxParser.ArrayDefContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArrayDef(@NotNull SycoraxParser.ArrayDefContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStringDef(@NotNull SycoraxParser.StringDefContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStringDef(@NotNull SycoraxParser.StringDefContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBoolArrType(@NotNull SycoraxParser.BoolArrTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -89,37 +65,13 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterType(@NotNull SycoraxParser.TypeContext ctx) { }
+	@Override public void enterParExpr(@NotNull SycoraxParser.ParExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitType(@NotNull SycoraxParser.TypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMinusExpr(@NotNull SycoraxParser.MinusExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMinusExpr(@NotNull SycoraxParser.MinusExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterGreaterExpr(@NotNull SycoraxParser.GreaterExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitGreaterExpr(@NotNull SycoraxParser.GreaterExprContext ctx) { }
+	@Override public void exitParExpr(@NotNull SycoraxParser.ParExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -197,6 +149,18 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCharType(@NotNull SycoraxParser.CharTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCharType(@NotNull SycoraxParser.CharTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIdTarget(@NotNull SycoraxParser.IdTargetContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -204,6 +168,30 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIdTarget(@NotNull SycoraxParser.IdTargetContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCompOpExpr(@NotNull SycoraxParser.CompOpExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCompOpExpr(@NotNull SycoraxParser.CompOpExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolOpExpr(@NotNull SycoraxParser.BoolOpExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolOpExpr(@NotNull SycoraxParser.BoolOpExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -233,18 +221,6 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOrExpr(@NotNull SycoraxParser.OrExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitOrExpr(@NotNull SycoraxParser.OrExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterNumExpr(@NotNull SycoraxParser.NumExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -264,18 +240,6 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIndexExpr(@NotNull SycoraxParser.IndexExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCommentStat(@NotNull SycoraxParser.CommentStatContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCommentStat(@NotNull SycoraxParser.CommentStatContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -305,18 +269,6 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNegExpr(@NotNull SycoraxParser.NegExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNegExpr(@NotNull SycoraxParser.NegExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterIntArrType(@NotNull SycoraxParser.IntArrTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -329,13 +281,25 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEqualsExpr(@NotNull SycoraxParser.EqualsExprContext ctx) { }
+	@Override public void enterVarDef(@NotNull SycoraxParser.VarDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEqualsExpr(@NotNull SycoraxParser.EqualsExprContext ctx) { }
+	@Override public void exitVarDef(@NotNull SycoraxParser.VarDefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPrintStat(@NotNull SycoraxParser.PrintStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrintStat(@NotNull SycoraxParser.PrintStatContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -348,6 +312,18 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTrueExpr(@NotNull SycoraxParser.TrueExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIntOp(@NotNull SycoraxParser.IntOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIntOp(@NotNull SycoraxParser.IntOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -377,18 +353,6 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBasicDef(@NotNull SycoraxParser.BasicDefContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBasicDef(@NotNull SycoraxParser.BasicDefContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterArray(@NotNull SycoraxParser.ArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -401,13 +365,25 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSmallerExpr(@NotNull SycoraxParser.SmallerExprContext ctx) { }
+	@Override public void enterArg(@NotNull SycoraxParser.ArgContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSmallerExpr(@NotNull SycoraxParser.SmallerExprContext ctx) { }
+	@Override public void exitArg(@NotNull SycoraxParser.ArgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStringType(@NotNull SycoraxParser.StringTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStringType(@NotNull SycoraxParser.StringTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -425,6 +401,30 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBoolOp(@NotNull SycoraxParser.BoolOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolOp(@NotNull SycoraxParser.BoolOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCharExpr(@NotNull SycoraxParser.CharExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCharExpr(@NotNull SycoraxParser.CharExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPointerStat(@NotNull SycoraxParser.PointerStatContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -432,6 +432,30 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPointerStat(@NotNull SycoraxParser.PointerStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCharArrType(@NotNull SycoraxParser.CharArrTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCharArrType(@NotNull SycoraxParser.CharArrTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSizeExpr(@NotNull SycoraxParser.SizeExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSizeExpr(@NotNull SycoraxParser.SizeExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -497,25 +521,13 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPlusExpr(@NotNull SycoraxParser.PlusExprContext ctx) { }
+	@Override public void enterCompOp(@NotNull SycoraxParser.CompOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPlusExpr(@NotNull SycoraxParser.PlusExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTimesExpr(@NotNull SycoraxParser.TimesExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTimesExpr(@NotNull SycoraxParser.TimesExprContext ctx) { }
+	@Override public void exitCompOp(@NotNull SycoraxParser.CompOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -545,13 +557,13 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterComment(@NotNull SycoraxParser.CommentContext ctx) { }
+	@Override public void enterIntOpExpr(@NotNull SycoraxParser.IntOpExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitComment(@NotNull SycoraxParser.CommentContext ctx) { }
+	@Override public void exitIntOpExpr(@NotNull SycoraxParser.IntOpExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -588,18 +600,6 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIdExpr(@NotNull SycoraxParser.IdExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAndExpr(@NotNull SycoraxParser.AndExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAndExpr(@NotNull SycoraxParser.AndExprContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

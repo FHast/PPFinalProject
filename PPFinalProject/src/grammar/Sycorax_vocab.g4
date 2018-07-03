@@ -9,8 +9,10 @@ OR:			O R ;
 
 BOOLEAN:	B O O L E A N ;
 INTEGER: 	I N T E G E R ;
+CHARACTER:	C H A R A C T E R;
 BOOLEANS:	B O O L E A N S ;
 INTEGERS: 	I N T E G E R S ;
+CHARACTERS:	C H A R A C T E R S;
 
 IF:			I F ;
 THEN:		T H E N ;
@@ -57,10 +59,13 @@ EQUALS:		E Q U A L S;
 GREATER:	G R E A T E R;
 SMALLER:	S M A L L E R;
 
-COMMENT:	C O M M E N T;
+GLOBAL:		G L O B A L;
+SIZE:		S I Z E;
+PRINT:		P R I N T;
 
 COMMA:  	',';
 DQUOTE: 	'"';
+SQUOTE:		'\'';
 LBRACE: 	'{';
 RBRACE: 	'}';
 LPAR:   	'(';
@@ -73,11 +78,13 @@ NEGATIVE:	'-';
 ID: LETTER (LETTER | DIGIT)*;
 NUM: DIGIT (DIGIT)*;
 STR: DQUOTE .*? DQUOTE;
+CHAR: SQUOTE .? SQUOTE;
 
 fragment LETTER: [a-zA-Z];
 fragment DIGIT: [0-9];
 
 // Skipped token types
+COMMENT: C O M M E N T .*? '\n' -> skip;
 WS: [ \t\r\n]+ -> skip;
 
 fragment A: [aA];

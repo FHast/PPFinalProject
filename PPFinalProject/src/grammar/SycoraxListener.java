@@ -33,38 +33,14 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitBlockStat(@NotNull SycoraxParser.BlockStatContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code arrayDef}
-	 * labeled alternative in {@link SycoraxParser#varDef}.
-	 * @param ctx the parse tree
-	 */
-	void enterArrayDef(@NotNull SycoraxParser.ArrayDefContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code arrayDef}
-	 * labeled alternative in {@link SycoraxParser#varDef}.
-	 * @param ctx the parse tree
-	 */
-	void exitArrayDef(@NotNull SycoraxParser.ArrayDefContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code stringDef}
-	 * labeled alternative in {@link SycoraxParser#varDef}.
-	 * @param ctx the parse tree
-	 */
-	void enterStringDef(@NotNull SycoraxParser.StringDefContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code stringDef}
-	 * labeled alternative in {@link SycoraxParser#varDef}.
-	 * @param ctx the parse tree
-	 */
-	void exitStringDef(@NotNull SycoraxParser.StringDefContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code boolArrType}
-	 * labeled alternative in {@link SycoraxParser#arrayType}.
+	 * labeled alternative in {@link SycoraxParser#type}.
 	 * @param ctx the parse tree
 	 */
 	void enterBoolArrType(@NotNull SycoraxParser.BoolArrTypeContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code boolArrType}
-	 * labeled alternative in {@link SycoraxParser#arrayType}.
+	 * labeled alternative in {@link SycoraxParser#type}.
 	 * @param ctx the parse tree
 	 */
 	void exitBoolArrType(@NotNull SycoraxParser.BoolArrTypeContext ctx);
@@ -79,39 +55,17 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitProgram(@NotNull SycoraxParser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SycoraxParser#type}.
-	 * @param ctx the parse tree
-	 */
-	void enterType(@NotNull SycoraxParser.TypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SycoraxParser#type}.
-	 * @param ctx the parse tree
-	 */
-	void exitType(@NotNull SycoraxParser.TypeContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code minusExpr}
+	 * Enter a parse tree produced by the {@code parExpr}
 	 * labeled alternative in {@link SycoraxParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterMinusExpr(@NotNull SycoraxParser.MinusExprContext ctx);
+	void enterParExpr(@NotNull SycoraxParser.ParExprContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code minusExpr}
+	 * Exit a parse tree produced by the {@code parExpr}
 	 * labeled alternative in {@link SycoraxParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitMinusExpr(@NotNull SycoraxParser.MinusExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code greaterExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterGreaterExpr(@NotNull SycoraxParser.GreaterExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code greaterExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitGreaterExpr(@NotNull SycoraxParser.GreaterExprContext ctx);
+	void exitParExpr(@NotNull SycoraxParser.ParExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code arrayTarget}
 	 * labeled alternative in {@link SycoraxParser#target}.
@@ -181,6 +135,18 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitDefs(@NotNull SycoraxParser.DefsContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code charType}
+	 * labeled alternative in {@link SycoraxParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterCharType(@NotNull SycoraxParser.CharTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code charType}
+	 * labeled alternative in {@link SycoraxParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitCharType(@NotNull SycoraxParser.CharTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code idTarget}
 	 * labeled alternative in {@link SycoraxParser#target}.
 	 * @param ctx the parse tree
@@ -192,6 +158,30 @@ public interface SycoraxListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIdTarget(@NotNull SycoraxParser.IdTargetContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code compOpExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterCompOpExpr(@NotNull SycoraxParser.CompOpExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code compOpExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitCompOpExpr(@NotNull SycoraxParser.CompOpExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code boolOpExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolOpExpr(@NotNull SycoraxParser.BoolOpExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code boolOpExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolOpExpr(@NotNull SycoraxParser.BoolOpExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code failStat}
 	 * labeled alternative in {@link SycoraxParser#stat}.
@@ -217,18 +207,6 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitForkStat(@NotNull SycoraxParser.ForkStatContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code orExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterOrExpr(@NotNull SycoraxParser.OrExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code orExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitOrExpr(@NotNull SycoraxParser.OrExprContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code numExpr}
 	 * labeled alternative in {@link SycoraxParser#expr}.
 	 * @param ctx the parse tree
@@ -253,18 +231,6 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitIndexExpr(@NotNull SycoraxParser.IndexExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code commentStat}
-	 * labeled alternative in {@link SycoraxParser#stat}.
-	 * @param ctx the parse tree
-	 */
-	void enterCommentStat(@NotNull SycoraxParser.CommentStatContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code commentStat}
-	 * labeled alternative in {@link SycoraxParser#stat}.
-	 * @param ctx the parse tree
-	 */
-	void exitCommentStat(@NotNull SycoraxParser.CommentStatContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code notExpr}
 	 * labeled alternative in {@link SycoraxParser#expr}.
 	 * @param ctx the parse tree
@@ -287,41 +253,39 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitFunDef(@NotNull SycoraxParser.FunDefContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code negExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterNegExpr(@NotNull SycoraxParser.NegExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code negExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitNegExpr(@NotNull SycoraxParser.NegExprContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code intArrType}
-	 * labeled alternative in {@link SycoraxParser#arrayType}.
+	 * labeled alternative in {@link SycoraxParser#type}.
 	 * @param ctx the parse tree
 	 */
 	void enterIntArrType(@NotNull SycoraxParser.IntArrTypeContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code intArrType}
-	 * labeled alternative in {@link SycoraxParser#arrayType}.
+	 * labeled alternative in {@link SycoraxParser#type}.
 	 * @param ctx the parse tree
 	 */
 	void exitIntArrType(@NotNull SycoraxParser.IntArrTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code equalsExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * Enter a parse tree produced by {@link SycoraxParser#varDef}.
 	 * @param ctx the parse tree
 	 */
-	void enterEqualsExpr(@NotNull SycoraxParser.EqualsExprContext ctx);
+	void enterVarDef(@NotNull SycoraxParser.VarDefContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code equalsExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * Exit a parse tree produced by {@link SycoraxParser#varDef}.
 	 * @param ctx the parse tree
 	 */
-	void exitEqualsExpr(@NotNull SycoraxParser.EqualsExprContext ctx);
+	void exitVarDef(@NotNull SycoraxParser.VarDefContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code printStat}
+	 * labeled alternative in {@link SycoraxParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintStat(@NotNull SycoraxParser.PrintStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code printStat}
+	 * labeled alternative in {@link SycoraxParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintStat(@NotNull SycoraxParser.PrintStatContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code trueExpr}
 	 * labeled alternative in {@link SycoraxParser#expr}.
@@ -335,14 +299,24 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitTrueExpr(@NotNull SycoraxParser.TrueExprContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SycoraxParser#intOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntOp(@NotNull SycoraxParser.IntOpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SycoraxParser#intOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntOp(@NotNull SycoraxParser.IntOpContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code boolType}
-	 * labeled alternative in {@link SycoraxParser#basicType}.
+	 * labeled alternative in {@link SycoraxParser#type}.
 	 * @param ctx the parse tree
 	 */
 	void enterBoolType(@NotNull SycoraxParser.BoolTypeContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code boolType}
-	 * labeled alternative in {@link SycoraxParser#basicType}.
+	 * labeled alternative in {@link SycoraxParser#type}.
 	 * @param ctx the parse tree
 	 */
 	void exitBoolType(@NotNull SycoraxParser.BoolTypeContext ctx);
@@ -359,18 +333,6 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitLockStat(@NotNull SycoraxParser.LockStatContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code basicDef}
-	 * labeled alternative in {@link SycoraxParser#varDef}.
-	 * @param ctx the parse tree
-	 */
-	void enterBasicDef(@NotNull SycoraxParser.BasicDefContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code basicDef}
-	 * labeled alternative in {@link SycoraxParser#varDef}.
-	 * @param ctx the parse tree
-	 */
-	void exitBasicDef(@NotNull SycoraxParser.BasicDefContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SycoraxParser#array}.
 	 * @param ctx the parse tree
 	 */
@@ -381,17 +343,27 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitArray(@NotNull SycoraxParser.ArrayContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code smallerExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * Enter a parse tree produced by {@link SycoraxParser#arg}.
 	 * @param ctx the parse tree
 	 */
-	void enterSmallerExpr(@NotNull SycoraxParser.SmallerExprContext ctx);
+	void enterArg(@NotNull SycoraxParser.ArgContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code smallerExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * Exit a parse tree produced by {@link SycoraxParser#arg}.
 	 * @param ctx the parse tree
 	 */
-	void exitSmallerExpr(@NotNull SycoraxParser.SmallerExprContext ctx);
+	void exitArg(@NotNull SycoraxParser.ArgContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code stringType}
+	 * labeled alternative in {@link SycoraxParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringType(@NotNull SycoraxParser.StringTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code stringType}
+	 * labeled alternative in {@link SycoraxParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringType(@NotNull SycoraxParser.StringTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code callExpr}
 	 * labeled alternative in {@link SycoraxParser#expr}.
@@ -405,6 +377,28 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitCallExpr(@NotNull SycoraxParser.CallExprContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SycoraxParser#boolOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolOp(@NotNull SycoraxParser.BoolOpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SycoraxParser#boolOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolOp(@NotNull SycoraxParser.BoolOpContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code charExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterCharExpr(@NotNull SycoraxParser.CharExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code charExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitCharExpr(@NotNull SycoraxParser.CharExprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code pointerStat}
 	 * labeled alternative in {@link SycoraxParser#stat}.
 	 * @param ctx the parse tree
@@ -416,6 +410,30 @@ public interface SycoraxListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPointerStat(@NotNull SycoraxParser.PointerStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code charArrType}
+	 * labeled alternative in {@link SycoraxParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterCharArrType(@NotNull SycoraxParser.CharArrTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code charArrType}
+	 * labeled alternative in {@link SycoraxParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitCharArrType(@NotNull SycoraxParser.CharArrTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code sizeExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterSizeExpr(@NotNull SycoraxParser.SizeExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code sizeExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitSizeExpr(@NotNull SycoraxParser.SizeExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code arrayExpr}
 	 * labeled alternative in {@link SycoraxParser#expr}.
@@ -442,13 +460,13 @@ public interface SycoraxListener extends ParseTreeListener {
 	void exitCallStat(@NotNull SycoraxParser.CallStatContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code intType}
-	 * labeled alternative in {@link SycoraxParser#basicType}.
+	 * labeled alternative in {@link SycoraxParser#type}.
 	 * @param ctx the parse tree
 	 */
 	void enterIntType(@NotNull SycoraxParser.IntTypeContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code intType}
-	 * labeled alternative in {@link SycoraxParser#basicType}.
+	 * labeled alternative in {@link SycoraxParser#type}.
 	 * @param ctx the parse tree
 	 */
 	void exitIntType(@NotNull SycoraxParser.IntTypeContext ctx);
@@ -477,29 +495,15 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitJoinStat(@NotNull SycoraxParser.JoinStatContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code plusExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * Enter a parse tree produced by {@link SycoraxParser#compOp}.
 	 * @param ctx the parse tree
 	 */
-	void enterPlusExpr(@NotNull SycoraxParser.PlusExprContext ctx);
+	void enterCompOp(@NotNull SycoraxParser.CompOpContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code plusExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * Exit a parse tree produced by {@link SycoraxParser#compOp}.
 	 * @param ctx the parse tree
 	 */
-	void exitPlusExpr(@NotNull SycoraxParser.PlusExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code timesExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterTimesExpr(@NotNull SycoraxParser.TimesExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code timesExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitTimesExpr(@NotNull SycoraxParser.TimesExprContext ctx);
+	void exitCompOp(@NotNull SycoraxParser.CompOpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SycoraxParser#args}.
 	 * @param ctx the parse tree
@@ -523,15 +527,17 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitIfstat(@NotNull SycoraxParser.IfstatContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SycoraxParser#comment}.
+	 * Enter a parse tree produced by the {@code intOpExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterComment(@NotNull SycoraxParser.CommentContext ctx);
+	void enterIntOpExpr(@NotNull SycoraxParser.IntOpExprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SycoraxParser#comment}.
+	 * Exit a parse tree produced by the {@code intOpExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitComment(@NotNull SycoraxParser.CommentContext ctx);
+	void exitIntOpExpr(@NotNull SycoraxParser.IntOpExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code assignStat}
 	 * labeled alternative in {@link SycoraxParser#stat}.
@@ -568,16 +574,4 @@ public interface SycoraxListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIdExpr(@NotNull SycoraxParser.IdExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code andExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterAndExpr(@NotNull SycoraxParser.AndExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code andExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitAndExpr(@NotNull SycoraxParser.AndExprContext ctx);
 }
