@@ -365,6 +365,18 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterParam(@NotNull SycoraxParser.ParamContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParam(@NotNull SycoraxParser.ParamContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterArray(@NotNull SycoraxParser.ArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -372,18 +384,6 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitArray(@NotNull SycoraxParser.ArrayContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArg(@NotNull SycoraxParser.ArgContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArg(@NotNull SycoraxParser.ArgContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -221,14 +221,14 @@ public class SycoraxBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitArray(@NotNull SycoraxParser.ArrayContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParam(@NotNull SycoraxParser.ParamContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitArg(@NotNull SycoraxParser.ArgContext ctx) { return visitChildren(ctx); }
+	@Override public T visitArray(@NotNull SycoraxParser.ArrayContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

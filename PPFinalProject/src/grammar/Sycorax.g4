@@ -19,13 +19,13 @@ varDef
 	
 funDef
 	: FUNCTION ID 
-	  (USES LPAR (arg (COMMA arg)*) RPAR)? 
+	  (USES LPAR (param (COMMA param)*) RPAR)? 
 	  (RETURNS type)? 
 	  CATCHABLE?
 	  DEFINES LBRACE stat* RBRACE
 	;
 	
-arg
+param
 	: type ID
 	;
 	

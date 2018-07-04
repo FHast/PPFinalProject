@@ -1,0 +1,4 @@
+program test 
+defines {
+	let global var be integers sized 4
+}

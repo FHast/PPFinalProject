@@ -1,6 +1,8 @@
 package symbTable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -19,6 +21,8 @@ public class SymbolTables {
 
 	private Map<String, Lock> locks;
 
+	private List<String> threadIDs;
+
 	public static final String GLOBAL = "global";
 	public static final String MAIN = "main";
 
@@ -26,6 +30,8 @@ public class SymbolTables {
 		this.functions = new HashMap<>();
 		this.tables = new HashMap<>();
 		this.threads = new Stack<>();
+		this.threadIDs = new ArrayList<>();
+		threadIDs.add(MAIN);
 		newThread(GLOBAL);
 		newThread(MAIN);
 	}
@@ -34,6 +40,7 @@ public class SymbolTables {
 		if (tables.containsKey(id))
 			return false;
 		threads.push(id);
+		threadIDs.add(id);
 		tables.put(id, new SymbolTable());
 		return true;
 	}
@@ -43,21 +50,27 @@ public class SymbolTables {
 		if (!id.equals(threadID())) {
 			return false;
 		} else {
-			//tables.remove(threadID());
+			// tables.remove(threadID());
 			threads.pop();
 			return true;
 		}
 	}
 
-	public void lock(String id) { // TODO lock storage and offsets
+	public boolean lock(String id) {
+		Data d = global().get(id);
+		if (!(d instanceof Lock)) {
+			return false;
+		}
 		Lock l;
 		if (locks.containsKey(id)) {
 			l = locks.get(id);
 		} else {
 			l = new Lock();
 			locks.put(id, l);
+			global().put(id, l);
 		}
 		locked.add(l);
+		return true;
 	}
 
 	public boolean unlock(String id) {
@@ -96,14 +109,18 @@ public class SymbolTables {
 	public Func getFunction() {
 		return table().getFunction();
 	}
-	
+
 	public Map<String, Integer> getHeapStarts() {
-		Map<String,Integer> ret = new HashMap<>();
+		Map<String, Integer> ret = new HashMap<>();
 		for (String s : tables.keySet()) {
 			SymbolTable t = tables.get(s);
 			ret.put(s, t.getMaxSize());
 		}
 		return ret;
+	}
+	
+	public List<String> getThreads() {
+		return this.threadIDs;
 	}
 
 }

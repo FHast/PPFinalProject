@@ -345,6 +345,16 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitBasicDef(@NotNull SycoraxParser.BasicDefContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SycoraxParser#param}.
+	 * @param ctx the parse tree
+	 */
+	void enterParam(@NotNull SycoraxParser.ParamContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SycoraxParser#param}.
+	 * @param ctx the parse tree
+	 */
+	void exitParam(@NotNull SycoraxParser.ParamContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SycoraxParser#array}.
 	 * @param ctx the parse tree
 	 */
@@ -354,16 +364,6 @@ public interface SycoraxListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArray(@NotNull SycoraxParser.ArrayContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link SycoraxParser#arg}.
-	 * @param ctx the parse tree
-	 */
-	void enterArg(@NotNull SycoraxParser.ArgContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SycoraxParser#arg}.
-	 * @param ctx the parse tree
-	 */
-	void exitArg(@NotNull SycoraxParser.ArgContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code stringType}
 	 * labeled alternative in {@link SycoraxParser#arrayType}.

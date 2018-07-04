@@ -117,13 +117,15 @@ public abstract class Data {
 
 	static public class Func extends Data {
 		private List<Data> args;
+		private List<String> vars;
 		private Data returnData;
 		private boolean catchable;
 
-		public Func(Data data, List<Data> args, boolean catchable) {
+		public Func(Data data, List<Data> args, List<String> vars, boolean catchable) {
 			super(Type.FUNCTION);
 			this.returnData = data;
 			this.args = new ArrayList<>(args);
+			this.vars = new ArrayList<>(vars);
 			this.catchable = catchable;
 		}
 
@@ -133,6 +135,10 @@ public abstract class Data {
 
 		public Data arg(int i) {
 			return this.args.get(i);
+		}
+		
+		public String var(int i) {
+			return this.vars.get(i);
 		}
 
 		public Data ret() {
@@ -195,7 +201,7 @@ public abstract class Data {
 			}
 		}
 	}
-	
+
 	static public class Lock extends Data {
 		public Lock() {
 			super(Type.LOCK);

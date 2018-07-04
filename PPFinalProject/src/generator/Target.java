@@ -15,6 +15,7 @@ public class Target extends Operand {
 	public Target(Tar type, Reg reg) {
 		super(Type.TARGET);
 		assert type == Tar.Ind;
+		this.type = type;
 		this.reg = reg;
 	}
 

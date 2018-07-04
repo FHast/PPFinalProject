@@ -209,17 +209,17 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBasicDef(@NotNull SycoraxParser.BasicDefContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SycoraxParser#param}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParam(@NotNull SycoraxParser.ParamContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SycoraxParser#array}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitArray(@NotNull SycoraxParser.ArrayContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link SycoraxParser#arg}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArg(@NotNull SycoraxParser.ArgContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code stringType}
 	 * labeled alternative in {@link SycoraxParser#arrayType}.

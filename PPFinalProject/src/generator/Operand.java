@@ -23,6 +23,8 @@ abstract public class Operand {
 
 		OPERATOR,
 
-		ADDRESS;
+		ADDRESS,
+		
+		STR;
 	}
 }

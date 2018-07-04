@@ -1,9 +1,10 @@
 package generator;
 
+import static generator.Operand.Type.ADDRESS;
 import static generator.Operand.Type.OPERATOR;
 import static generator.Operand.Type.REG;
 import static generator.Operand.Type.TARGET;
-import static generator.Operand.Type.ADDRESS;
+import static generator.Operand.Type.STR;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,8 +44,11 @@ public enum OpCode {
 	EndProg,
 
 	/** No operation */
-	Nop;
+	Nop,
 
+	/** auxiliary comments */
+	Comment(STR);
+	
 	private final List<Operand.Type> types;
 
 	private OpCode(Operand.Type... args) {

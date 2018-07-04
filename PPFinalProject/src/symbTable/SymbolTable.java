@@ -1,9 +1,5 @@
 package symbTable;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
 import symbTable.Data.Func;
@@ -47,6 +43,10 @@ public class SymbolTable {
 			size += s.size();
 		}
 		return size;
+	}
+	
+	public int size() {
+		return this.scopes.peek().size();
 	}
 
 	public boolean put(String id, Data type) {

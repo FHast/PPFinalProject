@@ -37,12 +37,12 @@ public class SycoraxParser extends Parser {
 		"')'", "'['", "']'", "'-'", "ID", "NUM", "STR", "CHAR", "COMMENT", "WS"
 	};
 	public static final int
-		RULE_program = 0, RULE_defs = 1, RULE_varDef = 2, RULE_funDef = 3, RULE_arg = 4, 
+		RULE_program = 0, RULE_defs = 1, RULE_varDef = 2, RULE_funDef = 3, RULE_param = 4, 
 		RULE_stat = 5, RULE_expr = 6, RULE_boolOp = 7, RULE_intOp = 8, RULE_compOp = 9, 
 		RULE_array = 10, RULE_args = 11, RULE_target = 12, RULE_block = 13, RULE_type = 14, 
 		RULE_basicType = 15, RULE_arrayType = 16;
 	public static final String[] ruleNames = {
-		"program", "defs", "varDef", "funDef", "arg", "stat", "expr", "boolOp", 
+		"program", "defs", "varDef", "funDef", "param", "stat", "expr", "boolOp", 
 		"intOp", "compOp", "array", "args", "target", "block", "type", "basicType", 
 		"arrayType"
 	};
@@ -348,6 +348,9 @@ public class SycoraxParser extends Parser {
 	}
 
 	public static class FunDefContext extends ParserRuleContext {
+		public List<ParamContext> param() {
+			return getRuleContexts(ParamContext.class);
+		}
 		public TerminalNode LBRACE() { return getToken(SycoraxParser.LBRACE, 0); }
 		public TerminalNode CATCHABLE() { return getToken(SycoraxParser.CATCHABLE, 0); }
 		public TerminalNode RETURNS() { return getToken(SycoraxParser.RETURNS, 0); }
@@ -358,9 +361,6 @@ public class SycoraxParser extends Parser {
 		public TerminalNode USES() { return getToken(SycoraxParser.USES, 0); }
 		public TerminalNode COMMA(int i) {
 			return getToken(SycoraxParser.COMMA, i);
-		}
-		public ArgContext arg(int i) {
-			return getRuleContext(ArgContext.class,i);
 		}
 		public TerminalNode ID() { return getToken(SycoraxParser.ID, 0); }
 		public TerminalNode FUNCTION() { return getToken(SycoraxParser.FUNCTION, 0); }
@@ -374,8 +374,8 @@ public class SycoraxParser extends Parser {
 			return getRuleContext(TypeContext.class,0);
 		}
 		public TerminalNode RPAR() { return getToken(SycoraxParser.RPAR, 0); }
-		public List<ArgContext> arg() {
-			return getRuleContexts(ArgContext.class);
+		public ParamContext param(int i) {
+			return getRuleContext(ParamContext.class,i);
 		}
 		public FunDefContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -412,7 +412,7 @@ public class SycoraxParser extends Parser {
 				setState(77); match(USES);
 				setState(78); match(LPAR);
 				{
-				setState(79); arg();
+				setState(79); param();
 				setState(84);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -420,7 +420,7 @@ public class SycoraxParser extends Parser {
 					{
 					{
 					setState(80); match(COMMA);
-					setState(81); arg();
+					setState(81); param();
 					}
 					}
 					setState(86);
@@ -478,33 +478,33 @@ public class SycoraxParser extends Parser {
 		return _localctx;
 	}
 
-	public static class ArgContext extends ParserRuleContext {
+	public static class ParamContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(SycoraxParser.ID, 0); }
 		public TypeContext type() {
 			return getRuleContext(TypeContext.class,0);
 		}
-		public ArgContext(ParserRuleContext parent, int invokingState) {
+		public ParamContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_arg; }
+		@Override public int getRuleIndex() { return RULE_param; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SycoraxListener ) ((SycoraxListener)listener).enterArg(this);
+			if ( listener instanceof SycoraxListener ) ((SycoraxListener)listener).enterParam(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SycoraxListener ) ((SycoraxListener)listener).exitArg(this);
+			if ( listener instanceof SycoraxListener ) ((SycoraxListener)listener).exitParam(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SycoraxVisitor ) return ((SycoraxVisitor<? extends T>)visitor).visitArg(this);
+			if ( visitor instanceof SycoraxVisitor ) return ((SycoraxVisitor<? extends T>)visitor).visitParam(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final ArgContext arg() throws RecognitionException {
-		ArgContext _localctx = new ArgContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_arg);
+	public final ParamContext param() throws RecognitionException {
+		ParamContext _localctx = new ParamContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_param);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
