@@ -9,7 +9,7 @@ program
 	;
 	
 defs
-	: (funDef | varDef)*
+	: (funDef | varDef | block)*
 	;
 	
 varDef
@@ -19,12 +19,16 @@ varDef
 	
 funDef
 	: FUNCTION ID 
-	  (USES LPAR (param (COMMA param)*) RPAR)? 
+	  (USES params)? 
 	  (RETURNS type)? 
 	  CATCHABLE?
 	  DEFINES LBRACE content RBRACE
 	;
-	
+
+params 
+	: LPAR (param (COMMA param)*) RPAR
+	;	
+
 param
 	: type ID
 	;

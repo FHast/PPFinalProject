@@ -48,6 +48,7 @@ public class Sycorax {
 			listener.throwException();
 			TypeChecker checker = new TypeChecker();
 			Result res = checker.check(tree);
+			
 			Generator gen = new Generator(checker.getTables(), res);
 			Program prog = gen.getProgram(tree);
 

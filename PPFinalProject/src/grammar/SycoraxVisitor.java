@@ -141,6 +141,12 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitForkStat(@NotNull SycoraxParser.ForkStatContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SycoraxParser#params}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParams(@NotNull SycoraxParser.ParamsContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code numExpr}
 	 * labeled alternative in {@link SycoraxParser#expr}.
 	 * @param ctx the parse tree

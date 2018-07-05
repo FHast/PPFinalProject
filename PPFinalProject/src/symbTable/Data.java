@@ -132,6 +132,10 @@ public abstract class Data {
 		public List<Data> args() {
 			return this.args;
 		}
+		
+		public void setArgs(List<Data> args) {
+			this.args = args;
+		}
 
 		public Data arg(int i) {
 			return this.args.get(i);
@@ -139,6 +143,10 @@ public abstract class Data {
 		
 		public String var(int i) {
 			return this.vars.get(i);
+		}
+		
+		public void setVars(List<String> vars) {
+			this.vars = vars;
 		}
 
 		public Data ret() {

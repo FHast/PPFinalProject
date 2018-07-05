@@ -229,6 +229,16 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitForkStat(@NotNull SycoraxParser.ForkStatContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SycoraxParser#params}.
+	 * @param ctx the parse tree
+	 */
+	void enterParams(@NotNull SycoraxParser.ParamsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SycoraxParser#params}.
+	 * @param ctx the parse tree
+	 */
+	void exitParams(@NotNull SycoraxParser.ParamsContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code numExpr}
 	 * labeled alternative in {@link SycoraxParser#expr}.
 	 * @param ctx the parse tree
