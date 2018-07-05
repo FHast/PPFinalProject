@@ -91,7 +91,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			threadIDs.put(tables.getThreads().get(i), i);
 		}
 		this.gArp = new Address(Addr.DirAddr, threadIDs.size());
-		this.gHeap = new Address(Addr.DirAddr, threadIDs.size() + 1);
+		this.gHeap = new Address(Addr.DirAddr, threadIDs.size()+1);
 
 		Target target = new Target(Tar.Abs, 0);
 		emit(OpCode.Jump, target);
@@ -129,7 +129,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		t0T.setTarget(t0);
 
 		Reg reg = helpReg();
-		emit(OpCode.Load, new Address(Addr.ImmValue, threadIDs.size() + 1), reg);
+		emit(OpCode.Load, new Address(Addr.ImmValue, threadIDs.size() + 2), reg);
 		emit(OpCode.WriteInstr, reg, gArp);
 		emit(OpCode.Load, new Address(Addr.ImmValue, 5000), reg);
 		emit(OpCode.WriteInstr, reg, gHeap);
@@ -252,13 +252,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		boolean assign = ctx.ASSIGN() != null;
 		boolean global = ctx.GLOBAL() != null;
 		int offset = offset(ctx);
-
-		OpCode store;
-		if (global) {
-			store = OpCode.WriteInstr;
-		} else {
-			store = OpCode.Store;
-		}
+		
 		// help registers
 		Reg r2 = helpReg();
 		Reg reg = helpReg();
@@ -279,13 +273,48 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			// store allocated address at pointer location
 			emit(OpCode.Load, new Address(Addr.ImmValue, offset), reg);
 			emit(OpCode.Compute, new Operator(Op.Add), arp, reg, reg);
-			emit(OpCode.WriteInstr, heap, new Address(Addr.IndAddr, reg));
-
-			// heap increased by size+1
+			
+			emit(OpCode.WriteInstr, r2, new Address(Addr.IndAddr, reg));
+			
+			// heap increased by size+1			
 			emit(OpCode.Pop, size);
 			emit(OpCode.Compute, new Operator(Op.Incr), heap, heap, heap);
 			emit(OpCode.Compute, new Operator(Op.Add), heap, size, heap);
 			emit(OpCode.WriteInstr, heap, gHeap);
+			
+			emit(OpCode.Comment, new Str("ArrayDef - store data"));
+			if (assign) {
+				/** COPY */
+				emit(OpCode.WriteInstr, size, new Address(Addr.IndAddr, r2));
+				emit(OpCode.Compute, new Operator(Op.Incr), r2, r2, r2);
+
+				Target endT = new Target(Tar.Abs, 0);
+				int loop = emit(OpCode.Branch, size, new Target(Tar.Rel, 2));
+				emit(OpCode.Jump, endT);
+
+				emit(OpCode.Pop, reg);
+				emit(OpCode.WriteInstr, reg, new Address(Addr.IndAddr, r2));
+				emit(OpCode.Compute, new Operator(Op.Incr), r2, r2, r2);
+				emit(OpCode.Compute, new Operator(Op.Decr), size, size, size);
+				emit(OpCode.Jump, new Target(Tar.Abs, loop));
+				int endV = emit(OpCode.Nop);
+				endT.setTarget(endV);
+			} else {
+				/** FILL WITH 0 */
+				emit(OpCode.WriteInstr, size, new Address(Addr.IndAddr, r2));
+				emit(OpCode.Compute, new Operator(Op.Incr), r2, r2, r2);
+
+				Target endT = new Target(Tar.Abs, 0);
+				int loop = emit(OpCode.Branch, size, new Target(Tar.Rel, 2));
+				emit(OpCode.Jump, endT);
+
+				emit(OpCode.WriteInstr, zero, new Address(Addr.IndAddr, r2));
+				emit(OpCode.Compute, new Operator(Op.Incr), r2, r2, r2);
+				emit(OpCode.Compute, new Operator(Op.Decr), size, size, size);
+				emit(OpCode.Jump, new Target(Tar.Abs, loop));
+				int endV = emit(OpCode.Nop);
+				endT.setTarget(endV);
+			}
 		} else {
 			Reg heap = this.heap;
 			Reg arp = this.arp;
@@ -299,40 +328,42 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			emit(OpCode.Pop, size);
 			emit(OpCode.Compute, new Operator(Op.Incr), heap, heap, heap);
 			emit(OpCode.Compute, new Operator(Op.Add), heap, size, heap);
+			
+			emit(OpCode.Comment, new Str("ArrayDef - store data"));
+			if (assign) {
+				/** COPY */
+				emit(OpCode.Store, size, new Address(Addr.IndAddr, r2));
+				emit(OpCode.Compute, new Operator(Op.Incr), r2, r2, r2);
+
+				Target endT = new Target(Tar.Abs, 0);
+				int loop = emit(OpCode.Branch, size, new Target(Tar.Rel, 2));
+				emit(OpCode.Jump, endT);
+
+				emit(OpCode.Pop, reg);
+				emit(OpCode.Store, reg, new Address(Addr.IndAddr, r2));
+				emit(OpCode.Compute, new Operator(Op.Incr), r2, r2, r2);
+				emit(OpCode.Compute, new Operator(Op.Decr), size, size, size);
+				emit(OpCode.Jump, new Target(Tar.Abs, loop));
+				int endV = emit(OpCode.Nop);
+				endT.setTarget(endV);
+			} else {
+				/** FILL WITH 0 */
+				emit(OpCode.Store, size, new Address(Addr.IndAddr, r2));
+				emit(OpCode.Compute, new Operator(Op.Incr), r2, r2, r2);
+
+				Target endT = new Target(Tar.Abs, 0);
+				int loop = emit(OpCode.Branch, size, new Target(Tar.Rel, 2));
+				emit(OpCode.Jump, endT);
+
+				emit(OpCode.Store, zero, new Address(Addr.IndAddr, r2));
+				emit(OpCode.Compute, new Operator(Op.Incr), r2, r2, r2);
+				emit(OpCode.Compute, new Operator(Op.Decr), size, size, size);
+				emit(OpCode.Jump, new Target(Tar.Abs, loop));
+				int endV = emit(OpCode.Nop);
+				endT.setTarget(endV);
+			}
 		}
-		emit(OpCode.Comment, new Str("ArrayDef - store data"));
-		if (assign) {
-			/** COPY */
-			emit(store, size, new Address(Addr.IndAddr, r2));
-			emit(OpCode.Compute, new Operator(Op.Incr), r2, r2, r2);
-
-			Target endT = new Target(Tar.Abs, 0);
-			int loop = emit(OpCode.Branch, size, new Target(Tar.Rel, 2));
-			emit(OpCode.Jump, endT);
-
-			emit(OpCode.Pop, reg);
-			emit(store, reg, new Address(Addr.IndAddr, r2));
-			emit(OpCode.Compute, new Operator(Op.Incr), r2, r2, r2);
-			emit(OpCode.Compute, new Operator(Op.Decr), size, size, size);
-			emit(OpCode.Jump, new Target(Tar.Abs, loop));
-			int endV = emit(OpCode.Nop);
-			endT.setTarget(endV);
-		} else {
-			/** FILL WITH 0 */
-			emit(store, size, new Address(Addr.IndAddr, r2));
-			emit(OpCode.Compute, new Operator(Op.Incr), r2, r2, r2);
-
-			Target endT = new Target(Tar.Abs, 0);
-			int loop = emit(OpCode.Branch, size, new Target(Tar.Rel, 2));
-			emit(OpCode.Jump, endT);
-
-			emit(store, zero, new Address(Addr.IndAddr, r2));
-			emit(OpCode.Compute, new Operator(Op.Incr), r2, r2, r2);
-			emit(OpCode.Compute, new Operator(Op.Decr), size, size, size);
-			emit(OpCode.Jump, new Target(Tar.Abs, loop));
-			int endV = emit(OpCode.Nop);
-			endT.setTarget(endV);
-		}
+		
 		return ret;
 	}
 
@@ -660,7 +691,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			Reg val = helpReg();
 			if (ch) {
 				emit(OpCode.Pop, size);
-
+				
 				Target endT = new Target(Tar.Abs, 0);
 				int loop = emit(OpCode.Branch, size, new Target(Tar.Rel, 2));
 				emit(OpCode.Jump, endT);
@@ -674,7 +705,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 
 			} else {
 				emit(OpCode.Pop, size);
-
+				
 				Target endT = new Target(Tar.Abs, 0);
 				int loop = emit(OpCode.Branch, size, new Target(Tar.Rel, 2));
 				emit(OpCode.Jump, endT);
@@ -741,11 +772,9 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		Reg failR = helpReg();
 		Reg retR = helpReg();
 
-		Target hcT = new Target(Tar.Abs, 0);
-		emit(OpCode.Branch, this.heap, hcT);
+		emit(OpCode.Branch, this.heap, new Target(Tar.Rel, 2));
 		emit(OpCode.Load, new Address(Addr.ImmValue, 5000), this.heap);
-		int hcV = emit(OpCode.Nop);
-		hcT.setTarget(hcV);
+		emit(OpCode.Nop);
 
 		emit(OpCode.Comment, new Str("Block"));
 
@@ -921,7 +950,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		}
 		emit(OpCode.Pop, r1);
 		emit(OpCode.Pop, r2);
-		emit(OpCode.Compute, op, r1, r2, reg);
+		emit(OpCode.Compute, op, r2, r1, reg);
 		emit(OpCode.Push, reg);
 		return ret;
 	}
@@ -969,7 +998,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		}
 		emit(OpCode.Pop, r1);
 		emit(OpCode.Pop, r2);
-		emit(OpCode.Compute, op, r1, r2, reg);
+		emit(OpCode.Compute, op, r2, r1, reg);
 		emit(OpCode.Push, reg);
 		return ret;
 	}
@@ -1155,14 +1184,17 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 				emit(OpCode.Load, new Address(Addr.ImmValue, offset), h1);
 				emit(OpCode.Compute, new Operator(Op.Add), h1, arp, h1);
 				emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
-				emit(OpCode.Receive, reg);
+				emit(OpCode.Receive, reg);				
 
 				/** ON STACK */
 				Reg size = helpReg();
 				// load size
 				emit(OpCode.ReadInstr, new Address(Addr.IndAddr, reg));
 				emit(OpCode.Receive, size);
-
+				
+				emit(OpCode.Compute, new Operator(Op.Add), size, zero, h1);
+				emit(OpCode.Compute, new Operator(Op.Add), size, reg, reg);
+				
 				Target endT = new Target(Tar.Abs, 0);
 				int loop = emit(OpCode.Branch, size, new Target(Tar.Rel, 2));
 				emit(OpCode.Jump, endT);
@@ -1170,10 +1202,10 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 				emit(OpCode.ReadInstr, new Address(Addr.IndAddr, reg));
 				emit(OpCode.Receive, addr);
 				emit(OpCode.Push, addr);
-				emit(OpCode.Compute, new Operator(Op.Incr), reg, reg, reg);
+				emit(OpCode.Compute, new Operator(Op.Decr), reg, reg, reg);
 				emit(OpCode.Compute, new Operator(Op.Decr), size, size, size);
 				emit(OpCode.Jump, new Target(Tar.Abs, loop));
-				int endV = emit(OpCode.Push, size);
+				int endV = emit(OpCode.Push, h1);
 				endT.setTarget(endV);
 
 			} else {
@@ -1192,19 +1224,19 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 				Reg size = helpReg();
 				// load size
 				emit(OpCode.Load, new Address(Addr.IndAddr, reg), size);
-				emit(OpCode.Compute, new Operator(Op.Incr), reg, reg, reg);
 				emit(OpCode.Compute, new Operator(Op.Add), reg, size, reg);
-
+				emit(OpCode.Compute, new Operator(Op.Add), size, zero, h1);
+				
 				Target endT = new Target(Tar.Abs, 0);
 				int loop = emit(OpCode.Branch, size, new Target(Tar.Rel, 2));
 				emit(OpCode.Jump, endT);
 
 				emit(OpCode.Load, new Address(Addr.IndAddr, reg), addr);
 				emit(OpCode.Push, addr);
-				emit(OpCode.Compute, new Operator(Op.Incr), reg, reg, reg);
+				emit(OpCode.Compute, new Operator(Op.Decr), reg, reg, reg);
 				emit(OpCode.Compute, new Operator(Op.Decr), size, size, size);
 				emit(OpCode.Jump, new Target(Tar.Abs, loop));
-				int endV = emit(OpCode.Push, size);
+				int endV = emit(OpCode.Push, h1);
 				endT.setTarget(endV);
 			}
 		} else {
@@ -1362,17 +1394,30 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 
 			emit(OpCode.Load, new Address(Addr.ImmValue, offset), h1);
 			emit(OpCode.Compute, new Operator(Op.Add), h1, arp, h1);
+			emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
+			
+			emit(OpCode.WriteInstr, h1, new Address(Addr.numberIO)); //TODO
 			if (array) {
 				Reg size = helpReg();
 				emit(OpCode.Pop, size);
+				emit(OpCode.Load, new Address(Addr.IndAddr, h1), reg);
+				emit(OpCode.Compute, new Operator(Op.Equal), reg, size, reg);
+				emit(OpCode.Branch, reg, new Target(Tar.Abs, this.errorJump));
+				
 				emit(OpCode.WriteInstr, size, new Address(Addr.IndAddr, h1));
 				emit(OpCode.Compute, new Operator(Op.Incr), h1, h1, h1);
 
-				int loop = emit(OpCode.Pop, reg);
+				Target endT = new Target(Tar.Abs, 0);
+				int loop = emit(OpCode.Branch, size, new Target(Tar.Rel, 2));
+				emit(OpCode.Jump, endT);
+				
+				emit(OpCode.Pop, reg);
 				emit(OpCode.WriteInstr, reg, new Address(Addr.IndAddr, h1));
 				emit(OpCode.Compute, new Operator(Op.Incr), h1, h1, h1);
 				emit(OpCode.Compute, new Operator(Op.Decr), size, size, size);
-				emit(OpCode.Branch, size, new Target(Tar.Abs, loop));
+				emit(OpCode.Jump, new Target(Tar.Abs, loop));
+				int endV = emit(OpCode.Nop);
+				endT.setTarget(endV);
 			} else {
 				emit(OpCode.Pop, reg);
 				emit(OpCode.WriteInstr, reg, new Address(Addr.IndAddr, h1));
@@ -1388,17 +1433,31 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			}
 			emit(OpCode.Load, new Address(Addr.ImmValue, offset), reg);
 			emit(OpCode.Compute, new Operator(Op.Add), h1, reg, h1);
+			emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
+			
+			emit(OpCode.WriteInstr, h1, new Address(Addr.numberIO)); //TODO
+			
 			if (array) {
 				Reg size = helpReg();
 				emit(OpCode.Pop, size);
+				emit(OpCode.Load, new Address(Addr.IndAddr, h1), reg);
+				emit(OpCode.Compute, new Operator(Op.Equal), reg, size, reg);
+				emit(OpCode.Branch, reg, new Target(Tar.Abs, this.errorJump));
+				
 				emit(OpCode.Store, size, new Address(Addr.IndAddr, h1));
 				emit(OpCode.Compute, new Operator(Op.Incr), h1, h1, h1);
 
-				int loop = emit(OpCode.Pop, reg);
+				Target endT = new Target(Tar.Abs, 0);
+				int loop = emit(OpCode.Branch, size, new Target(Tar.Rel, 2));
+				emit(OpCode.Jump, endT);
+				
+				emit(OpCode.Pop, reg);
 				emit(OpCode.Store, reg, new Address(Addr.IndAddr, h1));
 				emit(OpCode.Compute, new Operator(Op.Incr), h1, h1, h1);
 				emit(OpCode.Compute, new Operator(Op.Decr), size, size, size);
-				emit(OpCode.Branch, size, new Target(Tar.Abs, loop));
+				emit(OpCode.Jump, new Target(Tar.Abs, loop));
+				int endV = emit(OpCode.Nop);
+				endT.setTarget(endV);
 			} else {
 				/** LOAD VALUE */
 				emit(OpCode.Pop, reg);
