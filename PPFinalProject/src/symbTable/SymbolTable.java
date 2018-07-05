@@ -44,7 +44,7 @@ public class SymbolTable {
 		}
 		return size;
 	}
-	
+
 	public int size() {
 		return this.scopes.peek().size();
 	}

@@ -1,8 +1,11 @@
 program test 
 defines {
 	do {
-		let global x be integers assign [1,2,2]
-		global x assign [4,4,2,1]
-		print global x
+		let i be integer
+		while (i smaller 10)
+		do {
+			i assign i plus 1
+		}
+		print i
 	}
 }
