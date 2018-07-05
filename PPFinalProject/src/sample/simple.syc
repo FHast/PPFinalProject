@@ -1,4 +1,8 @@
 program test 
 defines {
-	let global var be integers sized 4
+	let global var be integers sized 3
+	function main
+	defines {
+		let x be integer
+	}
 }

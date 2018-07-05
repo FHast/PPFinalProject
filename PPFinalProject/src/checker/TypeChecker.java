@@ -29,8 +29,10 @@ import grammar.SycoraxParser.FailStatContext;
 import grammar.SycoraxParser.FalseExprContext;
 import grammar.SycoraxParser.ForkStatContext;
 import grammar.SycoraxParser.FunDefContext;
+import grammar.SycoraxParser.IdExprContext;
 import grammar.SycoraxParser.IdTargetContext;
 import grammar.SycoraxParser.IfstatContext;
+import grammar.SycoraxParser.IndexExprContext;
 import grammar.SycoraxParser.IntArrTypeContext;
 import grammar.SycoraxParser.IntOpExprContext;
 import grammar.SycoraxParser.IntTypeContext;
@@ -42,11 +44,11 @@ import grammar.SycoraxParser.ParExprContext;
 import grammar.SycoraxParser.ParamContext;
 import grammar.SycoraxParser.PointerStatContext;
 import grammar.SycoraxParser.PrintStatContext;
+import grammar.SycoraxParser.ProgramContext;
 import grammar.SycoraxParser.ReturnStatContext;
 import grammar.SycoraxParser.SizeExprContext;
 import grammar.SycoraxParser.StrExprContext;
 import grammar.SycoraxParser.StringTypeContext;
-import grammar.SycoraxParser.TargetExprContext;
 import grammar.SycoraxParser.TrueExprContext;
 import grammar.SycoraxParser.TypeContext;
 import grammar.SycoraxParser.UnlockStatContext;
@@ -68,12 +70,15 @@ public class TypeChecker extends SycoraxBaseVisitor<Void> {
 
 	private SymbolTables tables;
 
+	private int blockNameCounter = 0;
+
 	private static final boolean catchErrors = true;
 
 	public Result check(ParseTree tree) throws ParseException {
 		this.result = new Result();
 		this.errors = new ArrayList<>();
 		this.tables = new SymbolTables();
+		
 		if (catchErrors) {
 			try {
 				this.visit(tree);
@@ -92,7 +97,7 @@ public class TypeChecker extends SycoraxBaseVisitor<Void> {
 		}
 		return this.result;
 	}
-	
+
 	public SymbolTables getTables() {
 		return this.tables;
 	}
@@ -175,6 +180,13 @@ public class TypeChecker extends SycoraxBaseVisitor<Void> {
 
 	private SymbolTable global() {
 		return tables.global();
+	}
+
+	@Override
+	public Void visitProgram(ProgramContext ctx) {
+		super.visitProgram(ctx);
+		setThread(ctx, tables.threadID());
+		return null;
 	}
 
 	@Override
@@ -335,9 +347,7 @@ public class TypeChecker extends SycoraxBaseVisitor<Void> {
 		setData(ctx, func);
 		setEntry(ctx, ctx);
 
-		for (ParserRuleContext prc : ctx.stat()) {
-			visit(prc);
-		}
+		visit(ctx.content());
 
 		if (table().isMissingCatchable()) {
 			addError(ctx, Errors.EXPECTED_CATCHABLE);
@@ -521,8 +531,9 @@ public class TypeChecker extends SycoraxBaseVisitor<Void> {
 	}
 
 	@Override
-	public Void visitPrintStat(PrintStatContext ctx) { // TODO
+	public Void visitPrintStat(PrintStatContext ctx) {
 		super.visitPrintStat(ctx);
+		setData(ctx, getData(ctx.expr()));
 		setEntry(ctx, entry(ctx.expr()));
 		setThread(ctx, tables.threadID());
 		return null;
@@ -623,10 +634,53 @@ public class TypeChecker extends SycoraxBaseVisitor<Void> {
 	}
 
 	@Override
-	public Void visitTargetExpr(TargetExprContext ctx) {
-		super.visitTargetExpr(ctx);
-		setData(ctx, getData(ctx.target()));
-		setEntry(ctx, entry(ctx.target()));
+	public Void visitIdExpr(IdExprContext ctx) {
+		super.visitIdExpr(ctx);
+		String id = ctx.ID().getText();
+		Data data;
+		boolean global = ctx.GLOBAL() != null;
+		if (global) {
+			data = global().get(id);
+			setOffset(ctx, global().offset(id));
+			setDepth(ctx, global().depth(id));
+		} else {
+			data = table().get(id);
+			setOffset(ctx, table().offset(id));
+			setDepth(ctx, table().depth(id));
+		}
+		if (data == null) {
+			addError(ctx, Errors.VARIBALE_NOT_IN_SCOPE, id);
+		}
+		setData(ctx, data);
+		setEntry(ctx, ctx);
+		setThread(ctx, tables.threadID());
+		return null;
+	}
+
+	@Override
+	public Void visitIndexExpr(IndexExprContext ctx) {
+		String id = ctx.ID().getText();
+		Data data;
+		boolean global = ctx.GLOBAL() != null;
+
+		if (global) {
+			data = global().get(id);
+			setOffset(ctx, global().offset(id));
+			setDepth(ctx, global().depth(id));
+		} else {
+			data = table().get(id);
+			setOffset(ctx, table().offset(id));
+			setDepth(ctx, table().depth(id));
+		}
+		if (data == null) {
+			addError(ctx, Errors.VARIBALE_NOT_IN_SCOPE, id);
+		} else if (!(data instanceof Arr)) {
+			addError(ctx.ID().getSymbol(), Errors.EXPECTED_TYPE_BUT_FOUND, "Array", data);
+		}
+		checkType(ctx.expr(), Data.INT);
+
+		setData(ctx, ((Arr) data).elem());
+		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 		return null;
 	}
@@ -789,15 +843,20 @@ public class TypeChecker extends SycoraxBaseVisitor<Void> {
 	@Override
 	public Void visitBlock(BlockContext ctx) {
 		boolean hasCatch = ctx.CATCH() != null;
+		String id = "#blockRet" + blockNameCounter++;
+		Data data = tables.getFunction().ret();
+		if (data == null) {
+			data = Data.INT;
+		}
+		boolean success = table().put(id, data);
+		if (success) {
+			addError(ctx, Errors.VARIABLE_DECL_FAIL, id);
+		}
+		setOffset(ctx.FINALLY(), table().offset(id));
 		table().openBlockScope(hasCatch);
 		super.visitBlock(ctx);
 		table().closeScope();
-		if (ctx.stat().isEmpty()) {
-			setEntry(ctx, ctx);
-		} else {
-			setEntry(ctx, entry(ctx.stat(0)));
-		}
-		setOffset(ctx, table().size());
+		setOffset(ctx, table().size() + 1);
 		setThread(ctx, tables.threadID());
 		return null;
 	}

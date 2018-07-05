@@ -98,7 +98,7 @@ public abstract class Data {
 
 		@Override
 		public String toString() {
-			return String.format("Array of '%s' sized '%s'", this.elemData, this.size);
+			return String.format("Array of '%s'", this.elemData);
 		}
 
 		@Override

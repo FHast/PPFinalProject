@@ -148,6 +148,13 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNumExpr(@NotNull SycoraxParser.NumExprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code indexExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexExpr(@NotNull SycoraxParser.IndexExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code notExpr}
 	 * labeled alternative in {@link SycoraxParser#expr}.
 	 * @param ctx the parse tree
@@ -187,6 +194,12 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIntOp(@NotNull SycoraxParser.IntOpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SycoraxParser#content}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitContent(@NotNull SycoraxParser.ContentContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code boolType}
 	 * labeled alternative in {@link SycoraxParser#basicType}.
@@ -234,13 +247,6 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCallExpr(@NotNull SycoraxParser.CallExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code targetExpr}
-	 * labeled alternative in {@link SycoraxParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTargetExpr(@NotNull SycoraxParser.TargetExprContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SycoraxParser#boolOp}.
 	 * @param ctx the parse tree
@@ -350,4 +356,11 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitUnlockStat(@NotNull SycoraxParser.UnlockStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code idExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdExpr(@NotNull SycoraxParser.IdExprContext ctx);
 }

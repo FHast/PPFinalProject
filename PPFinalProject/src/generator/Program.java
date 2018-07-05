@@ -11,8 +11,6 @@ public class Program {
 	private int lineCounter = 0;
 	private int coreCount = 1;
 
-	private int regCount;
-
 	public Program() {
 		prog = new ArrayList<>();
 	}
@@ -30,18 +28,9 @@ public class Program {
 	public void incrCoreCount() {
 		coreCount++;
 	}
-
-	public void setRegCount(int c) {
-		this.regCount = c;
-	}
-
+	
 	public String prettyPrint() {
 		String out = "import Sprockell\n";
-
-		for (int i = 1; i < this.regCount; i++) {
-			out += "\nreg" + i + " :: Value";
-			out += "\nreg" + i + " = 0";
-		}
 
 		out += "\nprog :: [Instruction]\nprog = [";
 		if (prog.size() > 0) {

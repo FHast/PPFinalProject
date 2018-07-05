@@ -31,8 +31,7 @@ public class SymbolTables {
 		this.tables = new HashMap<>();
 		this.threads = new Stack<>();
 		this.threadIDs = new ArrayList<>();
-		threadIDs.add(MAIN);
-		newThread(GLOBAL);
+		tables.put(GLOBAL, new SymbolTable());
 		newThread(MAIN);
 	}
 
@@ -112,7 +111,7 @@ public class SymbolTables {
 
 	public Map<String, Integer> getHeapStarts() {
 		Map<String, Integer> ret = new HashMap<>();
-		for (String s : tables.keySet()) {
+		for (String s : threadIDs) {
 			SymbolTable t = tables.get(s);
 			ret.put(s, t.getMaxSize());
 		}

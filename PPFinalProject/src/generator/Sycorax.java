@@ -22,7 +22,7 @@ public class Sycorax {
 	private final static String BASE_DIR = "src/sample";
 	private final static String EXT = ".syc";
 
-	public static void main(String[] args) throws IOException, ParseException {
+	public static void main(String[] args) throws IOException {
 		if (args.length==0) {
 			System.out.println("provide filepath.");
 			return;
@@ -43,14 +43,13 @@ public class Sycorax {
 			SycoraxParser parser = new SycoraxParser(tokens);
 			parser.removeErrorListeners();
 			parser.addErrorListener(listener);
+			
 			ParseTree tree = parser.program();
 			listener.throwException();
-
 			TypeChecker checker = new TypeChecker();
 			Result res = checker.check(tree);
 			Generator gen = new Generator(checker.getTables(), res);
-			gen.visit(tree);
-			Program prog = gen.getProgram();
+			Program prog = gen.getProgram(tree);
 
 			PrintWriter out = new PrintWriter(BASE_DIR + "/" + filename + ".hs");
 			out.println(prog.prettyPrint());
@@ -59,8 +58,6 @@ public class Sycorax {
 		} catch (ParseException e) {
 			System.out.println(String.format("Error log for '%s'", filename));
 			e.print();
-			throw e;
-
 		}
 
 	}

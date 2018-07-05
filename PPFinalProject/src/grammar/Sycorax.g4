@@ -22,7 +22,7 @@ funDef
 	  (USES LPAR (param (COMMA param)*) RPAR)? 
 	  (RETURNS type)? 
 	  CATCHABLE?
-	  DEFINES LBRACE stat* RBRACE
+	  DEFINES LBRACE content RBRACE
 	;
 	
 param
@@ -55,9 +55,10 @@ expr
 	| expr intOp expr				#intOpExpr
 	| expr compOp expr				#compOpExpr
 	| array							#arrayExpr
+	| GLOBAL? ID					#idExpr
+	| GLOBAL? ID LBRACK expr RBRACK #indexExpr
 	| SIZE expr						#sizeExpr
 	| CALL ID (WITH args)?			#callExpr
-	| target						#targetExpr
 	| NEGATIVE? NUM					#numExpr
 	| CHAR							#charExpr
 	| STR							#strExpr
@@ -90,10 +91,12 @@ target
 	;
 
 block
-	: DO LBRACE stat* RBRACE 
-	  (CATCH LBRACE stat* RBRACE)?
-	  (FINALLY LBRACE stat* RBRACE)?	
+	: DO LBRACE content RBRACE 
+	  (CATCH LBRACE content RBRACE)?
+	  (FINALLY LBRACE content RBRACE)?	
 	;
+
+content : stat*;
 
 type
 	: basicType | arrayType;
