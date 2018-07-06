@@ -301,13 +301,14 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		} else {
 			Reg heap = this.heap;
 			Reg arp = this.arp;
+			
 			// r2 -> heap address
 			emit(OpCode.Compute, new Operator(Op.Add), heap, zero, r2);
 			// store allocated address at pointer location
 			emit(OpCode.Load, new Address(Addr.ImmValue, offset), reg);
 			emit(OpCode.Compute, new Operator(Op.Add), arp, reg, reg);
 			// store pointer to heap
-			emit(OpCode.Store, r2, new Address(Addr.IndAddr, reg));
+			emit(OpCode.Store, heap, new Address(Addr.IndAddr, reg));
 			// heap increased by size+1
 			emit(OpCode.Pop, size);
 			// index checking
@@ -498,7 +499,8 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 	@Override
 	public Integer visitParam(ParamContext ctx) {
 		int ret = emit(OpCode.Nop);
-
+		super.visitParam(ctx);
+		
 		Data data = getData(ctx);
 		boolean array = data instanceof Arr;
 		int offset = offset(ctx);
@@ -664,7 +666,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		Reg h1 = helpReg();
 		Reg failR = helpReg();
 		Reg retR = helpReg();
-
+		
 		emit(OpCode.Comment, new Str("Function - call " + id));
 		/** PUSH & SET ARP */
 		emit(OpCode.Load, new Address(Addr.ImmValue, incr), reg);
@@ -967,7 +969,6 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 				emit(OpCode.Jump, new Target(Tar.Abs, loop));
 				int endV = emit(OpCode.Nop);
 				endT.setTarget(endV);
-
 			} else {
 				emit(OpCode.Pop, size);
 
@@ -1244,7 +1245,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 
 			emit(OpCode.Compute, new Operator(Op.Decr), num, num, num);
 			emit(OpCode.Load, new Address(Addr.IndAddr, num), h1);
-			emit(OpCode.WriteInstr, new Address(Addr.IndAddr, regThreadID));
+			emit(OpCode.WriteInstr, h1, new Address(Addr.IndAddr, regThreadID));
 
 			emit(OpCode.Compute, new Operator(Op.Decr), num, num, num);
 			emit(OpCode.Load, new Address(Addr.IndAddr, num), retR);
@@ -1346,7 +1347,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 
 			emit(OpCode.Compute, new Operator(Op.Decr), num, num, num);
 			emit(OpCode.Load, new Address(Addr.IndAddr, num), h1);
-			emit(OpCode.WriteInstr, new Address(Addr.IndAddr, regThreadID));
+			emit(OpCode.WriteInstr, h1, new Address(Addr.IndAddr, regThreadID));
 
 			emit(OpCode.Compute, new Operator(Op.Decr), num, num, num);
 			emit(OpCode.Load, new Address(Addr.IndAddr, num), retR);
@@ -1518,18 +1519,21 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		Reg retR = helpReg();
 
 		emit(OpCode.Comment, new Str("Function - call " + id));
+		
 		/** PUSH & SET ARP */
 		emit(OpCode.Load, new Address(Addr.ImmValue, incr), reg);
 		emit(OpCode.Compute, new Operator(Op.Add), reg, arp, reg);
 
+		// backup old arp
 		emit(OpCode.Compute, new Operator(Op.Decr), reg, reg, reg);
 		emit(OpCode.Store, arp, new Address(Addr.IndAddr, reg));
+		// backup old break target
 		emit(OpCode.Compute, new Operator(Op.Decr), reg, reg, reg);
 		emit(OpCode.ReadInstr, new Address(Addr.IndAddr, regThreadID));
 		emit(OpCode.Receive, h1);
 		emit(OpCode.Store, h1, new Address(Addr.IndAddr, reg));
-
-		emit(OpCode.Load, new Address(Addr.ImmValue, incr), reg);
+		
+		emit(OpCode.Load, new Address(Addr.ImmValue, incr), reg); 
 		emit(OpCode.Compute, new Operator(Op.Add), reg, arp, arp);
 
 		/** PUSH RET ADDRESS */
@@ -1550,7 +1554,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		if (ctx.args() != null) {
 			visit(ctx.args());
 		}
-
+		
 		/** JUMP */
 		emit(OpCode.Jump, startFun);
 
@@ -1581,7 +1585,6 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 
 		emit(OpCode.Branch, retR, new Target(Tar.Rel, 2));
 		emit(OpCode.Jump, new Target(Tar.Abs, errorJump));
-
 		return ret;
 	}
 
@@ -1750,8 +1753,8 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 					emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
 				}
 				emit(OpCode.Load, new Address(Addr.ImmValue, offset), reg);
+				
 				emit(OpCode.Compute, new Operator(Op.Add), reg, h1, reg);
-				emit(OpCode.Load, new Address(Addr.IndAddr, reg), reg);
 
 				if (pointer) {
 					while (point instanceof Pointer) {
@@ -1762,6 +1765,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 
 				/** BACKWARDS ON STACK */
 				Reg size = helpReg();
+
 				// load size
 				emit(OpCode.Load, new Address(Addr.IndAddr, reg), size);
 				emit(OpCode.Compute, new Operator(Op.Add), reg, size, reg);
@@ -1811,7 +1815,6 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 				}
 				emit(OpCode.Load, new Address(Addr.ImmValue, offset), reg);
 				emit(OpCode.Compute, new Operator(Op.Add), reg, h1, reg);
-				emit(OpCode.Load, new Address(Addr.IndAddr, reg), reg);
 
 				if (pointer) {
 					while (point instanceof Pointer) {

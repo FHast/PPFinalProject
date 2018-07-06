@@ -509,6 +509,9 @@ public class TypeChecker extends SycoraxBaseListener {
 		super.exitReturnStat(ctx);
 		boolean retValue = ctx.expr() != null;
 		Func current = table().getFunction();
+		if (current == null) {
+			addError(ctx, "Cannot return outside function. ");;
+		}
 		Data ret = current.ret();
 
 		if (retValue && current.isVoid()) {
@@ -553,7 +556,7 @@ public class TypeChecker extends SycoraxBaseListener {
 		setDepth(ctx, table().depth(id));
 		setThread(ctx, tables.threadID());
 	}
-	
+
 	@Override
 	public void exitIdPointer(IdPointerContext ctx) {
 		super.exitIdPointer(ctx);
@@ -571,18 +574,18 @@ public class TypeChecker extends SycoraxBaseListener {
 		}
 		if (data == null) {
 			addError(ctx, Errors.VARIBALE_NOT_IN_SCOPE, id);
-		} 
+		}
 		if (data instanceof Pointer) {
 			setData(ctx.ID(), data);
 			while (data instanceof Pointer) {
-				data = ((Pointer)data).target();
+				data = ((Pointer) data).target();
 			}
 		}
 		setData(ctx, data);
 		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 	}
-	
+
 	@Override
 	public void exitIndexPointer(IndexPointerContext ctx) {
 		String id = ctx.ID().getText();
@@ -604,7 +607,7 @@ public class TypeChecker extends SycoraxBaseListener {
 		if (data instanceof Pointer) {
 			setData(ctx.ID(), data);
 			while (data instanceof Pointer) {
-				data = ((Pointer)data).target();
+				data = ((Pointer) data).target();
 			}
 		}
 		if (!(data instanceof Arr)) {
@@ -710,7 +713,7 @@ public class TypeChecker extends SycoraxBaseListener {
 	@Override
 	public void exitCompOpExpr(CompOpExprContext ctx) {
 		super.exitCompOpExpr(ctx);
-		checkType(ctx.expr(0), getData(ctx.expr(1)));
+		//checkType(ctx.expr(0), getData(ctx.expr(1)));
 		setEntry(ctx, entry(ctx.expr(0)));
 		setData(ctx, Data.BOOL);
 		setThread(ctx, tables.threadID());
@@ -764,7 +767,7 @@ public class TypeChecker extends SycoraxBaseListener {
 		if (data instanceof Pointer) {
 			setData(ctx.ID(), data);
 			while (data instanceof Pointer) {
-				data = ((Pointer)data).target();
+				data = ((Pointer) data).target();
 			}
 		}
 		setData(ctx, data);
@@ -794,7 +797,7 @@ public class TypeChecker extends SycoraxBaseListener {
 		if (data instanceof Pointer) {
 			setData(ctx.ID(), data);
 			while (data instanceof Pointer) {
-				data = ((Pointer)data).target();
+				data = ((Pointer) data).target();
 			}
 		}
 		if (!(data instanceof Arr)) {
@@ -834,7 +837,7 @@ public class TypeChecker extends SycoraxBaseListener {
 		for (int i = 0; i < args.size(); i++) {
 			checkType(ctx.args().expr(i), args.get(i));
 		}
-		setOffset(ctx, table().size()+2);
+		setOffset(ctx, table().size() + 2);
 		setData(ctx, func.ret());
 		setData(ctx.ID(), func);
 		setEntry(ctx, ctx);
@@ -931,11 +934,11 @@ public class TypeChecker extends SycoraxBaseListener {
 		}
 		if (data == null) {
 			addError(ctx, Errors.VARIBALE_NOT_IN_SCOPE, id);
-		} 
+		}
 		if (data instanceof Pointer) {
 			setData(ctx.ID(), data);
 			while (data instanceof Pointer) {
-				data = ((Pointer)data).target();
+				data = ((Pointer) data).target();
 			}
 		}
 		setData(ctx, data);
@@ -966,7 +969,7 @@ public class TypeChecker extends SycoraxBaseListener {
 		if (data instanceof Pointer) {
 			setData(ctx.ID(), data);
 			while (data instanceof Pointer) {
-				data = ((Pointer)data).target();
+				data = ((Pointer) data).target();
 			}
 		}
 		if (!(data instanceof Arr)) {
