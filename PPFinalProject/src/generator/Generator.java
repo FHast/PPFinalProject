@@ -884,7 +884,8 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		emit(OpCode.Store, h1, new Address(Addr.IndAddr, reg));
 
 		/** SET NEW ARP */
-		emit(OpCode.Compute, new Operator(Op.Incr), reg, reg, arp);
+		emit(OpCode.Load, new Address(Addr.ImmValue, offset), reg);
+		emit(OpCode.Compute, new Operator(Op.Add), reg, arp, arp);
 
 		emit(OpCode.Jump, new Target(Tar.Rel, 2));
 		Target retT = new Target(Tar.Abs, 0);
@@ -1894,14 +1895,15 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		Reg cond = helpReg();
 
 		emit(OpCode.Comment, new Str("While"));
-
 		Target endT = new Target(Tar.Abs, 0);
+		
 		emit(OpCode.Comment, new Str("While - condition"));
 		int loop = emit(OpCode.Nop);
 		visit(ctx.expr());
 		emit(OpCode.Pop, cond);
 		emit(OpCode.Branch, cond, new Target(Tar.Rel, 2));
 		emit(OpCode.Jump, endT);
+		emit(OpCode.Nop);
 		visit(ctx.block());
 		emit(OpCode.Jump, new Target(Tar.Abs, loop));
 		int end = emit(OpCode.Nop);
