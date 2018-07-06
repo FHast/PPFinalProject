@@ -297,6 +297,18 @@ public interface SycoraxListener extends ParseTreeListener {
 	 */
 	void exitIntArrType(@NotNull SycoraxParser.IntArrTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code indexPointer}
+	 * labeled alternative in {@link SycoraxParser#pointerTarget}.
+	 * @param ctx the parse tree
+	 */
+	void enterIndexPointer(@NotNull SycoraxParser.IndexPointerContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code indexPointer}
+	 * labeled alternative in {@link SycoraxParser#pointerTarget}.
+	 * @param ctx the parse tree
+	 */
+	void exitIndexPointer(@NotNull SycoraxParser.IndexPointerContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SycoraxParser#funType}.
 	 * @param ctx the parse tree
 	 */
@@ -604,6 +616,18 @@ public interface SycoraxListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAssignStat(@NotNull SycoraxParser.AssignStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code idPointer}
+	 * labeled alternative in {@link SycoraxParser#pointerTarget}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdPointer(@NotNull SycoraxParser.IdPointerContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code idPointer}
+	 * labeled alternative in {@link SycoraxParser#pointerTarget}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdPointer(@NotNull SycoraxParser.IdPointerContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code unlockStat}
 	 * labeled alternative in {@link SycoraxParser#stat}.

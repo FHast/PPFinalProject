@@ -2,7 +2,6 @@ package generator;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -28,15 +27,18 @@ import grammar.SycoraxParser.FalseExprContext;
 import grammar.SycoraxParser.ForkStatContext;
 import grammar.SycoraxParser.FunDefContext;
 import grammar.SycoraxParser.IdExprContext;
+import grammar.SycoraxParser.IdPointerContext;
 import grammar.SycoraxParser.IdTargetContext;
 import grammar.SycoraxParser.IfstatContext;
 import grammar.SycoraxParser.IndexExprContext;
+import grammar.SycoraxParser.IndexPointerContext;
 import grammar.SycoraxParser.IntOpExprContext;
 import grammar.SycoraxParser.JoinStatContext;
 import grammar.SycoraxParser.LockStatContext;
 import grammar.SycoraxParser.NotExprContext;
 import grammar.SycoraxParser.NumExprContext;
 import grammar.SycoraxParser.ParamContext;
+import grammar.SycoraxParser.PointerStatContext;
 import grammar.SycoraxParser.PrintStatContext;
 import grammar.SycoraxParser.ProgramContext;
 import grammar.SycoraxParser.ReturnStatContext;
@@ -47,6 +49,7 @@ import grammar.SycoraxParser.UnlockStatContext;
 import grammar.SycoraxParser.WhileStatContext;
 import symbTable.Data;
 import symbTable.Data.Arr;
+import symbTable.Data.Pointer;
 import symbTable.SymbolTables;
 
 public class Generator extends SycoraxBaseVisitor<Integer> {
@@ -744,6 +747,187 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 
 		return ret;
 	}
+	
+	@Override
+	public Integer visitPointerStat(PointerStatContext ctx) {
+		int ret = emit(OpCode.Nop);
+		super.visitPointerStat(ctx);
+		
+		int offset = offset(ctx);
+		String id = ctx.ID().getText();
+		Reg reg = helpReg();
+		Reg arp = this.arp;
+		Reg h1 = helpReg();
+
+		emit(OpCode.Comment, new Str("Pointer creation - " + id));
+		
+		/** GET SCOPE AND OFFSET */
+		emit(OpCode.Compute, new Operator(Op.Add), arp, zero, h1);
+		emit(OpCode.Load, new Address(Addr.ImmValue, offset), reg);
+		emit(OpCode.Compute, new Operator(Op.Add), h1, reg, h1);
+		
+		emit(OpCode.Pop, reg);
+		emit(OpCode.Store, reg, new Address(Addr.IndAddr, h1));
+		return ret;
+	}
+	
+	@Override
+	public Integer visitIdPointer(IdPointerContext ctx) {
+		int ret = emit(OpCode.Nop);
+		
+		Data point = getData(ctx.ID());
+		boolean pointer = point != null;
+		Data data = getData(ctx);
+		boolean array = data instanceof Arr;
+		boolean global = ctx.GLOBAL() != null;
+		int offset = offset(ctx);
+		int depth = depth(ctx);
+
+		Reg reg = helpReg();
+		Reg h1 = helpReg();
+
+		emit(OpCode.Comment, new Str("ID Target"));
+		if (global) {
+			Reg arp = helpReg();
+			emit(OpCode.ReadInstr, gArp);
+			emit(OpCode.Receive, arp);
+
+			emit(OpCode.Load, new Address(Addr.ImmValue, offset), h1);
+			emit(OpCode.Compute, new Operator(Op.Add), h1, arp, h1);
+			
+			if (pointer) {
+				while (point instanceof Pointer) {
+					point = ((Pointer)point).target();
+					emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
+					emit(OpCode.Receive, h1);
+				}
+			}
+
+			if (array) {
+				emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
+				emit(OpCode.Receive, h1);
+			}
+			
+			emit(OpCode.Push, h1);
+		} else { // local
+			Reg arp = this.arp;
+
+			/** GET SCOPE AND OFFSET */
+			emit(OpCode.Compute, new Operator(Op.Add), arp, zero, h1);
+			for (int i = 0; i < depth; i++) {
+				emit(OpCode.Compute, new Operator(Op.Decr), h1, h1, h1);
+				emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
+			}
+			emit(OpCode.Load, new Address(Addr.ImmValue, offset), reg);
+			emit(OpCode.Compute, new Operator(Op.Add), h1, reg, h1);
+			
+			if (pointer) {
+				while (point instanceof Pointer) {
+					point = ((Pointer)point).target();
+					emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
+				}
+			}
+
+			if (array) {
+				emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
+			}
+			
+			emit(OpCode.Push, h1);
+		}
+
+		return ret;
+	}
+	
+	@Override
+	public Integer visitIndexPointer(IndexPointerContext ctx) {
+		int ret = emit(OpCode.Nop);
+		super.visitIndexPointer(ctx);
+
+		Data point = getData(ctx.ID());
+		boolean pointer = point != null;
+		boolean global = ctx.GLOBAL() != null;
+		int offset = offset(ctx);
+		int depth = depth(ctx);
+
+		Reg h1 = helpReg();
+		Reg index = helpReg();
+		Reg reg = helpReg();
+		Reg size = helpReg();
+		if (global) {
+			Reg arp = helpReg();
+			emit(OpCode.ReadInstr, gArp);
+			emit(OpCode.Receive, arp);
+
+			emit(OpCode.Load, new Address(Addr.ImmValue, offset), h1);
+			emit(OpCode.Compute, new Operator(Op.Add), h1, arp, h1);
+
+			emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
+			emit(OpCode.Receive, h1);
+			
+			if (pointer) {
+				while (point instanceof Pointer) {
+					point = ((Pointer)point).target();
+					emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
+					emit(OpCode.Receive, h1);
+				}
+			}
+
+			emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
+			emit(OpCode.Receive, size);
+
+			// add index +1 (size storage)
+			emit(OpCode.Pop, index);
+
+			// Check index
+			emit(OpCode.Compute, new Operator(Op.GtE), index, size, size);
+			emit(OpCode.Branch, size, new Target(Tar.Abs, this.errorJump));
+			emit(OpCode.Compute, new Operator(Op.Lt), index, zero, size);
+			emit(OpCode.Branch, size, new Target(Tar.Abs, errorJump));
+
+			emit(OpCode.Compute, new Operator(Op.Add), h1, index, h1);
+			emit(OpCode.Compute, new Operator(Op.Incr), h1, h1, h1);
+
+			/** LOAD VALUE */
+			emit(OpCode.Push, h1);
+		} else {
+			Reg arp = this.arp;
+
+			/** GET SCOPE AND OFFSET */
+			emit(OpCode.Compute, new Operator(Op.Add), arp, zero, h1);
+			for (int i = 0; i < depth; i++) {
+				emit(OpCode.Compute, new Operator(Op.Decr), h1, h1, h1);
+				emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
+			}
+			emit(OpCode.Load, new Address(Addr.ImmValue, offset), reg);
+			emit(OpCode.Compute, new Operator(Op.Add), h1, reg, h1);
+
+			emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
+			
+			if (pointer) {
+				while (point instanceof Pointer) {
+					point = ((Pointer)point).target();
+					emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
+				}
+			}
+
+			emit(OpCode.Load, new Address(Addr.IndAddr, h1), size);
+			// add index +1 (size storage)
+			emit(OpCode.Pop, index);
+
+			// Check index
+			emit(OpCode.Compute, new Operator(Op.GtE), index, size, size);
+			emit(OpCode.Branch, size, new Target(Tar.Abs, this.errorJump));
+			emit(OpCode.Compute, new Operator(Op.Lt), index, zero, size);
+			emit(OpCode.Branch, size, new Target(Tar.Abs, errorJump));
+
+			emit(OpCode.Compute, new Operator(Op.Add), h1, index, h1);
+			emit(OpCode.Compute, new Operator(Op.Incr), h1, h1, h1);
+
+			/** LOAD VALUE */
+			emit(OpCode.Push, h1);
+		}
+		return ret;
+	}
 
 	@Override
 	public Integer visitPrintStat(PrintStatContext ctx) {
@@ -932,6 +1116,10 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			/** STORE SCOPE ADDRESS */
 			emit(OpCode.Compute, new Operator(Op.Decr), reg, reg, reg);
 			emit(OpCode.Store, arp, new Address(Addr.IndAddr, reg));
+			emit(OpCode.Compute, new Operator(Op.Decr), reg, reg, reg);
+			emit(OpCode.ReadInstr, new Address(Addr.IndAddr, regThreadID));
+			emit(OpCode.Receive, h1);
+			emit(OpCode.Store, h1, new Address(Addr.IndAddr, reg));
 			emit(OpCode.Compute, new Operator(Op.Decr), reg, reg, reg);
 			emit(OpCode.Store, retR, new Address(Addr.IndAddr, reg));
 			emit(OpCode.Compute, new Operator(Op.Decr), reg, reg, reg);
@@ -1406,6 +1594,8 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		int ret = emit(OpCode.Nop);
 		super.visitIndexExpr(ctx);
 
+		Data point = getData(ctx.ID());
+		boolean pointer = point != null;
 		int offset = offset(ctx);
 		int depth = depth(ctx);
 		boolean global = ctx.GLOBAL() != null;
@@ -1424,6 +1614,14 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			emit(OpCode.Compute, new Operator(Op.Add), h1, arp, h1);
 			emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
 			emit(OpCode.Receive, h1);
+			
+			if (pointer) {
+				while (point instanceof Pointer) {
+					point = ((Pointer)point).target();
+					emit(OpCode.ReadInstr, new Address(Addr.IndAddr, reg));
+					emit(OpCode.Receive, reg);
+				}
+			}
 
 			/** BOUNDS CHECKING */
 			emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
@@ -1454,6 +1652,13 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			emit(OpCode.Compute, new Operator(Op.Add), reg, h1, h1);
 			emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
 
+			if (pointer) {
+				while (point instanceof Pointer) {
+					point = ((Pointer)point).target();
+					emit(OpCode.Load, new Address(Addr.IndAddr, reg), reg);
+				}
+			}
+			
 			/** CHECKING INDEX BOUNDS */
 			Reg comp = helpReg();
 			emit(OpCode.Load, new Address(Addr.IndAddr, h1), reg);
@@ -1476,6 +1681,8 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 	public Integer visitIdExpr(IdExprContext ctx) {
 		super.visitIdExpr(ctx);
 		Data data = getData(ctx);
+		Data point = getData(ctx.ID());
+		boolean pointer = point != null;
 		boolean array = data instanceof Arr;
 		boolean global = ctx.GLOBAL() != null;
 		int offset = offset(ctx);
@@ -1496,6 +1703,14 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 				emit(OpCode.Compute, new Operator(Op.Add), h1, arp, h1);
 				emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
 				emit(OpCode.Receive, reg);
+				
+				if (pointer) {
+					while (point instanceof Pointer) {
+						point = ((Pointer)point).target();
+						emit(OpCode.ReadInstr, new Address(Addr.IndAddr, reg));
+						emit(OpCode.Receive, reg);
+					}
+				}
 
 				/** ON STACK */
 				Reg size = helpReg();
@@ -1531,6 +1746,13 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 				emit(OpCode.Compute, new Operator(Op.Add), reg, h1, reg);
 				emit(OpCode.Load, new Address(Addr.IndAddr, reg), reg);
 
+				if (pointer) {
+					while (point instanceof Pointer) {
+						point = ((Pointer)point).target();
+						emit(OpCode.Load, new Address(Addr.IndAddr, reg), reg);
+					}
+				}
+				
 				/** BACKWARDS ON STACK */
 				Reg size = helpReg();
 				// load size
@@ -1561,6 +1783,14 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 				emit(OpCode.Compute, new Operator(Op.Add), h1, arp, h1);
 				emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
 				emit(OpCode.Receive, reg);
+				
+				if (pointer) {
+					while (point instanceof Pointer) {
+						point = ((Pointer)point).target();
+						emit(OpCode.ReadInstr, new Address(Addr.IndAddr, reg));
+						emit(OpCode.Receive, reg);
+					}
+				}
 
 				/** ON STACK */
 				emit(OpCode.Push, reg);
@@ -1576,6 +1806,13 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 				emit(OpCode.Compute, new Operator(Op.Add), reg, h1, reg);
 				emit(OpCode.Load, new Address(Addr.IndAddr, reg), reg);
 
+				if (pointer) {
+					while (point instanceof Pointer) {
+						point = ((Pointer)point).target();
+						emit(OpCode.Load, new Address(Addr.IndAddr, reg), reg);
+					}
+				}
+				
 				/** ON STACK */
 				emit(OpCode.Push, reg);
 			}
@@ -1688,6 +1925,8 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 	public Integer visitIdTarget(IdTargetContext ctx) {
 		int ret = emit(OpCode.Nop);
 
+		Data point = getData(ctx.ID());
+		boolean pointer = point != null;
 		Data data = getData(ctx);
 		boolean array = data instanceof Arr;
 		boolean global = ctx.GLOBAL() != null;
@@ -1705,6 +1944,14 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 
 			emit(OpCode.Load, new Address(Addr.ImmValue, offset), h1);
 			emit(OpCode.Compute, new Operator(Op.Add), h1, arp, h1);
+			
+			if (pointer) {
+				while (point instanceof Pointer) {
+					point = ((Pointer)point).target();
+					emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
+					emit(OpCode.Receive, h1);
+				}
+			}
 
 			if (array) {
 				emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
@@ -1747,6 +1994,13 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			}
 			emit(OpCode.Load, new Address(Addr.ImmValue, offset), reg);
 			emit(OpCode.Compute, new Operator(Op.Add), h1, reg, h1);
+			
+			if (pointer) {
+				while (point instanceof Pointer) {
+					point = ((Pointer)point).target();
+					emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
+				}
+			}
 
 			if (array) {
 				emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
@@ -1788,6 +2042,8 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		int ret = emit(OpCode.Nop);
 		super.visitArrayTarget(ctx);
 
+		Data point = getData(ctx.ID());
+		boolean pointer = point != null;
 		boolean global = ctx.GLOBAL() != null;
 		int offset = offset(ctx);
 		int depth = depth(ctx);
@@ -1806,6 +2062,14 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 
 			emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
 			emit(OpCode.Receive, h1);
+			
+			if (pointer) {
+				while (point instanceof Pointer) {
+					point = ((Pointer)point).target();
+					emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
+					emit(OpCode.Receive, h1);
+				}
+			}
 
 			emit(OpCode.ReadInstr, new Address(Addr.IndAddr, h1));
 			emit(OpCode.Receive, size);
@@ -1838,6 +2102,13 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			emit(OpCode.Compute, new Operator(Op.Add), h1, reg, h1);
 
 			emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
+			
+			if (pointer) {
+				while (point instanceof Pointer) {
+					point = ((Pointer)point).target();
+					emit(OpCode.Load, new Address(Addr.IndAddr, h1), h1);
+				}
+			}
 
 			emit(OpCode.Load, new Address(Addr.IndAddr, h1), size);
 			// add index +1 (size storage)

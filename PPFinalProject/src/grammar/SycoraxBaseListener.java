@@ -317,6 +317,18 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterIndexPointer(@NotNull SycoraxParser.IndexPointerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIndexPointer(@NotNull SycoraxParser.IndexPointerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFunType(@NotNull SycoraxParser.FunTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -636,6 +648,18 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAssignStat(@NotNull SycoraxParser.AssignStatContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIdPointer(@NotNull SycoraxParser.IdPointerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIdPointer(@NotNull SycoraxParser.IdPointerContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -32,9 +32,11 @@ import grammar.SycoraxParser.ForkStatContext;
 import grammar.SycoraxParser.FunDefContext;
 import grammar.SycoraxParser.FunTypeContext;
 import grammar.SycoraxParser.IdExprContext;
+import grammar.SycoraxParser.IdPointerContext;
 import grammar.SycoraxParser.IdTargetContext;
 import grammar.SycoraxParser.IfstatContext;
 import grammar.SycoraxParser.IndexExprContext;
+import grammar.SycoraxParser.IndexPointerContext;
 import grammar.SycoraxParser.IntArrTypeContext;
 import grammar.SycoraxParser.IntOpExprContext;
 import grammar.SycoraxParser.IntTypeContext;
@@ -536,13 +538,13 @@ public class TypeChecker extends SycoraxBaseListener {
 	@Override
 	public void exitPointerStat(PointerStatContext ctx) {
 		super.exitPointerStat(ctx);
-		Data var = getData(ctx.target());
+		Data var = getData(ctx.pointerTarget());
 		if (var == null) {
-			addError(ctx.target(), Errors.VARIBALE_NOT_IN_SCOPE, var);
+			addError(ctx.pointerTarget(), Errors.VARIBALE_NOT_IN_SCOPE, var);
 		}
 		String id = ctx.ID().getText();
 		Data data = new Pointer(var);
-		if (table().put(id, data)) {
+		if (!table().put(id, data)) {
 			addError(ctx.ID().getSymbol(), Errors.VARIABLE_DECL_FAIL, id);
 		}
 		setData(ctx, data);
@@ -550,7 +552,68 @@ public class TypeChecker extends SycoraxBaseListener {
 		setOffset(ctx, table().offset(id));
 		setDepth(ctx, table().depth(id));
 		setThread(ctx, tables.threadID());
+	}
+	
+	@Override
+	public void exitIdPointer(IdPointerContext ctx) {
+		super.exitIdPointer(ctx);
+		String id = ctx.ID().getText();
+		Data data;
+		boolean global = ctx.GLOBAL() != null;
+		if (global) {
+			data = global().get(id);
+			setOffset(ctx, global().offset(id));
+			setDepth(ctx, global().depth(id));
+		} else {
+			data = table().get(id);
+			setOffset(ctx, table().offset(id));
+			setDepth(ctx, table().depth(id));
+		}
+		if (data == null) {
+			addError(ctx, Errors.VARIBALE_NOT_IN_SCOPE, id);
+		} 
+		if (data instanceof Pointer) {
+			setData(ctx.ID(), data);
+			while (data instanceof Pointer) {
+				data = ((Pointer)data).target();
+			}
+		}
+		setData(ctx, data);
+		setEntry(ctx, ctx);
+		setThread(ctx, tables.threadID());
+	}
+	
+	@Override
+	public void exitIndexPointer(IndexPointerContext ctx) {
+		String id = ctx.ID().getText();
+		Data data;
+		boolean global = ctx.GLOBAL() != null;
 
+		if (global) {
+			data = global().get(id);
+			setOffset(ctx, global().offset(id));
+			setDepth(ctx, global().depth(id));
+		} else {
+			data = table().get(id);
+			setOffset(ctx, table().offset(id));
+			setDepth(ctx, table().depth(id));
+		}
+		if (data == null) {
+			addError(ctx, Errors.VARIBALE_NOT_IN_SCOPE, id);
+		}
+		if (data instanceof Pointer) {
+			setData(ctx.ID(), data);
+			while (data instanceof Pointer) {
+				data = ((Pointer)data).target();
+			}
+		}
+		if (!(data instanceof Arr)) {
+			addError(ctx.ID().getSymbol(), Errors.EXPECTED_TYPE_BUT_FOUND, "Array", data);
+		}
+		checkType(ctx.expr(), Data.INT);
+		setData(ctx, ((Arr) data).elem());
+		setEntry(ctx, ctx);
+		setThread(ctx, tables.threadID());
 	}
 
 	@Override
@@ -698,6 +761,12 @@ public class TypeChecker extends SycoraxBaseListener {
 		if (data == null) {
 			addError(ctx, Errors.VARIBALE_NOT_IN_SCOPE, id);
 		}
+		if (data instanceof Pointer) {
+			setData(ctx.ID(), data);
+			while (data instanceof Pointer) {
+				data = ((Pointer)data).target();
+			}
+		}
 		setData(ctx, data);
 		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
@@ -721,11 +790,17 @@ public class TypeChecker extends SycoraxBaseListener {
 		}
 		if (data == null) {
 			addError(ctx, Errors.VARIBALE_NOT_IN_SCOPE, id);
-		} else if (!(data instanceof Arr)) {
+		}
+		if (data instanceof Pointer) {
+			setData(ctx.ID(), data);
+			while (data instanceof Pointer) {
+				data = ((Pointer)data).target();
+			}
+		}
+		if (!(data instanceof Arr)) {
 			addError(ctx.ID().getSymbol(), Errors.EXPECTED_TYPE_BUT_FOUND, "Array", data);
 		}
 		checkType(ctx.expr(), Data.INT);
-
 		setData(ctx, ((Arr) data).elem());
 		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
@@ -856,6 +931,12 @@ public class TypeChecker extends SycoraxBaseListener {
 		}
 		if (data == null) {
 			addError(ctx, Errors.VARIBALE_NOT_IN_SCOPE, id);
+		} 
+		if (data instanceof Pointer) {
+			setData(ctx.ID(), data);
+			while (data instanceof Pointer) {
+				data = ((Pointer)data).target();
+			}
 		}
 		setData(ctx, data);
 		setEntry(ctx, ctx);
@@ -881,11 +962,17 @@ public class TypeChecker extends SycoraxBaseListener {
 		}
 		if (data == null) {
 			addError(ctx, Errors.VARIBALE_NOT_IN_SCOPE, id);
-		} else if (!(data instanceof Arr)) {
+		}
+		if (data instanceof Pointer) {
+			setData(ctx.ID(), data);
+			while (data instanceof Pointer) {
+				data = ((Pointer)data).target();
+			}
+		}
+		if (!(data instanceof Arr)) {
 			addError(ctx.ID().getSymbol(), Errors.EXPECTED_TYPE_BUT_FOUND, "Array", data);
 		}
 		checkType(ctx.expr(), Data.INT);
-
 		setData(ctx, ((Arr) data).elem());
 		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());

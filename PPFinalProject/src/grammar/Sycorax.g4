@@ -47,7 +47,7 @@ stat
 	| UNLOCK ID						#unlockStat
 	| RETURN expr?					#returnStat
 	| target ASSIGN expr			#assignStat
-	| POINTER ID TO target			#pointerStat
+	| POINTER ID TO pointerTarget	#pointerStat
 	| IF LPAR expr RPAR 
 	  THEN block
 	  (ELSE block)?					#ifstat
@@ -55,6 +55,11 @@ stat
 	  block							#whileStat
 	| CALL ID (WITH args)?			#callStat
 	| PRINT expr					#printStat
+	;
+	
+pointerTarget
+	: GLOBAL? ID						#idPointer
+	| GLOBAL? ID LBRACK expr RBRACK		#indexPointer
 	;
 	
 expr

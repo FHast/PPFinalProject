@@ -1,18 +1,12 @@
 program test 
 defines {
-	function test uses (integers val) catchable
-	defines {
-		let index be integer
-		while (index smaller size val) 
-		do {
-			print val[index]
-			index assign index plus 1
-		}
-		print "end"
-	}
-		
 	do {
-		call test with ([7,8,9])
+		let x be integer assign 10
+		print x
+		pointer y to x
+		y assign 20
+		print x
+		print y
 	} catch {
 		print "fail"
 	}

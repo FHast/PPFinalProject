@@ -181,6 +181,13 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIntArrType(@NotNull SycoraxParser.IntArrTypeContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code indexPointer}
+	 * labeled alternative in {@link SycoraxParser#pointerTarget}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexPointer(@NotNull SycoraxParser.IndexPointerContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SycoraxParser#funType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -361,6 +368,13 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAssignStat(@NotNull SycoraxParser.AssignStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code idPointer}
+	 * labeled alternative in {@link SycoraxParser#pointerTarget}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdPointer(@NotNull SycoraxParser.IdPointerContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code unlockStat}
 	 * labeled alternative in {@link SycoraxParser#stat}.
