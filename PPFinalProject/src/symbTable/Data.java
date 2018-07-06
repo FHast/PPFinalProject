@@ -120,21 +120,31 @@ public abstract class Data {
 		private List<String> vars;
 		private Data returnData;
 		private boolean catchable;
+		private String name;
 
-		public Func(Data data, List<Data> args, List<String> vars, boolean catchable) {
+		public Func(Data data, String name, List<Data> args, List<String> vars, boolean catchable) {
 			super(Type.FUNCTION);
 			this.returnData = data;
 			this.args = new ArrayList<>(args);
 			this.vars = new ArrayList<>(vars);
 			this.catchable = catchable;
+			this.name = name;
 		}
 
 		public List<Data> args() {
 			return this.args;
 		}
 		
+		public String getName() {
+			return this.name;
+		}
+		
 		public void setArgs(List<Data> args) {
 			this.args = args;
+		}
+		
+		public void setRet(Data data) {
+			this.returnData = data;
 		}
 
 		public Data arg(int i) {

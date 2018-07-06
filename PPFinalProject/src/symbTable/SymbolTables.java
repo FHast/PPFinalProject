@@ -2,6 +2,7 @@ package symbTable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,6 +29,8 @@ public class SymbolTables {
 
 	public SymbolTables() {
 		this.functions = new HashMap<>();
+		this.locks = new HashMap<>();
+		this.locked = new HashSet<>();
 		this.tables = new HashMap<>();
 		this.threads = new Stack<>();
 		this.threadIDs = new ArrayList<>();
@@ -44,6 +47,10 @@ public class SymbolTables {
 		return true;
 	}
 
+	public boolean hasThread(String id) {
+		return tables.containsKey(id);
+	}
+
 	public boolean closeThread(String id) {
 		assert id != MAIN && id != GLOBAL;
 		if (!id.equals(threadID())) {
@@ -57,7 +64,7 @@ public class SymbolTables {
 
 	public boolean lock(String id) {
 		Data d = global().get(id);
-		if (!(d instanceof Lock)) {
+		if (d != null && !(d instanceof Lock)) {
 			return false;
 		}
 		Lock l;
@@ -117,9 +124,13 @@ public class SymbolTables {
 		}
 		return ret;
 	}
-	
+
 	public List<String> getThreads() {
 		return this.threadIDs;
+	}
+
+	public boolean globalScope() {
+		return this.tables.get(MAIN).getScopesSize() == 1;
 	}
 
 }

@@ -1,11 +1,21 @@
 program test 
 defines {
-	do {
-		let i be integer
-		while (i smaller 10)
+	let global x be integer 
+	
+	function test uses (integers val) catchable
+	defines {
+		let index be integer
+		while (index smaller 10) 
 		do {
-			i assign i plus 1
+			comment print index
+			index assign index plus 2
 		}
-		print i
+		print "end"
+	}
+		
+	do {
+		call test with ([1,2,3])
+	} catch {
+		print "fail"
 	}
 }

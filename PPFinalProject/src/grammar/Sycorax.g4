@@ -20,9 +20,13 @@ varDef
 funDef
 	: FUNCTION ID 
 	  (USES params)? 
-	  (RETURNS type)? 
+	  (RETURNS funType)? 
 	  CATCHABLE?
 	  DEFINES LBRACE content RBRACE
+	;
+
+funType 
+	: type
 	;
 
 params 

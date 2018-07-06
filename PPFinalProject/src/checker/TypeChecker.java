@@ -30,6 +30,7 @@ import grammar.SycoraxParser.FailStatContext;
 import grammar.SycoraxParser.FalseExprContext;
 import grammar.SycoraxParser.ForkStatContext;
 import grammar.SycoraxParser.FunDefContext;
+import grammar.SycoraxParser.FunTypeContext;
 import grammar.SycoraxParser.IdExprContext;
 import grammar.SycoraxParser.IdTargetContext;
 import grammar.SycoraxParser.IfstatContext;
@@ -74,7 +75,7 @@ public class TypeChecker extends SycoraxBaseListener {
 
 	private int blockNameCounter = 0;
 
-	private static final boolean catchErrors = false;
+	private static final boolean catchErrors = true;
 
 	public Result check(ParseTree tree) throws ParseException {
 		this.result = new Result();
@@ -274,6 +275,7 @@ public class TypeChecker extends SycoraxBaseListener {
 		Data data = getData(ctx.basicType());
 		boolean global = ctx.GLOBAL() != null;
 		boolean assign = ctx.ASSIGN() != null;
+		boolean glscope = tables.globalScope();
 		SymbolTable table = global ? global() : table();
 
 		if (assign) {
@@ -282,6 +284,10 @@ public class TypeChecker extends SycoraxBaseListener {
 		if (!table.put(id, data)) {
 			addError(ctx.ID().getSymbol(), Errors.VARIABLE_DECL_FAIL, id);
 		}
+		if (!global && glscope) {
+			addError(ctx, Errors.MISSING_GLOBAL, id);
+		}
+
 		setEntry(ctx, ctx);
 		setData(ctx, data);
 		setOffset(ctx, table.offset(id));
@@ -297,6 +303,7 @@ public class TypeChecker extends SycoraxBaseListener {
 		Data data = getData(ctx.arrayType());
 		boolean global = ctx.GLOBAL() != null;
 		boolean assign = ctx.ASSIGN() != null;
+		boolean glscope = tables.globalScope();
 		SymbolTable table = global ? global() : table();
 
 		if (assign) {
@@ -307,6 +314,10 @@ public class TypeChecker extends SycoraxBaseListener {
 		if (!table.put(id, data)) {
 			addError(ctx.ID().getSymbol(), Errors.VARIABLE_DECL_FAIL, id);
 		}
+		if (!global && glscope) {
+			addError(ctx, Errors.MISSING_GLOBAL, id);
+		}
+
 		setEntry(ctx, ctx);
 		setData(ctx, data);
 		setOffset(ctx, table.offset(id));
@@ -323,15 +334,14 @@ public class TypeChecker extends SycoraxBaseListener {
 		boolean success = true;
 		Data rettype;
 		if (returns) {
-			rettype = getData(ctx.type());
-			success = success && table().put(name, rettype);
+			rettype = Data.INT;
 		} else {
 			rettype = null;
 		}
 
 		List<Data> args = new ArrayList<>();
 		List<String> vars = new ArrayList<>();
-		Func func = new Func(rettype, args, vars, catchable);
+		Func func = new Func(rettype, name, args, vars, catchable);
 		table().openFunScope(func);
 		success = success && tables.putFunction(name, func);
 		if (!success) {
@@ -359,6 +369,18 @@ public class TypeChecker extends SycoraxBaseListener {
 		table().closeScope();
 		setOffset(ctx, table().size());
 		setThread(ctx, tables.threadID());
+	}
+
+	@Override
+	public void exitFunType(FunTypeContext ctx) {
+		Func func = tables.getFunction();
+		func.setRet(getData(ctx.type()));
+		String name = func.getName();
+		boolean success = table().put(name, func.ret());
+		if (!success) {
+			addError(ctx, Errors.VARIABLE_DECL_FAIL, name);
+		}
+		setOffset(ctx, table().offset(name));
 	}
 
 	@Override
@@ -419,28 +441,32 @@ public class TypeChecker extends SycoraxBaseListener {
 	}
 
 	@Override
-	public void exitForkStat(ForkStatContext ctx) {
+	public void enterForkStat(ForkStatContext ctx) {
 		super.exitForkStat(ctx);
 		String id = ctx.ID().getText();
 		boolean success = tables.newThread(id);
 		if (!success) {
 			addError(ctx.ID().getSymbol(), Errors.THREAD_NAME_TAKEN, id);
 		}
-		setEntry(ctx, entry(ctx.block()));
 		setThread(ctx, tables.threadID());
+	}
 
+	@Override
+	public void exitForkStat(ForkStatContext ctx) {
+		String id = ctx.ID().getText();
+		tables.closeThread(id);
 	}
 
 	@Override
 	public void exitJoinStat(JoinStatContext ctx) {
 		super.exitJoinStat(ctx);
 		String id = ctx.ID().getText();
-		boolean success = tables.closeThread(id);
+		boolean success = tables.hasThread(id);
 		if (!success) {
 			addError(ctx.ID().getSymbol(), Errors.CANNOT_JOIN_UNDEFINED, id);
 		}
 		setEntry(ctx, ctx);
-		setThread(ctx, tables.threadID());
+		setThread(ctx, id);
 
 	}
 
@@ -581,7 +607,7 @@ public class TypeChecker extends SycoraxBaseListener {
 		for (int i = 0; i < args.size(); i++) {
 			checkType(ctx.args().expr(i), args.get(i));
 		}
-		setOffset(ctx, table().size() + 1);
+		setOffset(ctx, table().size() + 2);
 		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
@@ -720,7 +746,12 @@ public class TypeChecker extends SycoraxBaseListener {
 			}
 		}
 		List<Data> args = func.args();
-		int given = ctx.args().expr().size();
+		int given;
+		if (ctx.args() == null) {
+			given = 0;
+		} else {
+			given = ctx.args().expr().size();
+		}
 		int expected = args.size();
 		if (given != expected) {
 			addError(ctx.args(), Errors.EXPECTED_NUM_ARGUMENTS, expected, given);
@@ -728,7 +759,7 @@ public class TypeChecker extends SycoraxBaseListener {
 		for (int i = 0; i < args.size(); i++) {
 			checkType(ctx.args().expr(i), args.get(i));
 		}
-		setOffset(ctx, table().size());
+		setOffset(ctx, table().size()+2);
 		setData(ctx, func.ret());
 		setData(ctx.ID(), func);
 		setEntry(ctx, ctx);
@@ -881,7 +912,7 @@ public class TypeChecker extends SycoraxBaseListener {
 	@Override
 	public void exitBlock(BlockContext ctx) {
 		table().closeScope();
-		setOffset(ctx, table().size() + 1);
+		setOffset(ctx, table().size() + 4);
 		setThread(ctx, tables.threadID());
 	}
 }

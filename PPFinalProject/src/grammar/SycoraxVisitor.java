@@ -181,6 +181,12 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIntArrType(@NotNull SycoraxParser.IntArrTypeContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SycoraxParser#funType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunType(@NotNull SycoraxParser.FunTypeContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code printStat}
 	 * labeled alternative in {@link SycoraxParser#stat}.
 	 * @param ctx the parse tree

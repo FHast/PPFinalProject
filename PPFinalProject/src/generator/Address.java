@@ -31,7 +31,7 @@ public class Address extends Operand {
 			return this.type.toString();
 		}
 		Object arg = type == Addr.IndAddr ? reg : val;
-		return String.format("(%s %s)", type, arg);
+		return String.format("(%s (%s))", type, arg);
 	}
 
 	public enum Addr {

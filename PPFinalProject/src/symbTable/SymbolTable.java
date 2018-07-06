@@ -114,4 +114,8 @@ public class SymbolTable {
 		}
 		return result == null ? -1 : result;
 	}
+	
+	public int getScopesSize() {
+		return this.scopes.size();
+	}
 }

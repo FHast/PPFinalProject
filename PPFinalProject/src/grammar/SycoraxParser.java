@@ -37,14 +37,15 @@ public class SycoraxParser extends Parser {
 		"')'", "'['", "']'", "'-'", "ID", "NUM", "STR", "CHAR", "COMMENT", "WS"
 	};
 	public static final int
-		RULE_program = 0, RULE_defs = 1, RULE_varDef = 2, RULE_funDef = 3, RULE_params = 4, 
-		RULE_param = 5, RULE_stat = 6, RULE_expr = 7, RULE_boolOp = 8, RULE_intOp = 9, 
-		RULE_compOp = 10, RULE_array = 11, RULE_args = 12, RULE_target = 13, RULE_block = 14, 
-		RULE_content = 15, RULE_type = 16, RULE_basicType = 17, RULE_arrayType = 18;
+		RULE_program = 0, RULE_defs = 1, RULE_varDef = 2, RULE_funDef = 3, RULE_funType = 4, 
+		RULE_params = 5, RULE_param = 6, RULE_stat = 7, RULE_expr = 8, RULE_boolOp = 9, 
+		RULE_intOp = 10, RULE_compOp = 11, RULE_array = 12, RULE_args = 13, RULE_target = 14, 
+		RULE_block = 15, RULE_content = 16, RULE_type = 17, RULE_basicType = 18, 
+		RULE_arrayType = 19;
 	public static final String[] ruleNames = {
-		"program", "defs", "varDef", "funDef", "params", "param", "stat", "expr", 
-		"boolOp", "intOp", "compOp", "array", "args", "target", "block", "content", 
-		"type", "basicType", "arrayType"
+		"program", "defs", "varDef", "funDef", "funType", "params", "param", "stat", 
+		"expr", "boolOp", "intOp", "compOp", "array", "args", "target", "block", 
+		"content", "type", "basicType", "arrayType"
 	};
 
 	@Override
@@ -101,13 +102,13 @@ public class SycoraxParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(38); match(PROGRAM);
-			setState(39); match(ID);
-			setState(40); match(DEFINES);
-			setState(41); match(LBRACE);
-			setState(42); defs();
-			setState(43); match(RBRACE);
-			setState(44); match(EOF);
+			setState(40); match(PROGRAM);
+			setState(41); match(ID);
+			setState(42); match(DEFINES);
+			setState(43); match(LBRACE);
+			setState(44); defs();
+			setState(45); match(RBRACE);
+			setState(46); match(EOF);
 			}
 		}
 		catch (RecognitionException re) {
@@ -166,33 +167,33 @@ public class SycoraxParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(51);
+			setState(53);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << DO) | (1L << LET) | (1L << FUNCTION))) != 0)) {
 				{
-				setState(49);
+				setState(51);
 				switch (_input.LA(1)) {
 				case FUNCTION:
 					{
-					setState(46); funDef();
+					setState(48); funDef();
 					}
 					break;
 				case LET:
 					{
-					setState(47); varDef();
+					setState(49); varDef();
 					}
 					break;
 				case DO:
 					{
-					setState(48); block();
+					setState(50); block();
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
 				}
-				setState(53);
+				setState(55);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -281,30 +282,30 @@ public class SycoraxParser extends Parser {
 		enterRule(_localctx, 4, RULE_varDef);
 		int _la;
 		try {
-			setState(78);
+			setState(80);
 			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
 			case 1:
 				_localctx = new BasicDefContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(54); match(LET);
-				setState(56);
+				setState(56); match(LET);
+				setState(58);
 				_la = _input.LA(1);
 				if (_la==GLOBAL) {
 					{
-					setState(55); match(GLOBAL);
+					setState(57); match(GLOBAL);
 					}
 				}
 
-				setState(58); match(ID);
-				setState(59); match(BE);
-				setState(60); basicType();
-				setState(63);
+				setState(60); match(ID);
+				setState(61); match(BE);
+				setState(62); basicType();
+				setState(65);
 				_la = _input.LA(1);
 				if (_la==ASSIGN) {
 					{
-					setState(61); match(ASSIGN);
-					setState(62); expr(0);
+					setState(63); match(ASSIGN);
+					setState(64); expr(0);
 					}
 				}
 
@@ -314,30 +315,30 @@ public class SycoraxParser extends Parser {
 				_localctx = new ArrayDefContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(65); match(LET);
-				setState(67);
+				setState(67); match(LET);
+				setState(69);
 				_la = _input.LA(1);
 				if (_la==GLOBAL) {
 					{
-					setState(66); match(GLOBAL);
+					setState(68); match(GLOBAL);
 					}
 				}
 
-				setState(69); match(ID);
-				setState(70); match(BE);
-				setState(71); arrayType();
-				setState(76);
+				setState(71); match(ID);
+				setState(72); match(BE);
+				setState(73); arrayType();
+				setState(78);
 				switch (_input.LA(1)) {
 				case SIZED:
 					{
-					setState(72); match(SIZED);
-					setState(73); expr(0);
+					setState(74); match(SIZED);
+					setState(75); expr(0);
 					}
 					break;
 				case ASSIGN:
 					{
-					setState(74); match(ASSIGN);
-					setState(75); expr(0);
+					setState(76); match(ASSIGN);
+					setState(77); expr(0);
 					}
 					break;
 				default:
@@ -372,10 +373,10 @@ public class SycoraxParser extends Parser {
 		public TerminalNode DEFINES() { return getToken(SycoraxParser.DEFINES, 0); }
 		public TerminalNode CATCHABLE() { return getToken(SycoraxParser.CATCHABLE, 0); }
 		public TerminalNode RETURNS() { return getToken(SycoraxParser.RETURNS, 0); }
-		public TypeContext type() {
-			return getRuleContext(TypeContext.class,0);
-		}
 		public TerminalNode USES() { return getToken(SycoraxParser.USES, 0); }
+		public FunTypeContext funType() {
+			return getRuleContext(FunTypeContext.class,0);
+		}
 		public FunDefContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -402,38 +403,81 @@ public class SycoraxParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(80); match(FUNCTION);
-			setState(81); match(ID);
-			setState(84);
+			setState(82); match(FUNCTION);
+			setState(83); match(ID);
+			setState(86);
 			_la = _input.LA(1);
 			if (_la==USES) {
 				{
-				setState(82); match(USES);
-				setState(83); params();
+				setState(84); match(USES);
+				setState(85); params();
 				}
 			}
 
-			setState(88);
+			setState(90);
 			_la = _input.LA(1);
 			if (_la==RETURNS) {
 				{
-				setState(86); match(RETURNS);
-				setState(87); type();
+				setState(88); match(RETURNS);
+				setState(89); funType();
 				}
 			}
 
-			setState(91);
+			setState(93);
 			_la = _input.LA(1);
 			if (_la==CATCHABLE) {
 				{
-				setState(90); match(CATCHABLE);
+				setState(92); match(CATCHABLE);
 				}
 			}
 
-			setState(93); match(DEFINES);
-			setState(94); match(LBRACE);
-			setState(95); content();
-			setState(96); match(RBRACE);
+			setState(95); match(DEFINES);
+			setState(96); match(LBRACE);
+			setState(97); content();
+			setState(98); match(RBRACE);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class FunTypeContext extends ParserRuleContext {
+		public TypeContext type() {
+			return getRuleContext(TypeContext.class,0);
+		}
+		public FunTypeContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_funType; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof SycoraxListener ) ((SycoraxListener)listener).enterFunType(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof SycoraxListener ) ((SycoraxListener)listener).exitFunType(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SycoraxVisitor ) return ((SycoraxVisitor<? extends T>)visitor).visitFunType(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final FunTypeContext funType() throws RecognitionException {
+		FunTypeContext _localctx = new FunTypeContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_funType);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(100); type();
 			}
 		}
 		catch (RecognitionException re) {
@@ -481,30 +525,30 @@ public class SycoraxParser extends Parser {
 
 	public final ParamsContext params() throws RecognitionException {
 		ParamsContext _localctx = new ParamsContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_params);
+		enterRule(_localctx, 10, RULE_params);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(98); match(LPAR);
+			setState(102); match(LPAR);
 			{
-			setState(99); param();
-			setState(104);
+			setState(103); param();
+			setState(108);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(100); match(COMMA);
-				setState(101); param();
+				setState(104); match(COMMA);
+				setState(105); param();
 				}
 				}
-				setState(106);
+				setState(110);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
 			}
-			setState(107); match(RPAR);
+			setState(111); match(RPAR);
 			}
 		}
 		catch (RecognitionException re) {
@@ -544,12 +588,12 @@ public class SycoraxParser extends Parser {
 
 	public final ParamContext param() throws RecognitionException {
 		ParamContext _localctx = new ParamContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_param);
+		enterRule(_localctx, 12, RULE_param);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(109); type();
-			setState(110); match(ID);
+			setState(113); type();
+			setState(114); match(ID);
 			}
 		}
 		catch (RecognitionException re) {
@@ -869,75 +913,75 @@ public class SycoraxParser extends Parser {
 
 	public final StatContext stat() throws RecognitionException {
 		StatContext _localctx = new StatContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_stat);
+		enterRule(_localctx, 14, RULE_stat);
 		int _la;
 		try {
-			setState(160);
+			setState(164);
 			switch (_input.LA(1)) {
 			case DO:
 				_localctx = new BlockStatContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(112); block();
+				setState(116); block();
 				}
 				break;
 			case LET:
 				_localctx = new VardefStatContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(113); varDef();
+				setState(117); varDef();
 				}
 				break;
 			case FAIL:
 				_localctx = new FailStatContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(114); match(FAIL);
+				setState(118); match(FAIL);
 				}
 				break;
 			case FORK:
 				_localctx = new ForkStatContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(115); match(FORK);
-				setState(116); match(ID);
-				setState(117); block();
+				setState(119); match(FORK);
+				setState(120); match(ID);
+				setState(121); block();
 				}
 				break;
 			case JOIN:
 				_localctx = new JoinStatContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(118); match(JOIN);
-				setState(119); match(ID);
+				setState(122); match(JOIN);
+				setState(123); match(ID);
 				}
 				break;
 			case LOCK:
 				_localctx = new LockStatContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(120); match(LOCK);
-				setState(121); match(ID);
+				setState(124); match(LOCK);
+				setState(125); match(ID);
 				}
 				break;
 			case UNLOCK:
 				_localctx = new UnlockStatContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(122); match(UNLOCK);
-				setState(123); match(ID);
+				setState(126); match(UNLOCK);
+				setState(127); match(ID);
 				}
 				break;
 			case RETURN:
 				_localctx = new ReturnStatContext(_localctx);
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(124); match(RETURN);
-				setState(126);
+				setState(128); match(RETURN);
+				setState(130);
 				switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
 				case 1:
 					{
-					setState(125); expr(0);
+					setState(129); expr(0);
 					}
 					break;
 				}
@@ -948,37 +992,37 @@ public class SycoraxParser extends Parser {
 				_localctx = new AssignStatContext(_localctx);
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(128); target();
-				setState(129); match(ASSIGN);
-				setState(130); expr(0);
+				setState(132); target();
+				setState(133); match(ASSIGN);
+				setState(134); expr(0);
 				}
 				break;
 			case POINTER:
 				_localctx = new PointerStatContext(_localctx);
 				enterOuterAlt(_localctx, 10);
 				{
-				setState(132); match(POINTER);
-				setState(133); match(ID);
-				setState(134); match(TO);
-				setState(135); target();
+				setState(136); match(POINTER);
+				setState(137); match(ID);
+				setState(138); match(TO);
+				setState(139); target();
 				}
 				break;
 			case IF:
 				_localctx = new IfstatContext(_localctx);
 				enterOuterAlt(_localctx, 11);
 				{
-				setState(136); match(IF);
-				setState(137); match(LPAR);
-				setState(138); expr(0);
-				setState(139); match(RPAR);
-				setState(140); match(THEN);
-				setState(141); block();
-				setState(144);
+				setState(140); match(IF);
+				setState(141); match(LPAR);
+				setState(142); expr(0);
+				setState(143); match(RPAR);
+				setState(144); match(THEN);
+				setState(145); block();
+				setState(148);
 				_la = _input.LA(1);
 				if (_la==ELSE) {
 					{
-					setState(142); match(ELSE);
-					setState(143); block();
+					setState(146); match(ELSE);
+					setState(147); block();
 					}
 				}
 
@@ -988,25 +1032,25 @@ public class SycoraxParser extends Parser {
 				_localctx = new WhileStatContext(_localctx);
 				enterOuterAlt(_localctx, 12);
 				{
-				setState(146); match(WHILE);
-				setState(147); match(LPAR);
-				setState(148); expr(0);
-				setState(149); match(RPAR);
-				setState(150); block();
+				setState(150); match(WHILE);
+				setState(151); match(LPAR);
+				setState(152); expr(0);
+				setState(153); match(RPAR);
+				setState(154); block();
 				}
 				break;
 			case CALL:
 				_localctx = new CallStatContext(_localctx);
 				enterOuterAlt(_localctx, 13);
 				{
-				setState(152); match(CALL);
-				setState(153); match(ID);
-				setState(156);
+				setState(156); match(CALL);
+				setState(157); match(ID);
+				setState(160);
 				_la = _input.LA(1);
 				if (_la==WITH) {
 					{
-					setState(154); match(WITH);
-					setState(155); args();
+					setState(158); match(WITH);
+					setState(159); args();
 					}
 				}
 
@@ -1016,8 +1060,8 @@ public class SycoraxParser extends Parser {
 				_localctx = new PrintStatContext(_localctx);
 				enterOuterAlt(_localctx, 14);
 				{
-				setState(158); match(PRINT);
-				setState(159); expr(0);
+				setState(162); match(PRINT);
+				setState(163); expr(0);
 				}
 				break;
 			default:
@@ -1360,14 +1404,14 @@ public class SycoraxParser extends Parser {
 		int _parentState = getState();
 		ExprContext _localctx = new ExprContext(_ctx, _parentState);
 		ExprContext _prevctx = _localctx;
-		int _startState = 14;
-		enterRecursionRule(_localctx, 14, RULE_expr, _p);
+		int _startState = 16;
+		enterRecursionRule(_localctx, 16, RULE_expr, _p);
 		int _la;
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(198);
+			setState(202);
 			switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
 			case 1:
 				{
@@ -1375,8 +1419,8 @@ public class SycoraxParser extends Parser {
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(163); match(SIZE);
-				setState(164); expr(8);
+				setState(167); match(SIZE);
+				setState(168); expr(8);
 				}
 				break;
 			case 2:
@@ -1384,8 +1428,8 @@ public class SycoraxParser extends Parser {
 				_localctx = new NotExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(165); match(NOT);
-				setState(166); expr(1);
+				setState(169); match(NOT);
+				setState(170); expr(1);
 				}
 				break;
 			case 3:
@@ -1393,9 +1437,9 @@ public class SycoraxParser extends Parser {
 				_localctx = new ParExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(167); match(LPAR);
-				setState(168); expr(0);
-				setState(169); match(RPAR);
+				setState(171); match(LPAR);
+				setState(172); expr(0);
+				setState(173); match(RPAR);
 				}
 				break;
 			case 4:
@@ -1403,28 +1447,12 @@ public class SycoraxParser extends Parser {
 				_localctx = new ArrayExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(171); array();
+				setState(175); array();
 				}
 				break;
 			case 5:
 				{
 				_localctx = new IdExprContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(173);
-				_la = _input.LA(1);
-				if (_la==GLOBAL) {
-					{
-					setState(172); match(GLOBAL);
-					}
-				}
-
-				setState(175); match(ID);
-				}
-				break;
-			case 6:
-				{
-				_localctx = new IndexExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(177);
@@ -1436,9 +1464,25 @@ public class SycoraxParser extends Parser {
 				}
 
 				setState(179); match(ID);
-				setState(180); match(LBRACK);
-				setState(181); expr(0);
-				setState(182); match(RBRACK);
+				}
+				break;
+			case 6:
+				{
+				_localctx = new IndexExprContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(181);
+				_la = _input.LA(1);
+				if (_la==GLOBAL) {
+					{
+					setState(180); match(GLOBAL);
+					}
+				}
+
+				setState(183); match(ID);
+				setState(184); match(LBRACK);
+				setState(185); expr(0);
+				setState(186); match(RBRACK);
 				}
 				break;
 			case 7:
@@ -1446,14 +1490,14 @@ public class SycoraxParser extends Parser {
 				_localctx = new CallExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(184); match(CALL);
-				setState(185); match(ID);
-				setState(188);
+				setState(188); match(CALL);
+				setState(189); match(ID);
+				setState(192);
 				switch ( getInterpreter().adaptivePredict(_input,17,_ctx) ) {
 				case 1:
 					{
-					setState(186); match(WITH);
-					setState(187); args();
+					setState(190); match(WITH);
+					setState(191); args();
 					}
 					break;
 				}
@@ -1464,15 +1508,15 @@ public class SycoraxParser extends Parser {
 				_localctx = new NumExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(191);
+				setState(195);
 				_la = _input.LA(1);
 				if (_la==NEGATIVE) {
 					{
-					setState(190); match(NEGATIVE);
+					setState(194); match(NEGATIVE);
 					}
 				}
 
-				setState(193); match(NUM);
+				setState(197); match(NUM);
 				}
 				break;
 			case 9:
@@ -1480,7 +1524,7 @@ public class SycoraxParser extends Parser {
 				_localctx = new CharExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(194); match(CHAR);
+				setState(198); match(CHAR);
 				}
 				break;
 			case 10:
@@ -1488,7 +1532,7 @@ public class SycoraxParser extends Parser {
 				_localctx = new StrExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(195); match(STR);
+				setState(199); match(STR);
 				}
 				break;
 			case 11:
@@ -1496,7 +1540,7 @@ public class SycoraxParser extends Parser {
 				_localctx = new TrueExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(196); match(TRUE);
+				setState(200); match(TRUE);
 				}
 				break;
 			case 12:
@@ -1504,12 +1548,12 @@ public class SycoraxParser extends Parser {
 				_localctx = new FalseExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(197); match(FALSE);
+				setState(201); match(FALSE);
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(214);
+			setState(218);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,21,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -1517,42 +1561,42 @@ public class SycoraxParser extends Parser {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(212);
+					setState(216);
 					switch ( getInterpreter().adaptivePredict(_input,20,_ctx) ) {
 					case 1:
 						{
 						_localctx = new BoolOpExprContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(200);
+						setState(204);
 						if (!(precpred(_ctx, 14))) throw new FailedPredicateException(this, "precpred(_ctx, 14)");
-						setState(201); boolOp();
-						setState(202); expr(15);
+						setState(205); boolOp();
+						setState(206); expr(15);
 						}
 						break;
 					case 2:
 						{
 						_localctx = new IntOpExprContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(204);
+						setState(208);
 						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
-						setState(205); intOp();
-						setState(206); expr(14);
+						setState(209); intOp();
+						setState(210); expr(14);
 						}
 						break;
 					case 3:
 						{
 						_localctx = new CompOpExprContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(208);
+						setState(212);
 						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
-						setState(209); compOp();
-						setState(210); expr(13);
+						setState(213); compOp();
+						setState(214); expr(13);
 						}
 						break;
 					}
 					} 
 				}
-				setState(216);
+				setState(220);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,21,_ctx);
 			}
@@ -1593,12 +1637,12 @@ public class SycoraxParser extends Parser {
 
 	public final BoolOpContext boolOp() throws RecognitionException {
 		BoolOpContext _localctx = new BoolOpContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_boolOp);
+		enterRule(_localctx, 18, RULE_boolOp);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(217);
+			setState(221);
 			_la = _input.LA(1);
 			if ( !(_la==AND || _la==OR) ) {
 			_errHandler.recoverInline(this);
@@ -1642,12 +1686,12 @@ public class SycoraxParser extends Parser {
 
 	public final IntOpContext intOp() throws RecognitionException {
 		IntOpContext _localctx = new IntOpContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_intOp);
+		enterRule(_localctx, 20, RULE_intOp);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(219);
+			setState(223);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << PLUS) | (1L << MINUS) | (1L << TIMES))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1691,12 +1735,12 @@ public class SycoraxParser extends Parser {
 
 	public final CompOpContext compOp() throws RecognitionException {
 		CompOpContext _localctx = new CompOpContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_compOp);
+		enterRule(_localctx, 22, RULE_compOp);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(221);
+			setState(225);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << EQUALS) | (1L << GREATER) | (1L << SMALLER))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1749,35 +1793,35 @@ public class SycoraxParser extends Parser {
 
 	public final ArrayContext array() throws RecognitionException {
 		ArrayContext _localctx = new ArrayContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_array);
+		enterRule(_localctx, 24, RULE_array);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(223); match(LBRACK);
-			setState(232);
+			setState(227); match(LBRACK);
+			setState(236);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TRUE) | (1L << FALSE) | (1L << NOT) | (1L << CALL) | (1L << GLOBAL) | (1L << SIZE) | (1L << LPAR) | (1L << LBRACK) | (1L << NEGATIVE) | (1L << ID) | (1L << NUM) | (1L << STR) | (1L << CHAR))) != 0)) {
 				{
-				setState(224); expr(0);
-				setState(229);
+				setState(228); expr(0);
+				setState(233);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==COMMA) {
 					{
 					{
-					setState(225); match(COMMA);
-					setState(226); expr(0);
+					setState(229); match(COMMA);
+					setState(230); expr(0);
 					}
 					}
-					setState(231);
+					setState(235);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 			}
 
-			setState(234); match(RBRACK);
+			setState(238); match(RBRACK);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1825,30 +1869,30 @@ public class SycoraxParser extends Parser {
 
 	public final ArgsContext args() throws RecognitionException {
 		ArgsContext _localctx = new ArgsContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_args);
+		enterRule(_localctx, 26, RULE_args);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(236); match(LPAR);
+			setState(240); match(LPAR);
 			{
-			setState(237); expr(0);
-			setState(242);
+			setState(241); expr(0);
+			setState(246);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(238); match(COMMA);
-				setState(239); expr(0);
+				setState(242); match(COMMA);
+				setState(243); expr(0);
 				}
 				}
-				setState(244);
+				setState(248);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
 			}
-			setState(245); match(RPAR);
+			setState(249); match(RPAR);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1917,29 +1961,14 @@ public class SycoraxParser extends Parser {
 
 	public final TargetContext target() throws RecognitionException {
 		TargetContext _localctx = new TargetContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_target);
+		enterRule(_localctx, 28, RULE_target);
 		int _la;
 		try {
-			setState(259);
+			setState(263);
 			switch ( getInterpreter().adaptivePredict(_input,27,_ctx) ) {
 			case 1:
 				_localctx = new IdTargetContext(_localctx);
 				enterOuterAlt(_localctx, 1);
-				{
-				setState(248);
-				_la = _input.LA(1);
-				if (_la==GLOBAL) {
-					{
-					setState(247); match(GLOBAL);
-					}
-				}
-
-				setState(250); match(ID);
-				}
-				break;
-			case 2:
-				_localctx = new ArrayTargetContext(_localctx);
-				enterOuterAlt(_localctx, 2);
 				{
 				setState(252);
 				_la = _input.LA(1);
@@ -1950,9 +1979,24 @@ public class SycoraxParser extends Parser {
 				}
 
 				setState(254); match(ID);
-				setState(255); match(LBRACK);
-				setState(256); expr(0);
-				setState(257); match(RBRACK);
+				}
+				break;
+			case 2:
+				_localctx = new ArrayTargetContext(_localctx);
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(256);
+				_la = _input.LA(1);
+				if (_la==GLOBAL) {
+					{
+					setState(255); match(GLOBAL);
+					}
+				}
+
+				setState(258); match(ID);
+				setState(259); match(LBRACK);
+				setState(260); expr(0);
+				setState(261); match(RBRACK);
 				}
 				break;
 			}
@@ -2007,34 +2051,34 @@ public class SycoraxParser extends Parser {
 
 	public final BlockContext block() throws RecognitionException {
 		BlockContext _localctx = new BlockContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_block);
+		enterRule(_localctx, 30, RULE_block);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(261); match(DO);
-			setState(262); match(LBRACE);
-			setState(263); content();
-			setState(264); match(RBRACE);
-			setState(270);
+			setState(265); match(DO);
+			setState(266); match(LBRACE);
+			setState(267); content();
+			setState(268); match(RBRACE);
+			setState(274);
 			_la = _input.LA(1);
 			if (_la==CATCH) {
 				{
-				setState(265); match(CATCH);
-				setState(266); match(LBRACE);
-				setState(267); content();
-				setState(268); match(RBRACE);
+				setState(269); match(CATCH);
+				setState(270); match(LBRACE);
+				setState(271); content();
+				setState(272); match(RBRACE);
 				}
 			}
 
-			setState(277);
+			setState(281);
 			_la = _input.LA(1);
 			if (_la==FINALLY) {
 				{
-				setState(272); match(FINALLY);
-				setState(273); match(LBRACE);
-				setState(274); content();
-				setState(275); match(RBRACE);
+				setState(276); match(FINALLY);
+				setState(277); match(LBRACE);
+				setState(278); content();
+				setState(279); match(RBRACE);
 				}
 			}
 
@@ -2079,21 +2123,21 @@ public class SycoraxParser extends Parser {
 
 	public final ContentContext content() throws RecognitionException {
 		ContentContext _localctx = new ContentContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_content);
+		enterRule(_localctx, 32, RULE_content);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(282);
+			setState(286);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << IF) | (1L << DO) | (1L << FAIL) | (1L << LET) | (1L << POINTER) | (1L << RETURN) | (1L << CALL) | (1L << WHILE) | (1L << FORK) | (1L << JOIN) | (1L << LOCK) | (1L << UNLOCK) | (1L << GLOBAL) | (1L << PRINT) | (1L << ID))) != 0)) {
 				{
 				{
-				setState(279); stat();
+				setState(283); stat();
 				}
 				}
-				setState(284);
+				setState(288);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -2138,16 +2182,16 @@ public class SycoraxParser extends Parser {
 
 	public final TypeContext type() throws RecognitionException {
 		TypeContext _localctx = new TypeContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_type);
+		enterRule(_localctx, 34, RULE_type);
 		try {
-			setState(287);
+			setState(291);
 			switch (_input.LA(1)) {
 			case BOOLEAN:
 			case INTEGER:
 			case CHARACTER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(285); basicType();
+				setState(289); basicType();
 				}
 				break;
 			case BOOLEANS:
@@ -2156,7 +2200,7 @@ public class SycoraxParser extends Parser {
 			case STRING:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(286); arrayType();
+				setState(290); arrayType();
 				}
 				break;
 			default:
@@ -2239,29 +2283,29 @@ public class SycoraxParser extends Parser {
 
 	public final BasicTypeContext basicType() throws RecognitionException {
 		BasicTypeContext _localctx = new BasicTypeContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_basicType);
+		enterRule(_localctx, 36, RULE_basicType);
 		try {
-			setState(292);
+			setState(296);
 			switch (_input.LA(1)) {
 			case INTEGER:
 				_localctx = new IntTypeContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(289); match(INTEGER);
+				setState(293); match(INTEGER);
 				}
 				break;
 			case BOOLEAN:
 				_localctx = new BoolTypeContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(290); match(BOOLEAN);
+				setState(294); match(BOOLEAN);
 				}
 				break;
 			case CHARACTER:
 				_localctx = new CharTypeContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(291); match(CHARACTER);
+				setState(295); match(CHARACTER);
 				}
 				break;
 			default:
@@ -2361,36 +2405,36 @@ public class SycoraxParser extends Parser {
 
 	public final ArrayTypeContext arrayType() throws RecognitionException {
 		ArrayTypeContext _localctx = new ArrayTypeContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_arrayType);
+		enterRule(_localctx, 38, RULE_arrayType);
 		try {
-			setState(298);
+			setState(302);
 			switch (_input.LA(1)) {
 			case INTEGERS:
 				_localctx = new IntArrTypeContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(294); match(INTEGERS);
+				setState(298); match(INTEGERS);
 				}
 				break;
 			case BOOLEANS:
 				_localctx = new BoolArrTypeContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(295); match(BOOLEANS);
+				setState(299); match(BOOLEANS);
 				}
 				break;
 			case CHARACTERS:
 				_localctx = new CharArrTypeContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(296); match(CHARACTERS);
+				setState(300); match(CHARACTERS);
 				}
 				break;
 			case STRING:
 				_localctx = new StringTypeContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(297); match(STRING);
+				setState(301); match(STRING);
 				}
 				break;
 			default:
@@ -2410,7 +2454,7 @@ public class SycoraxParser extends Parser {
 
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-		case 7: return expr_sempred((ExprContext)_localctx, predIndex);
+		case 8: return expr_sempred((ExprContext)_localctx, predIndex);
 		}
 		return true;
 	}
@@ -2424,114 +2468,115 @@ public class SycoraxParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3C\u012f\4\2\t\2\4"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3C\u0133\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
-		"\4\23\t\23\4\24\t\24\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\3\3\3\3\3\7\3\64"+
-		"\n\3\f\3\16\3\67\13\3\3\4\3\4\5\4;\n\4\3\4\3\4\3\4\3\4\3\4\5\4B\n\4\3"+
-		"\4\3\4\5\4F\n\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4O\n\4\5\4Q\n\4\3\5\3\5"+
-		"\3\5\3\5\5\5W\n\5\3\5\3\5\5\5[\n\5\3\5\5\5^\n\5\3\5\3\5\3\5\3\5\3\5\3"+
-		"\6\3\6\3\6\3\6\7\6i\n\6\f\6\16\6l\13\6\3\6\3\6\3\7\3\7\3\7\3\b\3\b\3\b"+
-		"\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\5\b\u0081\n\b\3\b\3\b\3\b"+
-		"\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\5\b\u0093\n\b\3\b"+
-		"\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\5\b\u009f\n\b\3\b\3\b\5\b\u00a3\n"+
-		"\b\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\t\u00b0\n\t\3\t\3\t\5"+
-		"\t\u00b4\n\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\t\u00bf\n\t\3\t\5\t"+
-		"\u00c2\n\t\3\t\3\t\3\t\3\t\3\t\5\t\u00c9\n\t\3\t\3\t\3\t\3\t\3\t\3\t\3"+
-		"\t\3\t\3\t\3\t\3\t\3\t\7\t\u00d7\n\t\f\t\16\t\u00da\13\t\3\n\3\n\3\13"+
-		"\3\13\3\f\3\f\3\r\3\r\3\r\3\r\7\r\u00e6\n\r\f\r\16\r\u00e9\13\r\5\r\u00eb"+
-		"\n\r\3\r\3\r\3\16\3\16\3\16\3\16\7\16\u00f3\n\16\f\16\16\16\u00f6\13\16"+
-		"\3\16\3\16\3\17\5\17\u00fb\n\17\3\17\3\17\5\17\u00ff\n\17\3\17\3\17\3"+
-		"\17\3\17\3\17\5\17\u0106\n\17\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20"+
-		"\3\20\5\20\u0111\n\20\3\20\3\20\3\20\3\20\3\20\5\20\u0118\n\20\3\21\7"+
-		"\21\u011b\n\21\f\21\16\21\u011e\13\21\3\22\3\22\5\22\u0122\n\22\3\23\3"+
-		"\23\3\23\5\23\u0127\n\23\3\24\3\24\3\24\3\24\5\24\u012d\n\24\3\24\2\3"+
-		"\20\25\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&\2\5\3\2\6\7\3\2+-\3"+
-		"\2.\60\u0158\2(\3\2\2\2\4\65\3\2\2\2\6P\3\2\2\2\bR\3\2\2\2\nd\3\2\2\2"+
-		"\fo\3\2\2\2\16\u00a2\3\2\2\2\20\u00c8\3\2\2\2\22\u00db\3\2\2\2\24\u00dd"+
-		"\3\2\2\2\26\u00df\3\2\2\2\30\u00e1\3\2\2\2\32\u00ee\3\2\2\2\34\u0105\3"+
-		"\2\2\2\36\u0107\3\2\2\2 \u011c\3\2\2\2\"\u0121\3\2\2\2$\u0126\3\2\2\2"+
-		"&\u012c\3\2\2\2()\7%\2\2)*\7>\2\2*+\7!\2\2+,\7\67\2\2,-\5\4\3\2-.\78\2"+
-		"\2./\7\2\2\3/\3\3\2\2\2\60\64\5\b\5\2\61\64\5\6\4\2\62\64\5\36\20\2\63"+
-		"\60\3\2\2\2\63\61\3\2\2\2\63\62\3\2\2\2\64\67\3\2\2\2\65\63\3\2\2\2\65"+
-		"\66\3\2\2\2\66\5\3\2\2\2\67\65\3\2\2\28:\7\25\2\29;\7\61\2\2:9\3\2\2\2"+
-		":;\3\2\2\2;<\3\2\2\2<=\7>\2\2=>\7\30\2\2>A\5$\23\2?@\7\31\2\2@B\5\20\t"+
-		"\2A?\3\2\2\2AB\3\2\2\2BQ\3\2\2\2CE\7\25\2\2DF\7\61\2\2ED\3\2\2\2EF\3\2"+
-		"\2\2FG\3\2\2\2GH\7>\2\2HI\7\30\2\2IN\5&\24\2JK\7\32\2\2KO\5\20\t\2LM\7"+
-		"\31\2\2MO\5\20\t\2NJ\3\2\2\2NL\3\2\2\2OQ\3\2\2\2P8\3\2\2\2PC\3\2\2\2Q"+
-		"\7\3\2\2\2RS\7\35\2\2SV\7>\2\2TU\7\36\2\2UW\5\n\6\2VT\3\2\2\2VW\3\2\2"+
-		"\2WZ\3\2\2\2XY\7\37\2\2Y[\5\"\22\2ZX\3\2\2\2Z[\3\2\2\2[]\3\2\2\2\\^\7"+
-		" \2\2]\\\3\2\2\2]^\3\2\2\2^_\3\2\2\2_`\7!\2\2`a\7\67\2\2ab\5 \21\2bc\7"+
-		"8\2\2c\t\3\2\2\2de\79\2\2ej\5\f\7\2fg\7\64\2\2gi\5\f\7\2hf\3\2\2\2il\3"+
-		"\2\2\2jh\3\2\2\2jk\3\2\2\2km\3\2\2\2lj\3\2\2\2mn\7:\2\2n\13\3\2\2\2op"+
-		"\5\"\22\2pq\7>\2\2q\r\3\2\2\2r\u00a3\5\36\20\2s\u00a3\5\6\4\2t\u00a3\7"+
-		"\23\2\2uv\7\'\2\2vw\7>\2\2w\u00a3\5\36\20\2xy\7(\2\2y\u00a3\7>\2\2z{\7"+
-		")\2\2{\u00a3\7>\2\2|}\7*\2\2}\u00a3\7>\2\2~\u0080\7\"\2\2\177\u0081\5"+
-		"\20\t\2\u0080\177\3\2\2\2\u0080\u0081\3\2\2\2\u0081\u00a3\3\2\2\2\u0082"+
-		"\u0083\5\34\17\2\u0083\u0084\7\31\2\2\u0084\u0085\5\20\t\2\u0085\u00a3"+
-		"\3\2\2\2\u0086\u0087\7\33\2\2\u0087\u0088\7>\2\2\u0088\u0089\7\34\2\2"+
-		"\u0089\u00a3\5\34\17\2\u008a\u008b\7\16\2\2\u008b\u008c\79\2\2\u008c\u008d"+
-		"\5\20\t\2\u008d\u008e\7:\2\2\u008e\u008f\7\17\2\2\u008f\u0092\5\36\20"+
-		"\2\u0090\u0091\7\20\2\2\u0091\u0093\5\36\20\2\u0092\u0090\3\2\2\2\u0092"+
-		"\u0093\3\2\2\2\u0093\u00a3\3\2\2\2\u0094\u0095\7&\2\2\u0095\u0096\79\2"+
-		"\2\u0096\u0097\5\20\t\2\u0097\u0098\7:\2\2\u0098\u0099\5\36\20\2\u0099"+
-		"\u00a3\3\2\2\2\u009a\u009b\7#\2\2\u009b\u009e\7>\2\2\u009c\u009d\7$\2"+
-		"\2\u009d\u009f\5\32\16\2\u009e\u009c\3\2\2\2\u009e\u009f\3\2\2\2\u009f"+
-		"\u00a3\3\2\2\2\u00a0\u00a1\7\63\2\2\u00a1\u00a3\5\20\t\2\u00a2r\3\2\2"+
-		"\2\u00a2s\3\2\2\2\u00a2t\3\2\2\2\u00a2u\3\2\2\2\u00a2x\3\2\2\2\u00a2z"+
-		"\3\2\2\2\u00a2|\3\2\2\2\u00a2~\3\2\2\2\u00a2\u0082\3\2\2\2\u00a2\u0086"+
-		"\3\2\2\2\u00a2\u008a\3\2\2\2\u00a2\u0094\3\2\2\2\u00a2\u009a\3\2\2\2\u00a2"+
-		"\u00a0\3\2\2\2\u00a3\17\3\2\2\2\u00a4\u00a5\b\t\1\2\u00a5\u00a6\7\62\2"+
-		"\2\u00a6\u00c9\5\20\t\n\u00a7\u00a8\7\5\2\2\u00a8\u00c9\5\20\t\3\u00a9"+
-		"\u00aa\79\2\2\u00aa\u00ab\5\20\t\2\u00ab\u00ac\7:\2\2\u00ac\u00c9\3\2"+
-		"\2\2\u00ad\u00c9\5\30\r\2\u00ae\u00b0\7\61\2\2\u00af\u00ae\3\2\2\2\u00af"+
-		"\u00b0\3\2\2\2\u00b0\u00b1\3\2\2\2\u00b1\u00c9\7>\2\2\u00b2\u00b4\7\61"+
-		"\2\2\u00b3\u00b2\3\2\2\2\u00b3\u00b4\3\2\2\2\u00b4\u00b5\3\2\2\2\u00b5"+
-		"\u00b6\7>\2\2\u00b6\u00b7\7;\2\2\u00b7\u00b8\5\20\t\2\u00b8\u00b9\7<\2"+
-		"\2\u00b9\u00c9\3\2\2\2\u00ba\u00bb\7#\2\2\u00bb\u00be\7>\2\2\u00bc\u00bd"+
-		"\7$\2\2\u00bd\u00bf\5\32\16\2\u00be\u00bc\3\2\2\2\u00be\u00bf\3\2\2\2"+
-		"\u00bf\u00c9\3\2\2\2\u00c0\u00c2\7=\2\2\u00c1\u00c0\3\2\2\2\u00c1\u00c2"+
-		"\3\2\2\2\u00c2\u00c3\3\2\2\2\u00c3\u00c9\7?\2\2\u00c4\u00c9\7A\2\2\u00c5"+
-		"\u00c9\7@\2\2\u00c6\u00c9\7\3\2\2\u00c7\u00c9\7\4\2\2\u00c8\u00a4\3\2"+
-		"\2\2\u00c8\u00a7\3\2\2\2\u00c8\u00a9\3\2\2\2\u00c8\u00ad\3\2\2\2\u00c8"+
-		"\u00af\3\2\2\2\u00c8\u00b3\3\2\2\2\u00c8\u00ba\3\2\2\2\u00c8\u00c1\3\2"+
-		"\2\2\u00c8\u00c4\3\2\2\2\u00c8\u00c5\3\2\2\2\u00c8\u00c6\3\2\2\2\u00c8"+
-		"\u00c7\3\2\2\2\u00c9\u00d8\3\2\2\2\u00ca\u00cb\f\20\2\2\u00cb\u00cc\5"+
-		"\22\n\2\u00cc\u00cd\5\20\t\21\u00cd\u00d7\3\2\2\2\u00ce\u00cf\f\17\2\2"+
-		"\u00cf\u00d0\5\24\13\2\u00d0\u00d1\5\20\t\20\u00d1\u00d7\3\2\2\2\u00d2"+
-		"\u00d3\f\16\2\2\u00d3\u00d4\5\26\f\2\u00d4\u00d5\5\20\t\17\u00d5\u00d7"+
-		"\3\2\2\2\u00d6\u00ca\3\2\2\2\u00d6\u00ce\3\2\2\2\u00d6\u00d2\3\2\2\2\u00d7"+
-		"\u00da\3\2\2\2\u00d8\u00d6\3\2\2\2\u00d8\u00d9\3\2\2\2\u00d9\21\3\2\2"+
-		"\2\u00da\u00d8\3\2\2\2\u00db\u00dc\t\2\2\2\u00dc\23\3\2\2\2\u00dd\u00de"+
-		"\t\3\2\2\u00de\25\3\2\2\2\u00df\u00e0\t\4\2\2\u00e0\27\3\2\2\2\u00e1\u00ea"+
-		"\7;\2\2\u00e2\u00e7\5\20\t\2\u00e3\u00e4\7\64\2\2\u00e4\u00e6\5\20\t\2"+
-		"\u00e5\u00e3\3\2\2\2\u00e6\u00e9\3\2\2\2\u00e7\u00e5\3\2\2\2\u00e7\u00e8"+
-		"\3\2\2\2\u00e8\u00eb\3\2\2\2\u00e9\u00e7\3\2\2\2\u00ea\u00e2\3\2\2\2\u00ea"+
-		"\u00eb\3\2\2\2\u00eb\u00ec\3\2\2\2\u00ec\u00ed\7<\2\2\u00ed\31\3\2\2\2"+
-		"\u00ee\u00ef\79\2\2\u00ef\u00f4\5\20\t\2\u00f0\u00f1\7\64\2\2\u00f1\u00f3"+
-		"\5\20\t\2\u00f2\u00f0\3\2\2\2\u00f3\u00f6\3\2\2\2\u00f4\u00f2\3\2\2\2"+
-		"\u00f4\u00f5\3\2\2\2\u00f5\u00f7\3\2\2\2\u00f6\u00f4\3\2\2\2\u00f7\u00f8"+
-		"\7:\2\2\u00f8\33\3\2\2\2\u00f9\u00fb\7\61\2\2\u00fa\u00f9\3\2\2\2\u00fa"+
-		"\u00fb\3\2\2\2\u00fb\u00fc\3\2\2\2\u00fc\u0106\7>\2\2\u00fd\u00ff\7\61"+
-		"\2\2\u00fe\u00fd\3\2\2\2\u00fe\u00ff\3\2\2\2\u00ff\u0100\3\2\2\2\u0100"+
-		"\u0101\7>\2\2\u0101\u0102\7;\2\2\u0102\u0103\5\20\t\2\u0103\u0104\7<\2"+
-		"\2\u0104\u0106\3\2\2\2\u0105\u00fa\3\2\2\2\u0105\u00fe\3\2\2\2\u0106\35"+
-		"\3\2\2\2\u0107\u0108\7\21\2\2\u0108\u0109\7\67\2\2\u0109\u010a\5 \21\2"+
-		"\u010a\u0110\78\2\2\u010b\u010c\7\22\2\2\u010c\u010d\7\67\2\2\u010d\u010e"+
-		"\5 \21\2\u010e\u010f\78\2\2\u010f\u0111\3\2\2\2\u0110\u010b\3\2\2\2\u0110"+
-		"\u0111\3\2\2\2\u0111\u0117\3\2\2\2\u0112\u0113\7\24\2\2\u0113\u0114\7"+
-		"\67\2\2\u0114\u0115\5 \21\2\u0115\u0116\78\2\2\u0116\u0118\3\2\2\2\u0117"+
-		"\u0112\3\2\2\2\u0117\u0118\3\2\2\2\u0118\37\3\2\2\2\u0119\u011b\5\16\b"+
-		"\2\u011a\u0119\3\2\2\2\u011b\u011e\3\2\2\2\u011c\u011a\3\2\2\2\u011c\u011d"+
-		"\3\2\2\2\u011d!\3\2\2\2\u011e\u011c\3\2\2\2\u011f\u0122\5$\23\2\u0120"+
-		"\u0122\5&\24\2\u0121\u011f\3\2\2\2\u0121\u0120\3\2\2\2\u0122#\3\2\2\2"+
-		"\u0123\u0127\7\t\2\2\u0124\u0127\7\b\2\2\u0125\u0127\7\n\2\2\u0126\u0123"+
-		"\3\2\2\2\u0126\u0124\3\2\2\2\u0126\u0125\3\2\2\2\u0127%\3\2\2\2\u0128"+
-		"\u012d\7\f\2\2\u0129\u012d\7\13\2\2\u012a\u012d\7\r\2\2\u012b\u012d\7"+
-		"\27\2\2\u012c\u0128\3\2\2\2\u012c\u0129\3\2\2\2\u012c\u012a\3\2\2\2\u012c"+
-		"\u012b\3\2\2\2\u012d\'\3\2\2\2$\63\65:AENPVZ]j\u0080\u0092\u009e\u00a2"+
-		"\u00af\u00b3\u00be\u00c1\u00c8\u00d6\u00d8\u00e7\u00ea\u00f4\u00fa\u00fe"+
-		"\u0105\u0110\u0117\u011c\u0121\u0126\u012c";
+		"\4\23\t\23\4\24\t\24\4\25\t\25\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\3\3\3"+
+		"\3\3\7\3\66\n\3\f\3\16\39\13\3\3\4\3\4\5\4=\n\4\3\4\3\4\3\4\3\4\3\4\5"+
+		"\4D\n\4\3\4\3\4\5\4H\n\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4Q\n\4\5\4S\n\4"+
+		"\3\5\3\5\3\5\3\5\5\5Y\n\5\3\5\3\5\5\5]\n\5\3\5\5\5`\n\5\3\5\3\5\3\5\3"+
+		"\5\3\5\3\6\3\6\3\7\3\7\3\7\3\7\7\7m\n\7\f\7\16\7p\13\7\3\7\3\7\3\b\3\b"+
+		"\3\b\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\t\u0085"+
+		"\n\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5"+
+		"\t\u0097\n\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\t\u00a3\n\t\3\t"+
+		"\3\t\5\t\u00a7\n\t\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\5\n\u00b4"+
+		"\n\n\3\n\3\n\5\n\u00b8\n\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\5\n\u00c3"+
+		"\n\n\3\n\5\n\u00c6\n\n\3\n\3\n\3\n\3\n\3\n\5\n\u00cd\n\n\3\n\3\n\3\n\3"+
+		"\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\7\n\u00db\n\n\f\n\16\n\u00de\13\n\3"+
+		"\13\3\13\3\f\3\f\3\r\3\r\3\16\3\16\3\16\3\16\7\16\u00ea\n\16\f\16\16\16"+
+		"\u00ed\13\16\5\16\u00ef\n\16\3\16\3\16\3\17\3\17\3\17\3\17\7\17\u00f7"+
+		"\n\17\f\17\16\17\u00fa\13\17\3\17\3\17\3\20\5\20\u00ff\n\20\3\20\3\20"+
+		"\5\20\u0103\n\20\3\20\3\20\3\20\3\20\3\20\5\20\u010a\n\20\3\21\3\21\3"+
+		"\21\3\21\3\21\3\21\3\21\3\21\3\21\5\21\u0115\n\21\3\21\3\21\3\21\3\21"+
+		"\3\21\5\21\u011c\n\21\3\22\7\22\u011f\n\22\f\22\16\22\u0122\13\22\3\23"+
+		"\3\23\5\23\u0126\n\23\3\24\3\24\3\24\5\24\u012b\n\24\3\25\3\25\3\25\3"+
+		"\25\5\25\u0131\n\25\3\25\2\3\22\26\2\4\6\b\n\f\16\20\22\24\26\30\32\34"+
+		"\36 \"$&(\2\5\3\2\6\7\3\2+-\3\2.\60\u015b\2*\3\2\2\2\4\67\3\2\2\2\6R\3"+
+		"\2\2\2\bT\3\2\2\2\nf\3\2\2\2\fh\3\2\2\2\16s\3\2\2\2\20\u00a6\3\2\2\2\22"+
+		"\u00cc\3\2\2\2\24\u00df\3\2\2\2\26\u00e1\3\2\2\2\30\u00e3\3\2\2\2\32\u00e5"+
+		"\3\2\2\2\34\u00f2\3\2\2\2\36\u0109\3\2\2\2 \u010b\3\2\2\2\"\u0120\3\2"+
+		"\2\2$\u0125\3\2\2\2&\u012a\3\2\2\2(\u0130\3\2\2\2*+\7%\2\2+,\7>\2\2,-"+
+		"\7!\2\2-.\7\67\2\2./\5\4\3\2/\60\78\2\2\60\61\7\2\2\3\61\3\3\2\2\2\62"+
+		"\66\5\b\5\2\63\66\5\6\4\2\64\66\5 \21\2\65\62\3\2\2\2\65\63\3\2\2\2\65"+
+		"\64\3\2\2\2\669\3\2\2\2\67\65\3\2\2\2\678\3\2\2\28\5\3\2\2\29\67\3\2\2"+
+		"\2:<\7\25\2\2;=\7\61\2\2<;\3\2\2\2<=\3\2\2\2=>\3\2\2\2>?\7>\2\2?@\7\30"+
+		"\2\2@C\5&\24\2AB\7\31\2\2BD\5\22\n\2CA\3\2\2\2CD\3\2\2\2DS\3\2\2\2EG\7"+
+		"\25\2\2FH\7\61\2\2GF\3\2\2\2GH\3\2\2\2HI\3\2\2\2IJ\7>\2\2JK\7\30\2\2K"+
+		"P\5(\25\2LM\7\32\2\2MQ\5\22\n\2NO\7\31\2\2OQ\5\22\n\2PL\3\2\2\2PN\3\2"+
+		"\2\2QS\3\2\2\2R:\3\2\2\2RE\3\2\2\2S\7\3\2\2\2TU\7\35\2\2UX\7>\2\2VW\7"+
+		"\36\2\2WY\5\f\7\2XV\3\2\2\2XY\3\2\2\2Y\\\3\2\2\2Z[\7\37\2\2[]\5\n\6\2"+
+		"\\Z\3\2\2\2\\]\3\2\2\2]_\3\2\2\2^`\7 \2\2_^\3\2\2\2_`\3\2\2\2`a\3\2\2"+
+		"\2ab\7!\2\2bc\7\67\2\2cd\5\"\22\2de\78\2\2e\t\3\2\2\2fg\5$\23\2g\13\3"+
+		"\2\2\2hi\79\2\2in\5\16\b\2jk\7\64\2\2km\5\16\b\2lj\3\2\2\2mp\3\2\2\2n"+
+		"l\3\2\2\2no\3\2\2\2oq\3\2\2\2pn\3\2\2\2qr\7:\2\2r\r\3\2\2\2st\5$\23\2"+
+		"tu\7>\2\2u\17\3\2\2\2v\u00a7\5 \21\2w\u00a7\5\6\4\2x\u00a7\7\23\2\2yz"+
+		"\7\'\2\2z{\7>\2\2{\u00a7\5 \21\2|}\7(\2\2}\u00a7\7>\2\2~\177\7)\2\2\177"+
+		"\u00a7\7>\2\2\u0080\u0081\7*\2\2\u0081\u00a7\7>\2\2\u0082\u0084\7\"\2"+
+		"\2\u0083\u0085\5\22\n\2\u0084\u0083\3\2\2\2\u0084\u0085\3\2\2\2\u0085"+
+		"\u00a7\3\2\2\2\u0086\u0087\5\36\20\2\u0087\u0088\7\31\2\2\u0088\u0089"+
+		"\5\22\n\2\u0089\u00a7\3\2\2\2\u008a\u008b\7\33\2\2\u008b\u008c\7>\2\2"+
+		"\u008c\u008d\7\34\2\2\u008d\u00a7\5\36\20\2\u008e\u008f\7\16\2\2\u008f"+
+		"\u0090\79\2\2\u0090\u0091\5\22\n\2\u0091\u0092\7:\2\2\u0092\u0093\7\17"+
+		"\2\2\u0093\u0096\5 \21\2\u0094\u0095\7\20\2\2\u0095\u0097\5 \21\2\u0096"+
+		"\u0094\3\2\2\2\u0096\u0097\3\2\2\2\u0097\u00a7\3\2\2\2\u0098\u0099\7&"+
+		"\2\2\u0099\u009a\79\2\2\u009a\u009b\5\22\n\2\u009b\u009c\7:\2\2\u009c"+
+		"\u009d\5 \21\2\u009d\u00a7\3\2\2\2\u009e\u009f\7#\2\2\u009f\u00a2\7>\2"+
+		"\2\u00a0\u00a1\7$\2\2\u00a1\u00a3\5\34\17\2\u00a2\u00a0\3\2\2\2\u00a2"+
+		"\u00a3\3\2\2\2\u00a3\u00a7\3\2\2\2\u00a4\u00a5\7\63\2\2\u00a5\u00a7\5"+
+		"\22\n\2\u00a6v\3\2\2\2\u00a6w\3\2\2\2\u00a6x\3\2\2\2\u00a6y\3\2\2\2\u00a6"+
+		"|\3\2\2\2\u00a6~\3\2\2\2\u00a6\u0080\3\2\2\2\u00a6\u0082\3\2\2\2\u00a6"+
+		"\u0086\3\2\2\2\u00a6\u008a\3\2\2\2\u00a6\u008e\3\2\2\2\u00a6\u0098\3\2"+
+		"\2\2\u00a6\u009e\3\2\2\2\u00a6\u00a4\3\2\2\2\u00a7\21\3\2\2\2\u00a8\u00a9"+
+		"\b\n\1\2\u00a9\u00aa\7\62\2\2\u00aa\u00cd\5\22\n\n\u00ab\u00ac\7\5\2\2"+
+		"\u00ac\u00cd\5\22\n\3\u00ad\u00ae\79\2\2\u00ae\u00af\5\22\n\2\u00af\u00b0"+
+		"\7:\2\2\u00b0\u00cd\3\2\2\2\u00b1\u00cd\5\32\16\2\u00b2\u00b4\7\61\2\2"+
+		"\u00b3\u00b2\3\2\2\2\u00b3\u00b4\3\2\2\2\u00b4\u00b5\3\2\2\2\u00b5\u00cd"+
+		"\7>\2\2\u00b6\u00b8\7\61\2\2\u00b7\u00b6\3\2\2\2\u00b7\u00b8\3\2\2\2\u00b8"+
+		"\u00b9\3\2\2\2\u00b9\u00ba\7>\2\2\u00ba\u00bb\7;\2\2\u00bb\u00bc\5\22"+
+		"\n\2\u00bc\u00bd\7<\2\2\u00bd\u00cd\3\2\2\2\u00be\u00bf\7#\2\2\u00bf\u00c2"+
+		"\7>\2\2\u00c0\u00c1\7$\2\2\u00c1\u00c3\5\34\17\2\u00c2\u00c0\3\2\2\2\u00c2"+
+		"\u00c3\3\2\2\2\u00c3\u00cd\3\2\2\2\u00c4\u00c6\7=\2\2\u00c5\u00c4\3\2"+
+		"\2\2\u00c5\u00c6\3\2\2\2\u00c6\u00c7\3\2\2\2\u00c7\u00cd\7?\2\2\u00c8"+
+		"\u00cd\7A\2\2\u00c9\u00cd\7@\2\2\u00ca\u00cd\7\3\2\2\u00cb\u00cd\7\4\2"+
+		"\2\u00cc\u00a8\3\2\2\2\u00cc\u00ab\3\2\2\2\u00cc\u00ad\3\2\2\2\u00cc\u00b1"+
+		"\3\2\2\2\u00cc\u00b3\3\2\2\2\u00cc\u00b7\3\2\2\2\u00cc\u00be\3\2\2\2\u00cc"+
+		"\u00c5\3\2\2\2\u00cc\u00c8\3\2\2\2\u00cc\u00c9\3\2\2\2\u00cc\u00ca\3\2"+
+		"\2\2\u00cc\u00cb\3\2\2\2\u00cd\u00dc\3\2\2\2\u00ce\u00cf\f\20\2\2\u00cf"+
+		"\u00d0\5\24\13\2\u00d0\u00d1\5\22\n\21\u00d1\u00db\3\2\2\2\u00d2\u00d3"+
+		"\f\17\2\2\u00d3\u00d4\5\26\f\2\u00d4\u00d5\5\22\n\20\u00d5\u00db\3\2\2"+
+		"\2\u00d6\u00d7\f\16\2\2\u00d7\u00d8\5\30\r\2\u00d8\u00d9\5\22\n\17\u00d9"+
+		"\u00db\3\2\2\2\u00da\u00ce\3\2\2\2\u00da\u00d2\3\2\2\2\u00da\u00d6\3\2"+
+		"\2\2\u00db\u00de\3\2\2\2\u00dc\u00da\3\2\2\2\u00dc\u00dd\3\2\2\2\u00dd"+
+		"\23\3\2\2\2\u00de\u00dc\3\2\2\2\u00df\u00e0\t\2\2\2\u00e0\25\3\2\2\2\u00e1"+
+		"\u00e2\t\3\2\2\u00e2\27\3\2\2\2\u00e3\u00e4\t\4\2\2\u00e4\31\3\2\2\2\u00e5"+
+		"\u00ee\7;\2\2\u00e6\u00eb\5\22\n\2\u00e7\u00e8\7\64\2\2\u00e8\u00ea\5"+
+		"\22\n\2\u00e9\u00e7\3\2\2\2\u00ea\u00ed\3\2\2\2\u00eb\u00e9\3\2\2\2\u00eb"+
+		"\u00ec\3\2\2\2\u00ec\u00ef\3\2\2\2\u00ed\u00eb\3\2\2\2\u00ee\u00e6\3\2"+
+		"\2\2\u00ee\u00ef\3\2\2\2\u00ef\u00f0\3\2\2\2\u00f0\u00f1\7<\2\2\u00f1"+
+		"\33\3\2\2\2\u00f2\u00f3\79\2\2\u00f3\u00f8\5\22\n\2\u00f4\u00f5\7\64\2"+
+		"\2\u00f5\u00f7\5\22\n\2\u00f6\u00f4\3\2\2\2\u00f7\u00fa\3\2\2\2\u00f8"+
+		"\u00f6\3\2\2\2\u00f8\u00f9\3\2\2\2\u00f9\u00fb\3\2\2\2\u00fa\u00f8\3\2"+
+		"\2\2\u00fb\u00fc\7:\2\2\u00fc\35\3\2\2\2\u00fd\u00ff\7\61\2\2\u00fe\u00fd"+
+		"\3\2\2\2\u00fe\u00ff\3\2\2\2\u00ff\u0100\3\2\2\2\u0100\u010a\7>\2\2\u0101"+
+		"\u0103\7\61\2\2\u0102\u0101\3\2\2\2\u0102\u0103\3\2\2\2\u0103\u0104\3"+
+		"\2\2\2\u0104\u0105\7>\2\2\u0105\u0106\7;\2\2\u0106\u0107\5\22\n\2\u0107"+
+		"\u0108\7<\2\2\u0108\u010a\3\2\2\2\u0109\u00fe\3\2\2\2\u0109\u0102\3\2"+
+		"\2\2\u010a\37\3\2\2\2\u010b\u010c\7\21\2\2\u010c\u010d\7\67\2\2\u010d"+
+		"\u010e\5\"\22\2\u010e\u0114\78\2\2\u010f\u0110\7\22\2\2\u0110\u0111\7"+
+		"\67\2\2\u0111\u0112\5\"\22\2\u0112\u0113\78\2\2\u0113\u0115\3\2\2\2\u0114"+
+		"\u010f\3\2\2\2\u0114\u0115\3\2\2\2\u0115\u011b\3\2\2\2\u0116\u0117\7\24"+
+		"\2\2\u0117\u0118\7\67\2\2\u0118\u0119\5\"\22\2\u0119\u011a\78\2\2\u011a"+
+		"\u011c\3\2\2\2\u011b\u0116\3\2\2\2\u011b\u011c\3\2\2\2\u011c!\3\2\2\2"+
+		"\u011d\u011f\5\20\t\2\u011e\u011d\3\2\2\2\u011f\u0122\3\2\2\2\u0120\u011e"+
+		"\3\2\2\2\u0120\u0121\3\2\2\2\u0121#\3\2\2\2\u0122\u0120\3\2\2\2\u0123"+
+		"\u0126\5&\24\2\u0124\u0126\5(\25\2\u0125\u0123\3\2\2\2\u0125\u0124\3\2"+
+		"\2\2\u0126%\3\2\2\2\u0127\u012b\7\t\2\2\u0128\u012b\7\b\2\2\u0129\u012b"+
+		"\7\n\2\2\u012a\u0127\3\2\2\2\u012a\u0128\3\2\2\2\u012a\u0129\3\2\2\2\u012b"+
+		"\'\3\2\2\2\u012c\u0131\7\f\2\2\u012d\u0131\7\13\2\2\u012e\u0131\7\r\2"+
+		"\2\u012f\u0131\7\27\2\2\u0130\u012c\3\2\2\2\u0130\u012d\3\2\2\2\u0130"+
+		"\u012e\3\2\2\2\u0130\u012f\3\2\2\2\u0131)\3\2\2\2$\65\67<CGPRX\\_n\u0084"+
+		"\u0096\u00a2\u00a6\u00b3\u00b7\u00c2\u00c5\u00cc\u00da\u00dc\u00eb\u00ee"+
+		"\u00f8\u00fe\u0102\u0109\u0114\u011b\u0120\u0125\u012a\u0130";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

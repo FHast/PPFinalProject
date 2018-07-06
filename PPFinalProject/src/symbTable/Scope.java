@@ -24,6 +24,7 @@ public abstract class Scope {
 		this.types = new LinkedHashMap<>();
 		this.offsets = new LinkedHashMap<>();
 		this.arrays = new HashSet<>();
+		this.size = 0;
 	}
 
 	public void setFails() {
