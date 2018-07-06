@@ -679,9 +679,6 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		emit(OpCode.Receive, h1);
 		emit(OpCode.Store, h1, new Address(Addr.IndAddr, reg));
 
-		emit(OpCode.Load, new Address(Addr.ImmValue, incr), reg);
-		emit(OpCode.Compute, new Operator(Op.Add), reg, arp, arp);
-
 		/** PUSH RET ADDRESS */
 		emit(OpCode.Jump, new Target(Tar.Rel, 2));
 		Target con = new Target(Tar.Abs, 0);
@@ -700,6 +697,9 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		if (ctx.args() != null) {
 			visit(ctx.args());
 		}
+		
+		emit(OpCode.Load, new Address(Addr.ImmValue, incr), reg);
+		emit(OpCode.Compute, new Operator(Op.Add), reg, arp, arp);
 
 		/** JUMP */
 		emit(OpCode.Jump, startFun);
@@ -943,6 +943,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 
 		emit(OpCode.ReadInstr, new Address(Addr.IndAddr, regThreadID));
 		emit(OpCode.Receive, reg);
+		emit(OpCode.WriteInstr, reg, new Address(Addr.numberIO)); //TODO
 		emit(OpCode.Jump, new Target(Tar.Ind, reg));
 		return ret;
 	}
@@ -1101,6 +1102,9 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		if (fin) {
 			int finV = emit(OpCode.Nop);
 			finT.setTarget(finV);
+			if (!cat) {
+				catT.setTarget(finV);
+			}
 
 			Target pastBackupT = new Target(Tar.Abs, 0);
 			emit(OpCode.Branch, retR, new Target(Tar.Rel, 2));
@@ -1308,10 +1312,11 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		} else {
 			int finV = emit(OpCode.Jump, endT);
 			finT.setTarget(finV);
-
-			emit(OpCode.Pop, failR);
-			emit(OpCode.Pop, retR);
+			if (!cat) {
+				catT.setTarget(finV);
+			}
 		}
+		
 		emit(OpCode.Comment, new Str("Block - end"));
 
 		emit(OpCode.Branch, retR, endTRet);
