@@ -50,6 +50,7 @@ prog = [
     , Branch regHeap (Rel 2)
     , Load (ImmValue (5000)) regHeap
     , Nop
+    --Block
     , Load (ImmValue (5)) regF
     , Compute Add regF regArp regF
     , Compute Decr regF regF regF
@@ -61,63 +62,111 @@ prog = [
     , Load (ImmValue (5)) regF
     , Compute Add regF regArp regArp
     , Jump (Rel 2)
-    , Jump (Abs 118)
+    , Jump (Abs 152)
     , Load (ImmValue (59)) regF
     , WriteInstr regF (IndAddr (regSprID))
     , Nop
+    --Num - 10
     , Load (ImmValue (10)) regE
     , Push regE
+    --VarDef - x
     , Load (ImmValue (0)) regF
     , Compute Add regF regArp regF
     , Pop regG
     , Store regG (IndAddr (regF))
     , Nop
+    --Load ID - x
     , Compute Add regArp reg0 regA
     , Load (ImmValue (0)) regH
     , Compute Add regH regA regH
     , Load (IndAddr (regH)) regH
     , Push regH
+    --Print: int
     , Pop regC
     , WriteInstr regC numberIO
     , Nop
+    , Branch regHeap (Rel 2)
+    , Load (ImmValue (5000)) regHeap
     , Nop
-    , Compute Add regArp reg0 regE
-    , Load (ImmValue (0)) regD
-    , Compute Add regE regD regE
-    , Push regE
-    , Compute Add regArp reg0 regG
-    , Load (ImmValue (1)) regF
-    , Compute Add regG regF regG
-    , Pop regF
-    , Store regF (IndAddr (regG))
-    , Nop
-    , Nop
-    , Load (ImmValue (20)) regH
-    , Push regH
-    , Nop
-    , Compute Add regArp reg0 regB
-    , Load (ImmValue (1)) regA
-    , Compute Add regB regA regB
-    , Load (IndAddr (regB)) regB
-    , Pop regA
-    , Store regA (IndAddr (regB))
-    , Nop
-    , Compute Add regArp reg0 regD
-    , Load (ImmValue (0)) regC
-    , Compute Add regC regD regC
-    , Load (IndAddr (regC)) regC
+    --Block
+    , Load (ImmValue (6)) regD
+    , Compute Add regD regArp regD
+    , Compute Decr regD regD regD
+    , Store regArp (IndAddr (regD))
+    , Compute Decr regD regD regD
+    , ReadInstr (IndAddr (regSprID))
+    , Receive regA
+    , Store regA (IndAddr (regD))
+    , Load (ImmValue (6)) regD
+    , Compute Add regD regArp regArp
+    , Jump (Rel 2)
+    , Jump (Abs 111)
+    , Load (ImmValue (92)) regD
+    , WriteInstr regD (IndAddr (regSprID))
+    --char - 97
+    , Load (ImmValue (97)) regC
     , Push regC
-    , Pop regF
-    , WriteInstr regF numberIO
+    --VarDef - x
+    , Load (ImmValue (0)) regD
+    , Compute Add regD regArp regD
+    , Pop regE
+    , Store regE (IndAddr (regD))
     , Nop
-    , Compute Add regArp reg0 regH
-    , Load (ImmValue (1)) regG
-    , Compute Add regG regH regG
-    , Load (IndAddr (regG)) regG
-    , Load (IndAddr (regG)) regG
-    , Push regG
-    , Pop regB
-    , WriteInstr regB numberIO
+    --Load ID - x
+    , Compute Add regArp reg0 regG
+    , Load (ImmValue (0)) regF
+    , Compute Add regF regG regF
+    , Load (IndAddr (regF)) regF
+    , Push regF
+    --Print: Character
+    , Pop regA
+    , WriteInstr regA charIO
+    --Block - end
+    , Push reg0
+    , Push reg0
+    , Nop
+    , Compute Decr regArp regArp regArp
+    , Compute Decr regArp regArp regArp
+    , Load (IndAddr (regArp)) regA
+    , WriteInstr regA (IndAddr (regSprID))
+    , Compute Incr regArp regArp regArp
+    , Load (IndAddr (regArp)) regArp
+    , Pop regE
+    , Pop regF
+    , Branch regE (Abs 0)
+    , Branch regF (Abs 123)
+    , Jump (Abs 123)
+    , Jump (Abs 141)
+    , Pop regE
+    , Pop regF
+    --Block - end
+    , Branch regF (Abs 129)
+    , Branch regE (Abs 135)
+    , Jump (Abs 141)
+    , Nop
+    , Push regF
+    , Push reg0
+    , ReadInstr (IndAddr (regSprID))
+    , Receive regD
+    , Jump (Ind regD)
+    , Nop
+    , Push regF
+    , Push regE
+    , ReadInstr (IndAddr (regSprID))
+    , Receive regD
+    , Jump (Ind regD)
+    , Nop
+    , Nop
+    --Load ID - x
+    , Compute Add regArp reg0 regC
+    , Load (ImmValue (0)) regB
+    , Compute Add regB regC regB
+    , Load (IndAddr (regB)) regB
+    , Push regB
+    --Print: int
+    , Pop regE
+    , WriteInstr regE numberIO
+    --Block - end
     , Push reg0
     , Push reg0
     , Nop
@@ -129,9 +178,10 @@ prog = [
     , Load (IndAddr (regArp)) regArp
     , Pop regG
     , Pop regH
-    , Branch regG (Abs 130)
-    , Branch regH (Abs 178)
-    , Jump (Abs 178)
+    , Branch regG (Abs 164)
+    , Branch regH (Abs 212)
+    , Jump (Abs 212)
+    --Block - catch
     , Nop
     , Load (ImmValue (0)) regG
     , Load (ImmValue (5)) regF
@@ -149,43 +199,47 @@ prog = [
     , Load (ImmValue (5)) regF
     , Compute Add regF regArp regArp
     , Jump (Rel 2)
-    , Jump (Abs 172)
-    , Load (ImmValue (147)) regF
+    , Jump (Abs 206)
+    , Load (ImmValue (181)) regF
     , WriteInstr regF (IndAddr (regSprID))
     , Nop
     , Nop
-    , Load (ImmValue (108)) regC
-    , Push regC
-    , Load (ImmValue (105)) regC
-    , Push regC
-    , Load (ImmValue (97)) regC
-    , Push regC
-    , Load (ImmValue (102)) regC
-    , Push regC
-    , Load (ImmValue (4)) regC
-    , Push regC
-    , Pop regD
-    , Branch regD (Rel 2)
-    , Jump (Abs 169)
-    , Pop regE
-    , WriteInstr regE charIO
-    , Compute Decr regD regD regD
-    , Jump (Abs 163)
+    --Str - "fail"
+    , Load (ImmValue (108)) regF
+    , Push regF
+    , Load (ImmValue (105)) regF
+    , Push regF
+    , Load (ImmValue (97)) regF
+    , Push regF
+    , Load (ImmValue (102)) regF
+    , Push regF
+    , Load (ImmValue (4)) regF
+    , Push regF
+    --Print: Array of 'Character'
+    , Pop regG
+    , Branch regG (Rel 2)
+    , Jump (Abs 203)
+    , Pop regH
+    , WriteInstr regH charIO
+    , Compute Decr regG regG regG
+    , Jump (Abs 197)
     , Nop
     , Push reg0
     , Push reg0
     , Nop
     , Compute Decr regArp regArp regArp
     , Load (IndAddr (regArp)) regArp
+    --Block - catch end
     , Pop regG
     , Pop regH
-    , Jump (Abs 178)
-    , Jump (Abs 196)
+    , Jump (Abs 212)
+    , Jump (Abs 230)
     , Pop regG
     , Pop regH
-    , Branch regH (Abs 184)
-    , Branch regG (Abs 190)
-    , Jump (Abs 196)
+    --Block - end
+    , Branch regH (Abs 218)
+    , Branch regG (Abs 224)
+    , Jump (Abs 230)
     , Nop
     , Push regH
     , Push reg0

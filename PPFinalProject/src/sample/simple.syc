@@ -3,10 +3,11 @@ defines {
 	do {
 		let x be integer assign 10
 		print x
-		pointer y to x
-		y assign 20
+		do {
+			let x be character assign 'a'
+			print x
+		}
 		print x
-		print y
 	} catch {
 		print "fail"
 	}

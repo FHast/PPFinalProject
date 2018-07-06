@@ -38,7 +38,7 @@ public class Program {
 		}
 		for (int i = 1; i < prog.size(); i++) {
 			if (prog.get(i).getOpCode() == OpCode.Comment) {
-				//out += "\n    --" + prog.get(i).getOperands().get(0).toString();
+				out += "\n    --" + prog.get(i).getOperands().get(0).toString();
 			} else {
 				out += "\n    , " + prog.get(i);
 			}

@@ -38,23 +38,23 @@ param
 	;
 	
 stat
-	: block							#blockStat
-	| varDef						#vardefStat
-	| FAIL							#failStat
-	| FORK ID block					#forkStat
-	| JOIN ID						#joinStat
-	| LOCK ID						#lockStat
-	| UNLOCK ID						#unlockStat
-	| RETURN expr?					#returnStat
-	| target ASSIGN expr			#assignStat
-	| POINTER ID TO pointerTarget	#pointerStat
+	: block								#blockStat
+	| varDef							#vardefStat
+	| FAIL								#failStat
+	| FORK ID block						#forkStat
+	| JOIN ID							#joinStat
+	| LOCK ID							#lockStat
+	| UNLOCK ID							#unlockStat
+	| RETURN expr?						#returnStat
+	| target ASSIGN expr				#assignStat
+	| POINTER ID TO pointerTarget		#pointerStat
 	| IF LPAR expr RPAR 
 	  THEN block
-	  (ELSE block)?					#ifstat
+	  (ELSE block)?						#ifstat
 	| WHILE LPAR expr RPAR
-	  block							#whileStat
-	| CALL ID (WITH args)?			#callStat
-	| PRINT expr					#printStat
+	  block								#whileStat
+	| CALL ID (WITH args)?				#callStat
+	| PRINT expr						#printStat
 	;
 	
 pointerTarget
@@ -63,21 +63,21 @@ pointerTarget
 	;
 	
 expr
-	: LPAR expr RPAR				#parExpr
-	| expr boolOp expr				#boolOpExpr
-	| expr intOp expr				#intOpExpr
-	| expr compOp expr				#compOpExpr
-	| array							#arrayExpr
-	| GLOBAL? ID					#idExpr
-	| GLOBAL? ID LBRACK expr RBRACK #indexExpr
-	| SIZE expr						#sizeExpr
-	| CALL ID (WITH args)?			#callExpr
-	| NEGATIVE? NUM					#numExpr
-	| CHAR							#charExpr
-	| STR							#strExpr
-	| TRUE							#trueExpr
-	| FALSE							#falseExpr
-	| NOT expr						#notExpr
+	: LPAR expr RPAR					#parExpr
+	| expr boolOp expr					#boolOpExpr
+	| expr intOp expr					#intOpExpr
+	| expr compOp expr					#compOpExpr
+	| array								#arrayExpr
+	| GLOBAL? ID						#idExpr
+	| GLOBAL? ID LBRACK expr RBRACK 	#indexExpr
+	| SIZE expr							#sizeExpr
+	| CALL ID (WITH args)?				#callExpr
+	| NEGATIVE? NUM						#numExpr
+	| CHAR								#charExpr
+	| STR								#strExpr
+	| TRUE								#trueExpr
+	| FALSE								#falseExpr
+	| NOT expr							#notExpr
 	;
 	
 boolOp
@@ -108,21 +108,23 @@ block
 	  (CATCH LBRACE content RBRACE)?
 	  (FINALLY LBRACE content RBRACE)?	
 	;
-
-content : stat*;
+	
+content 
+	: stat*
+	;
 
 type
 	: basicType | arrayType;
 
 basicType
-	: INTEGER 						#intType
-	| BOOLEAN						#boolType
-	| CHARACTER						#charType
+	: INTEGER 							#intType
+	| BOOLEAN							#boolType
+	| CHARACTER							#charType
 	;	
 	
 arrayType
-	: INTEGERS						#intArrType
-	| BOOLEANS						#boolArrType
-	| CHARACTERS					#charArrType
-	| STRING						#stringType
+	: INTEGERS							#intArrType
+	| BOOLEANS							#boolArrType
+	| CHARACTERS						#charArrType
+	| STRING							#stringType
 	;
