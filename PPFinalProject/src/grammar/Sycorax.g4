@@ -58,8 +58,8 @@ stat
 	;
 	
 pointerTarget
-	: GLOBAL? ID						#idPointer
-	| GLOBAL? ID LBRACK expr RBRACK		#indexPointer
+	: ID						#idPointer
+	| ID LBRACK expr RBRACK		#indexPointer
 	;
 	
 expr

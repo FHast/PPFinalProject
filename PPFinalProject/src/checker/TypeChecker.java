@@ -510,7 +510,8 @@ public class TypeChecker extends SycoraxBaseListener {
 		boolean retValue = ctx.expr() != null;
 		Func current = table().getFunction();
 		if (current == null) {
-			addError(ctx, "Cannot return outside function. ");;
+			addError(ctx, "Cannot return outside function. ");
+			;
 		}
 		Data ret = current.ret();
 
@@ -562,16 +563,9 @@ public class TypeChecker extends SycoraxBaseListener {
 		super.exitIdPointer(ctx);
 		String id = ctx.ID().getText();
 		Data data;
-		boolean global = ctx.GLOBAL() != null;
-		if (global) {
-			data = global().get(id);
-			setOffset(ctx, global().offset(id));
-			setDepth(ctx, global().depth(id));
-		} else {
-			data = table().get(id);
-			setOffset(ctx, table().offset(id));
-			setDepth(ctx, table().depth(id));
-		}
+		data = table().get(id);
+		setOffset(ctx, table().offset(id));
+		setDepth(ctx, table().depth(id));
 		if (data == null) {
 			addError(ctx, Errors.VARIBALE_NOT_IN_SCOPE, id);
 		}
@@ -590,17 +584,9 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitIndexPointer(IndexPointerContext ctx) {
 		String id = ctx.ID().getText();
 		Data data;
-		boolean global = ctx.GLOBAL() != null;
-
-		if (global) {
-			data = global().get(id);
-			setOffset(ctx, global().offset(id));
-			setDepth(ctx, global().depth(id));
-		} else {
-			data = table().get(id);
-			setOffset(ctx, table().offset(id));
-			setDepth(ctx, table().depth(id));
-		}
+		data = table().get(id);
+		setOffset(ctx, table().offset(id));
+		setDepth(ctx, table().depth(id));
 		if (data == null) {
 			addError(ctx, Errors.VARIBALE_NOT_IN_SCOPE, id);
 		}
@@ -713,7 +699,7 @@ public class TypeChecker extends SycoraxBaseListener {
 	@Override
 	public void exitCompOpExpr(CompOpExprContext ctx) {
 		super.exitCompOpExpr(ctx);
-		//checkType(ctx.expr(0), getData(ctx.expr(1)));
+		// checkType(ctx.expr(0), getData(ctx.expr(1)));
 		setEntry(ctx, entry(ctx.expr(0)));
 		setData(ctx, Data.BOOL);
 		setThread(ctx, tables.threadID());

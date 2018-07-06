@@ -47,128 +47,206 @@ prog = [
     , WriteInstr regE (DirAddr (2))
     , Load (ImmValue (5000)) regHeap
     , Nop
+    , Jump (Abs 136)
+    --FunDef test - body
+    , Nop
+    , Nop
+    , Load (ImmValue (1)) regC
+    , Compute Add regC regArp regC
+    , Store regHeap (IndAddr (regC))
+    , Pop regD
+    , Store regD (IndAddr (regHeap))
+    , Compute Incr regHeap regHeap regHeap
+    , Branch regD (Rel 2)
+    , Jump (Abs 61)
+    , Pop regB
+    , Store regB (IndAddr (regHeap))
+    , Compute Incr regHeap regHeap regHeap
+    , Compute Decr regD regD regD
+    , Jump (Abs 54)
+    , Nop
+    , Nop
+    , Nop
+    --Load ID - val
+    , Compute Add regArp reg0 regF
+    , Load (ImmValue (1)) regE
+    , Compute Add regE regF regE
+    , Load (IndAddr (regE)) regE
+    , Load (IndAddr (regE)) regH
+    , Compute Add regE regH regE
+    , Compute Add regH reg0 regF
+    , Branch regH (Rel 2)
+    , Jump (Abs 78)
+    , Load (IndAddr (regE)) regG
+    , Push regG
+    , Compute Decr regE regE regE
+    , Compute Decr regH regH regH
+    , Jump (Abs 71)
+    , Push regF
+    --Print: Array of 'int'
+    , Pop regA
+    , Branch regA (Rel 2)
+    , Jump (Abs 86)
+    , Pop regB
+    , WriteInstr regB numberIO
+    , Compute Decr regA regA regA
+    , Jump (Abs 80)
+    , Nop
+    , Nop
+    , Nop
+    --Load ID - val
+    , Compute Add regArp reg0 regD
+    , Load (ImmValue (1)) regC
+    , Compute Add regC regD regC
+    , Load (IndAddr (regC)) regC
+    , Load (IndAddr (regC)) regF
+    , Compute Add regC regF regC
+    , Compute Add regF reg0 regD
+    , Branch regF (Rel 2)
+    , Jump (Abs 103)
+    , Load (IndAddr (regC)) regE
+    , Push regE
+    , Compute Decr regC regC regC
+    , Compute Decr regF regF regF
+    , Jump (Abs 96)
+    , Push regD
+    --Return
+    , Load (ImmValue (1)) regG
+    , Push regG
+    , Push reg0
+    , ReadInstr (IndAddr (regSprID))
+    , Receive regG
+    , Jump (Ind regG)
+    , Push reg0
+    , Push reg0
+    , Nop
+    --FunDef - end test
+    , Pop regG
+    , Pop regH
+    , Branch regH (Abs 120)
+    , Pop regA
+    , Push regH
+    , Push regG
+    , Jump (Ind regA)
+    , Nop
+    , Branch regH (Rel 2)
+    , Jump (Abs 1)
+    , Nop
+    --FunDef - ret value backup
+    , Load (ImmValue (2)) regF
+    , Compute Add regF regArp regF
+    , Pop regA
+    , Store regA (IndAddr (regF))
+    , Pop regA
+    , Load (ImmValue (2)) regF
+    , Compute Add regF regArp regF
+    , Load (IndAddr (regF)) regA
+    , Push regA
+    , Push regH
+    , Push regG
+    , Jump (Ind regA)
+    , Nop
+    , Nop
     , Branch regHeap (Rel 2)
     , Load (ImmValue (5000)) regHeap
     , Nop
     --Block
-    , Load (ImmValue (5)) regF
-    , Compute Add regF regArp regF
-    , Compute Decr regF regF regF
-    , Store regArp (IndAddr (regF))
-    , Compute Decr regF regF regF
+    , Load (ImmValue (5)) regC
+    , Compute Add regC regArp regC
+    , Compute Decr regC regC regC
+    , Store regArp (IndAddr (regC))
+    , Compute Decr regC regC regC
+    , ReadInstr (IndAddr (regSprID))
+    , Receive regH
+    , Store regH (IndAddr (regC))
+    , Load (ImmValue (5)) regC
+    , Compute Add regC regArp regArp
+    , Jump (Rel 2)
+    , Jump (Abs 254)
+    , Load (ImmValue (152)) regC
+    , WriteInstr regC (IndAddr (regSprID))
+    , Nop
+    , Nop
+    , Nop
+    --Num - 6
+    , Load (ImmValue (6)) regB
+    , Push regB
+    , Nop
+    --Num - 5
+    , Load (ImmValue (5)) regC
+    , Push regC
+    , Nop
+    --Num - 4
+    , Load (ImmValue (4)) regD
+    , Push regD
+    , Nop
+    --Num - 3
+    , Load (ImmValue (3)) regE
+    , Push regE
+    , Load (ImmValue (4)) regF
+    , Push regF
+    --ArrayDef - allocate
+    , Compute Add regHeap reg0 regG
+    , Load (ImmValue (1)) regH
+    , Compute Add regArp regH regH
+    , Store regHeap (IndAddr (regH))
+    , Pop regA
+    , Compute Lt regA reg0 regH
+    , Branch regH (Abs 1)
+    , Compute Incr regHeap regHeap regHeap
+    , Compute Add regHeap regA regHeap
+    --ArrayDef - store data
+    , Store regA (IndAddr (regG))
+    , Compute Incr regG regG regG
+    , Branch regA (Rel 2)
+    , Jump (Abs 189)
+    , Pop regH
+    , Store regH (IndAddr (regG))
+    , Compute Incr regG regG regG
+    , Compute Decr regA regA regA
+    , Jump (Abs 182)
+    , Nop
+    , Nop
+    , Nop
+    --Function - call test
+    , Load (ImmValue (4)) regB
+    , Compute Add regB regArp regB
+    , Compute Decr regB regB regB
+    , Store regArp (IndAddr (regB))
+    , Compute Decr regB regB regB
     , ReadInstr (IndAddr (regSprID))
     , Receive regC
-    , Store regC (IndAddr (regF))
-    , Load (ImmValue (5)) regF
-    , Compute Add regF regArp regArp
+    , Store regC (IndAddr (regB))
     , Jump (Rel 2)
-    , Jump (Abs 152)
-    , Load (ImmValue (59)) regF
-    , WriteInstr regF (IndAddr (regSprID))
-    , Nop
-    --Num - 10
-    , Load (ImmValue (10)) regE
-    , Push regE
-    --VarDef - x
-    , Load (ImmValue (0)) regF
-    , Compute Add regF regArp regF
-    , Pop regG
-    , Store regG (IndAddr (regF))
-    , Nop
-    --Load ID - x
-    , Compute Add regArp reg0 regA
-    , Load (ImmValue (0)) regH
-    , Compute Add regH regA regH
-    , Load (IndAddr (regH)) regH
-    , Push regH
-    --Print: int
-    , Pop regC
-    , WriteInstr regC numberIO
-    , Nop
-    , Branch regHeap (Rel 2)
-    , Load (ImmValue (5000)) regHeap
-    , Nop
-    --Block
-    , Load (ImmValue (6)) regD
-    , Compute Add regD regArp regD
-    , Compute Decr regD regD regD
-    , Store regArp (IndAddr (regD))
-    , Compute Decr regD regD regD
-    , ReadInstr (IndAddr (regSprID))
-    , Receive regA
-    , Store regA (IndAddr (regD))
-    , Load (ImmValue (6)) regD
-    , Compute Add regD regArp regArp
+    , Jump (Abs 228)
+    , Load (ImmValue (201)) regB
+    , Push regB
     , Jump (Rel 2)
-    , Jump (Abs 111)
-    , Load (ImmValue (92)) regD
-    , WriteInstr regD (IndAddr (regSprID))
-    --char - 97
-    , Load (ImmValue (97)) regC
-    , Push regC
-    --VarDef - x
-    , Load (ImmValue (0)) regD
-    , Compute Add regD regArp regD
-    , Pop regE
-    , Store regE (IndAddr (regD))
+    , Jump (Abs 228)
+    , Load (ImmValue (205)) regB
+    , WriteInstr regB (IndAddr (regSprID))
+    , Nop
     , Nop
     --Load ID - x
     , Compute Add regArp reg0 regG
-    , Load (ImmValue (0)) regF
+    , Load (ImmValue (1)) regF
     , Compute Add regF regG regF
     , Load (IndAddr (regF)) regF
-    , Push regF
-    --Print: Character
-    , Pop regA
-    , WriteInstr regA charIO
-    --Block - end
-    , Push reg0
-    , Push reg0
-    , Nop
-    , Compute Decr regArp regArp regArp
-    , Compute Decr regArp regArp regArp
-    , Load (IndAddr (regArp)) regA
-    , WriteInstr regA (IndAddr (regSprID))
-    , Compute Incr regArp regArp regArp
-    , Load (IndAddr (regArp)) regArp
-    , Pop regE
-    , Pop regF
-    , Branch regE (Abs 0)
-    , Branch regF (Abs 123)
-    , Jump (Abs 123)
-    , Jump (Abs 141)
-    , Pop regE
-    , Pop regF
-    --Block - end
-    , Branch regF (Abs 129)
-    , Branch regE (Abs 135)
-    , Jump (Abs 141)
-    , Nop
-    , Push regF
-    , Push reg0
-    , ReadInstr (IndAddr (regSprID))
-    , Receive regD
-    , Jump (Ind regD)
-    , Nop
-    , Push regF
-    , Push regE
-    , ReadInstr (IndAddr (regSprID))
-    , Receive regD
-    , Jump (Ind regD)
-    , Nop
-    , Nop
-    --Load ID - x
-    , Compute Add regArp reg0 regC
-    , Load (ImmValue (0)) regB
-    , Compute Add regB regC regB
-    , Load (IndAddr (regB)) regB
-    , Push regB
-    --Print: int
-    , Pop regE
-    , WriteInstr regE numberIO
-    --Block - end
-    , Push reg0
-    , Push reg0
+    , Load (IndAddr (regF)) regA
+    , Compute Add regF regA regF
+    , Compute Add regA reg0 regG
+    , Branch regA (Rel 2)
+    , Jump (Abs 224)
+    , Load (IndAddr (regF)) regH
+    , Push regH
+    , Compute Decr regF regF regF
+    , Compute Decr regA regA regA
+    , Jump (Abs 217)
+    , Push regG
+    , Load (ImmValue (4)) regB
+    , Compute Add regB regArp regArp
+    , Jump (Abs 46)
+    --Function - return test
     , Nop
     , Compute Decr regArp regArp regArp
     , Compute Decr regArp regArp regArp
@@ -176,53 +254,81 @@ prog = [
     , WriteInstr regC (IndAddr (regSprID))
     , Compute Incr regArp regArp regArp
     , Load (IndAddr (regArp)) regArp
-    , Pop regG
-    , Pop regH
-    , Branch regG (Abs 164)
-    , Branch regH (Abs 212)
-    , Jump (Abs 212)
-    --Block - catch
-    , Nop
-    , Load (ImmValue (0)) regG
-    , Load (ImmValue (5)) regF
-    , Compute Add regF regArp regF
-    , Compute Decr regF regF regF
-    , Store regArp (IndAddr (regF))
-    , Compute Decr regF regF regF
+    , Pop regD
+    , Push regD
     , ReadInstr (IndAddr (regSprID))
     , Receive regC
-    , Store regC (IndAddr (regF))
-    , Compute Decr regF regF regF
-    , Store regH (IndAddr (regF))
-    , Compute Decr regF regF regF
-    , Store regG (IndAddr (regF))
-    , Load (ImmValue (5)) regF
-    , Compute Add regF regArp regArp
+    , Branch regD (Ind regC)
+    , Pop regD
+    , Pop regE
+    , Branch regE (Rel 2)
+    , Jump (Abs 1)
+    --Print: Array of 'int'
+    , Pop regB
+    , Branch regB (Rel 2)
+    , Jump (Abs 251)
+    , Pop regC
+    , WriteInstr regC numberIO
+    , Compute Decr regB regB regB
+    , Jump (Abs 245)
+    , Nop
+    --Block - end
+    , Push reg0
+    , Push reg0
+    , Nop
+    , Compute Decr regArp regArp regArp
+    , Compute Decr regArp regArp regArp
+    , Load (IndAddr (regArp)) regH
+    , WriteInstr regH (IndAddr (regSprID))
+    , Compute Incr regArp regArp regArp
+    , Load (IndAddr (regArp)) regArp
+    , Pop regD
+    , Pop regE
+    , Branch regD (Abs 266)
+    , Branch regE (Abs 314)
+    , Jump (Abs 314)
+    --Block - catch
+    , Nop
+    , Load (ImmValue (0)) regD
+    , Load (ImmValue (5)) regC
+    , Compute Add regC regArp regC
+    , Compute Decr regC regC regC
+    , Store regArp (IndAddr (regC))
+    , Compute Decr regC regC regC
+    , ReadInstr (IndAddr (regSprID))
+    , Receive regH
+    , Store regH (IndAddr (regC))
+    , Compute Decr regC regC regC
+    , Store regE (IndAddr (regC))
+    , Compute Decr regC regC regC
+    , Store regD (IndAddr (regC))
+    , Load (ImmValue (5)) regC
+    , Compute Add regC regArp regArp
     , Jump (Rel 2)
-    , Jump (Abs 206)
-    , Load (ImmValue (181)) regF
-    , WriteInstr regF (IndAddr (regSprID))
+    , Jump (Abs 308)
+    , Load (ImmValue (283)) regC
+    , WriteInstr regC (IndAddr (regSprID))
     , Nop
     , Nop
     --Str - "fail"
-    , Load (ImmValue (108)) regF
-    , Push regF
-    , Load (ImmValue (105)) regF
-    , Push regF
-    , Load (ImmValue (97)) regF
-    , Push regF
-    , Load (ImmValue (102)) regF
-    , Push regF
-    , Load (ImmValue (4)) regF
-    , Push regF
+    , Load (ImmValue (108)) regD
+    , Push regD
+    , Load (ImmValue (105)) regD
+    , Push regD
+    , Load (ImmValue (97)) regD
+    , Push regD
+    , Load (ImmValue (102)) regD
+    , Push regD
+    , Load (ImmValue (4)) regD
+    , Push regD
     --Print: Array of 'Character'
-    , Pop regG
-    , Branch regG (Rel 2)
-    , Jump (Abs 203)
-    , Pop regH
-    , WriteInstr regH charIO
-    , Compute Decr regG regG regG
-    , Jump (Abs 197)
+    , Pop regE
+    , Branch regE (Rel 2)
+    , Jump (Abs 305)
+    , Pop regF
+    , WriteInstr regF charIO
+    , Compute Decr regE regE regE
+    , Jump (Abs 299)
     , Nop
     , Push reg0
     , Push reg0
@@ -230,28 +336,28 @@ prog = [
     , Compute Decr regArp regArp regArp
     , Load (IndAddr (regArp)) regArp
     --Block - catch end
-    , Pop regG
-    , Pop regH
-    , Jump (Abs 212)
-    , Jump (Abs 230)
-    , Pop regG
-    , Pop regH
+    , Pop regD
+    , Pop regE
+    , Jump (Abs 314)
+    , Jump (Abs 332)
+    , Pop regD
+    , Pop regE
     --Block - end
-    , Branch regH (Abs 218)
-    , Branch regG (Abs 224)
-    , Jump (Abs 230)
+    , Branch regE (Abs 320)
+    , Branch regD (Abs 326)
+    , Jump (Abs 332)
     , Nop
-    , Push regH
+    , Push regE
     , Push reg0
     , ReadInstr (IndAddr (regSprID))
-    , Receive regF
-    , Jump (Ind regF)
+    , Receive regC
+    , Jump (Ind regC)
     , Nop
-    , Push regH
-    , Push regG
+    , Push regE
+    , Push regD
     , ReadInstr (IndAddr (regSprID))
-    , Receive regF
-    , Jump (Ind regF)
+    , Receive regC
+    , Jump (Ind regC)
     , Nop
     , EndProg
     ]
