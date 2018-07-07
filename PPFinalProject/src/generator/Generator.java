@@ -97,7 +97,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		Target target = new Target(Tar.Abs, 0);
 		emit(OpCode.Jump, target);
 		// runtime error handling
-		writeString("Runtime error!");
+		writeString("Runtime error!\n");
 		emit(OpCode.EndProg);
 
 		Map<String, Integer> map = tables.getHeapStarts();

@@ -45,7 +45,7 @@ stat
 	| JOIN ID							#joinStat
 	| LOCK ID							#lockStat
 	| UNLOCK ID							#unlockStat
-	| RETURN expr?						#returnStat
+	| RETURN expr						#returnStat
 	| target ASSIGN expr				#assignStat
 	| POINTER ID TO pointerTarget		#pointerStat
 	| IF LPAR expr RPAR 

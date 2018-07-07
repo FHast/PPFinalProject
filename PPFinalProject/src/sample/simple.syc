@@ -1,22 +1,13 @@
 program tests
 defines {
-	function fib uses (integer n) returns integer
+	function test 
 	defines {
-		if (n equals 0)
-		then do {
-			return 0
-		}
-		if (n equals 1)
-		then do {
-			return 1
-		}
-		let x be integer assign call fib with (n minus 1)
-		let y be integer assign call fib with (n minus 2)
-		return x plus y
+		print 0
+		return
+		print 1
 	}
 	
 	do {
-		let ret be integer assign call fib with (10)
-		print ret
+		call test
 	}
 }
