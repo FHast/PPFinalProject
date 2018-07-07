@@ -15,11 +15,11 @@ public class Result {
 	private final ParseTreeProperty<ParserRuleContext> entries = new ParseTreeProperty<>();
 	/** Mapping from expressions to types. */
 	private final ParseTreeProperty<Data> types = new ParseTreeProperty<>();
-	/** Mapping from variables to coordinates. */
+	/** Mapping from variables to offset. */
 	private final ParseTreeProperty<Integer> offsets = new ParseTreeProperty<>();
-
+	/** Mapping from variables to decleration depth. */
 	private final ParseTreeProperty<Integer> depths = new ParseTreeProperty<>();
-
+	/** Mapping from variables to current thread. */
 	private final ParseTreeProperty<String> threads = new ParseTreeProperty<>();
 
 	/** Adds an association from parse tree node to the flow graph entry. */
@@ -34,18 +34,38 @@ public class Result {
 		return this.entries.get(node);
 	}
 
+	/**
+	 * Sets the decleration depth on a node
+	 * @param node
+	 * @param depth
+	 */
 	public void setDepth(ParseTree node, int depth) {
 		this.depths.put(node, depth);
 	}
 
+	/**
+	 * Returns the decleartion depth on a node
+	 * @param node
+	 * @return
+	 */
 	public int getDepth(ParseTree node) {
 		return this.depths.get(node);
 	}
 
+	/**
+	 * Set the current thread on a node
+	 * @param node
+	 * @param id
+	 */
 	public void setThread(ParseTree node, String id) {
 		this.threads.put(node, id);
 	}
 
+	/**
+	 * Returns the current thread on a node
+	 * @param node
+	 * @return
+	 */
 	public String getThread(ParseTree node) {
 		return this.threads.get(node);
 	}

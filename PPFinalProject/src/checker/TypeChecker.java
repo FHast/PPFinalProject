@@ -71,15 +71,22 @@ import symbTable.SymbolTables;
 public class TypeChecker extends SycoraxBaseListener {
 	/** Result of the latest call of {@link #check}. */
 	private Result result;
-
+	/** list of found typchecking errors */
 	private List<String> errors;
-
+	/** symboltables */
 	private SymbolTables tables;
-
+	/** counter for id creation */
 	private int blockNameCounter = 0;
-
+	/** flag for user debugging */
 	private static final boolean catchErrors = true;
 
+	/**
+	 * Typecheck a parsetree
+	 * 
+	 * @param tree parsetree to be checked
+	 * @return result object
+	 * @throws ParseException if encountered errors
+	 */
 	public Result check(ParseTree tree) throws ParseException {
 		this.result = new Result();
 		this.errors = new ArrayList<>();
@@ -104,6 +111,10 @@ public class TypeChecker extends SycoraxBaseListener {
 		return this.result;
 	}
 
+	/**
+	 * Get symboltables
+	 * @return
+	 */
 	public SymbolTables getTables() {
 		return this.tables;
 	}
@@ -122,6 +133,11 @@ public class TypeChecker extends SycoraxBaseListener {
 		return this.errors;
 	}
 
+	/**
+	 * Checks the type of a node against an expected type
+	 * @param node node to be checked
+	 * @param expected expected type
+	 */
 	private void checkType(ParserRuleContext node, Data expected) {
 		Data actual = getData(node);
 		if (actual == null) {
@@ -132,10 +148,22 @@ public class TypeChecker extends SycoraxBaseListener {
 		}
 	}
 
+	/**
+	 * Add error to error log
+	 * @param node location of error
+	 * @param message error message
+	 * @param args error message arguments
+	 */
 	private void addError(ParserRuleContext node, String message, Object... args) {
 		addError(node.getStart(), message, args);
 	}
 
+	/**
+	 * Add error to error log
+	 * @param node location of error
+	 * @param message error message
+	 * @param args error message arguments
+	 */
 	private void addError(Token token, String message, Object... args) {
 		int line = token.getLine();
 		int column = token.getCharPositionInLine();
@@ -149,10 +177,12 @@ public class TypeChecker extends SycoraxBaseListener {
 		this.result.setOffset(node, offset);
 	}
 
+	/** convenience method to add depth to the result */
 	private void setDepth(ParseTree node, Integer depth) {
 		this.result.setDepth(node, depth);
 	}
 
+	/** convenience method to set thread to the result */
 	private void setThread(ParseTree node, String id) {
 		this.result.setThread(node, id);
 	}
@@ -172,14 +202,24 @@ public class TypeChecker extends SycoraxBaseListener {
 		return this.result.getEntry(node);
 	}
 
+	/**
+	 * return current symbol table
+	 * @return symbol table
+	 */
 	private SymbolTable table() {
 		return tables.table();
 	}
 
+	/**
+	 * Return global symbol table
+	 * @return global symbol table
+	 */
 	private SymbolTable global() {
 		return tables.global();
 	}
 
+	// TYPE CHECKING 
+	
 	@Override
 	public void exitProgram(ProgramContext ctx) {
 		super.exitProgram(ctx);

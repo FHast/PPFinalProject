@@ -62,70 +62,84 @@ import symbTable.Data.Arr;
 import symbTable.Data.Pointer;
 import symbTable.SymbolTables;
 
+/**
+ * Code generator for sycorax to sprockell
+ * @author gereon
+ *
+ */
 public class Generator extends SycoraxBaseVisitor<Integer> {
 
+	/** resulting sprockell program */
 	private Program prog;
-
+	/** typechecking result */
 	private Result checkResult;
-
+	/** rotation of available registers */
 	private int regCount = 0;
 
+	/** registers */
 	private Reg zero = new Reg("reg0");
+	/** arp register */
 	private Reg arp = new Reg("regArp");
+	/** heap management register */
 	private Reg heap = new Reg("regHeap");
+	/** register containing threadID */
 	private Reg regThreadID = new Reg("regSprID");
+	/** available registers */
 	private Reg[] regs = { new Reg("regA"), new Reg("regB"), new Reg("regC"), new Reg("regD"), new Reg("regE"),
 			new Reg("regF"), new Reg("regG"), new Reg("regH") };
 
-	private Map<String, Reg> heaps;
-	private Map<String, Reg> arps;
 
+	/** targets to jump to start a function */
 	private Map<String, Target> startFun;
+	/** targets to jump to end of function */
 	private Map<String, Target> endFun;
-
+	/** mapping thread names to threadIDs */
 	private Map<String, Integer> threadIDs;
+	/** global arp storage location */
 	private Address gArp;
+	/** global heap storage location */
 	private Address gHeap;
 
+	/** error jump location */
 	private final int errorJump = 1;
 
+	/**
+	 * Create a generator
+	 * @param tables symboltables
+	 * @param res typecheking result
+	 */
 	public Generator(SymbolTables tables, Result res) {
+		// initialization
 		this.prog = new Program();
 		this.threadIDs = new HashMap<>();
 		this.checkResult = res;
 		this.startFun = new HashMap<>();
 		this.endFun = new HashMap<>();
-		this.heaps = new HashMap<>();
-		this.arps = new HashMap<>();
 		for (int i = 0; i < tables.getThreads().size(); i++) {
 			threadIDs.put(tables.getThreads().get(i), i);
 		}
+		// set global heap/arp storage locations after all threadIDs
 		this.gArp = new Address(Addr.DirAddr, threadIDs.size());
 		this.gHeap = new Address(Addr.DirAddr, threadIDs.size() + 1);
 
+		// target to main code start
 		Target target = new Target(Tar.Abs, 0);
 		emit(OpCode.Jump, target);
 		// runtime error handling
 		writeString("Runtime error!\n");
 		emit(OpCode.EndProg);
-
-		Map<String, Integer> map = tables.getHeapStarts();
-		for (String s : map.keySet()) {
-			Reg r1 = helpReg();
-			Reg r2 = helpReg();
-
-			heaps.put(s, r1);
-			arps.put(s, r2);
-		}
+		
 		Reg h1 = helpReg();
 
 		int start = emit(OpCode.Nop);
 		target.setTarget(start);
 
+		// branch main thread from others
 		emit(OpCode.Branch, regThreadID, new Target(Tar.Rel, 2));
 		Target t0T = new Target(Tar.Abs, 0);
 		emit(OpCode.Jump, t0T);
 
+		// loop until thread can go
 		int loop = emit(OpCode.Nop);
 		emit(OpCode.ReadInstr, new Address(Addr.IndAddr, regThreadID));
 		emit(OpCode.Receive, h1);
@@ -134,7 +148,8 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 
 		int t0 = emit(OpCode.Nop);
 		t0T.setTarget(t0);
-
+		
+		// main thread start, set global arp and heap
 		Reg reg = helpReg();
 		emit(OpCode.Load, new Address(Addr.ImmValue, threadIDs.size() + 2), reg);
 		emit(OpCode.WriteInstr, reg, gArp);
@@ -142,49 +157,71 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		emit(OpCode.WriteInstr, reg, gHeap);
 	}
 
+	/**
+	 * Get generated program resulting from parseTree
+	 * @param node parsetree 
+	 * @return generated program
+	 */
 	public Program getProgram(ParseTree node) {
 		super.visit(node);
 		this.prog.setCores(this.threadIDs.size());
 		return this.prog;
 	}
 
+	/**
+	 * get current threadID
+	 * @param node
+	 * @return threadID
+	 */
 	private int threadID(ParseTree node) {
 		return threadIDs.get(this.checkResult.getThread(node));
 	}
 
+	/**
+	 * Add instruction to program
+	 * @return line number
+	 */
 	private int emit(OpCode opcode, Operand... operands) {
 		Instr res = new Instr(opcode, operands);
 		return prog.addInstr(res);
 	}
 
+	/**
+	 * Get type of node
+	 * @param node
+	 * @return data type
+	 */
 	private Data getData(ParseTree node) {
 		return this.checkResult.getType(node);
 	}
 
+	/**
+	 * get next available register
+	 * rotates through 8 registers
+	 * @return register 
+	 */
 	private Reg helpReg() {
 		Reg result = regs[regCount];
 		this.regCount = (regCount + 1) % regs.length;
 		return result;
 	}
 
+	/** convenience method to get offset */
 	private int offset(ParseTree node) {
 		return this.checkResult.getOffset(node);
 	}
 
+	/** convenience method to get depth */
 	private int depth(ParseTree node) {
 		return this.checkResult.getDepth(node);
 	}
 
 	/** code generation part */
-
-	@Override
-	public Integer visitProgram(ProgramContext ctx) {
-		emit(OpCode.Load, new Address(Addr.ImmValue, 5000), this.heap);
-		super.visitProgram(ctx);
-		emit(OpCode.EndProg);
-		return null;
-	}
-
+	
+	/**
+	 * Use sprockell char output to print a custom string, followed by new line
+	 * @param str string to be printed
+	 */
 	private void writeString(String str) {
 		Reg reg = helpReg();
 		for (char c : str.toCharArray()) {
@@ -192,6 +229,14 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			emit(OpCode.Load, new Address(Addr.ImmValue, ord), reg);
 			emit(OpCode.WriteInstr, reg, new Address(Addr.charIO));
 		}
+	}
+
+	@Override
+	public Integer visitProgram(ProgramContext ctx) {
+		emit(OpCode.Load, new Address(Addr.ImmValue, 5000), this.heap);
+		super.visitProgram(ctx);
+		emit(OpCode.EndProg);
+		return null;
 	}
 
 	@Override

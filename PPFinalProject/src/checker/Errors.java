@@ -1,5 +1,10 @@
 package checker;
 
+/**
+ * Error messages for typechecking
+ * @author gereon
+ *
+ */
 public abstract class Errors {
 	public static final String VARIABLE_DECL_FAIL = "Variable '%s' already declared.";
 	public static final String FUNCTION_DECL_FAIL = "Function '%s' already declared.";

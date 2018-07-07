@@ -12,6 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * OpCode types and operand requirements
+ * @author gereon
+ *
+ */
 public enum OpCode {
 	/** Arithmetic operations */
 	Compute(OPERATOR, REG, REG, REG),
@@ -49,16 +54,25 @@ public enum OpCode {
 	/** auxiliary comments */
 	Comment(STR);
 	
+	/** Required types */
 	private final List<Operand.Type> types;
 
 	private OpCode(Operand.Type... args) {
 		this.types = new ArrayList<>(Arrays.asList(args));
 	}
 
+	/**
+	 * provided required types
+	 * @return list of required operand types
+	 */
 	public List<Operand.Type> getTypes() {
 		return types;
 	}
 
+	/**
+	 * provides number of operands
+	 * @return number of operands required
+	 */
 	public int getTypesSize() {
 		return types.size();
 	}

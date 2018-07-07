@@ -18,13 +18,13 @@ abstract public class Operand {
 	public static enum Type {
 		/** Register-type operand; class {@link Reg}. */
 		REG,
-
+		/** Target-type operand; class {@link Target}. */
 		TARGET,
-
+		/** Operator-type operand; class {@link Operator}. */
 		OPERATOR,
-
+		/** address-type operand; class {@link Address}. */
 		ADDRESS,
-		
+		/** string-type operand; class {@link Str}. */
 		STR;
 	}
 }
