@@ -109,8 +109,10 @@ public abstract class Data {
 				return false;
 			} else {
 				Arr other = (Arr) obj;
-				boolean flag = true;
-				return this.elem().equals(other.elem()) && flag;
+				if (this.elem() == null || other.elem() == null) {
+					return true;
+				}
+				return this.elem().equals(other.elem());
 			}
 		}
 	}

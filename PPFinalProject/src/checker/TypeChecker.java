@@ -77,7 +77,7 @@ public class TypeChecker extends SycoraxBaseListener {
 
 	private int blockNameCounter = 0;
 
-	private static final boolean catchErrors = true;
+	private static final boolean catchErrors = false;
 
 	public Result check(ParseTree tree) throws ParseException {
 		this.result = new Result();
@@ -309,9 +309,13 @@ public class TypeChecker extends SycoraxBaseListener {
 		SymbolTable table = global ? global() : table();
 
 		if (assign) {
-			checkType(ctx.expr(), data);
+			if (ctx.expr() != null) {
+				checkType(ctx.expr(), data);
+			}
 		} else {
-			checkType(ctx.expr(), Data.INT);
+			if (ctx.expr() != null) {
+				checkType(ctx.expr(), Data.INT);
+			}
 		}
 		if (!table.put(id, data)) {
 			addError(ctx.ID().getSymbol(), Errors.VARIABLE_DECL_FAIL, id);
@@ -710,7 +714,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitArrayExpr(ArrayExprContext ctx) {
 		super.exitArrayExpr(ctx);
 		setData(ctx, getData(ctx.array()));
-		setEntry(ctx, entry(ctx.array()));
 		setThread(ctx, tables.threadID());
 
 	}
@@ -898,7 +901,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		String id = data.id();
 		table().put(id, data);
 		setData(ctx, data);
-		setEntry(ctx, entry(ctx.expr(0)));
 		setThread(ctx, tables.threadID());
 
 	}
