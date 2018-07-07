@@ -1,0 +1,7 @@
+program array2
+defines {
+	do {
+		let ints be integers assign [1,2,3]
+		ints assign 1
+	}
+}

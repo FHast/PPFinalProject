@@ -10,63 +10,10 @@ defines {
 		then do {
 			return 1
 		}
-		return (call fib with (n minus 1)) plus (call fib with (n minus 2))	
+		return call fib with (n minus 1) plus call fib with (n minus 2)
 	}
 	
-	function errors uses (boolean flag, integer x) returns integer
-	defines {
-		let y be integer assign x
-		if (flag)
-		then do {
-			return y
-		} else do {
-			fail
-		}
-	}
-	
-	let c be character assign 0
-	
-	function main
-	defines {
-		let num be integer assign call errors with (false,10)
-	}
-	
-	let global test be character assign 0
-	
-	function parallel uses (integer x) returns integer
-	defines {
-		let global account be integer assign x
-		fork t1 do {
-			lock accountLock
-			account assign account minus 100
-			unlock accountLock
-		}
-		fork t2 do {
-			lock accountLock
-			account assign account minus 200
-			unlock accountLock
-		}
-		join t1
-		join t2
-		return account
-	}
-	
-	function arrays uses (booleans s, integers in) returns integers
-	defines {
-		let data be integers sized 10
-		do {
-			let i be integer assign 0
-			while (i smaller size s)
-			do {
-				if (s[i])
-				then do {
-					data[i] assign in[i]
-				} else do {
-					data[i] assign -1
-				}
-				i assign i plus 1
-			}
-		}
-		return data
+	do {
+		print call fib with (read integer)
 	}
 }

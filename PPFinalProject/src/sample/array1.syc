@@ -1,0 +1,14 @@
+program array1 
+defines {
+	let global bools be booleans assign [true,false]
+	do {
+		let ints be integers sized 3
+		print ints
+		let int be integer assign ints[1]
+		print int plus 4
+		ints assign [1,2,3]
+		print ints
+		print global bools
+		print global bools[1] and true
+	}
+}

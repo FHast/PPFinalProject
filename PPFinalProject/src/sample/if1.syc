@@ -1,0 +1,13 @@
+program if1 
+defines {
+	do {
+		let x be integers assign [0,8,15]
+		if ((size x) greater 4)
+		then do {
+			print x[0]
+		}
+		else do {
+			print x[1]
+		}
+	}
+}

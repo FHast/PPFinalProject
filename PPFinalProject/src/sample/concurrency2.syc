@@ -1,0 +1,17 @@
+program concurrency2
+defines {
+	let global x be integer assign 10
+	do {
+		fork t1
+		do {
+			global x assign global x plus 200
+		}
+		fork t2
+		do {
+			global x assign global x minus 100
+		}
+		join t1
+		join t2
+		print global x
+	}
+}

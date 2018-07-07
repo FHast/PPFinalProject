@@ -1,0 +1,8 @@
+program boolean3
+defines {
+	do {
+		let x be boolean assign true
+		let y be boolean
+		print x * y
+	}
+}

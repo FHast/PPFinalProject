@@ -1,0 +1,11 @@
+program function2
+defines {
+	function plus4 uses (integer x) returns integer
+	defines {
+		return x plus 4
+	}
+	
+	do {
+		print call plus4 with ("three")
+	}
+}

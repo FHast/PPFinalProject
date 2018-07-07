@@ -1,0 +1,10 @@
+program pointer1 
+defines {
+	do {
+		let x be integers assign [0,8,15]
+		pointer y to x[2]
+		print x
+		y assign x[1]
+		print x
+	}
+}

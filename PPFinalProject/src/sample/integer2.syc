@@ -1,0 +1,6 @@
+program integer2
+defines {
+	do {
+		let integer x be 4
+	}
+}

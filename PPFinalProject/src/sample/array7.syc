@@ -1,0 +1,7 @@
+program array7
+defines {
+	do {
+		let chars be characters sized -1
+		print chars
+	}
+}

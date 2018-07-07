@@ -1,0 +1,7 @@
+program array6
+defines {
+	do {
+		let chars be characters assign ['A','a']
+		print chars[2]
+	}
+}

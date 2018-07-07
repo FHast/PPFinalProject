@@ -1,0 +1,18 @@
+program function3
+defines {
+	
+	function plus4 uses (integer x) returns integer
+	defines {
+		return x plus 4
+	}
+	
+	function times2 (integer x) returns integer
+	defines {
+		return x times 2
+	}
+	
+	do {
+		print call plus4 with (2)
+		print call times2 with (call plus4 with (1))
+	}
+}

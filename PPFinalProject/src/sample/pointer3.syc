@@ -1,0 +1,7 @@
+program pointer3
+defines {
+	do {
+		let x be integers assign [0,8,15]
+		point y to x[1]
+	}
+}

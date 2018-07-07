@@ -1,0 +1,10 @@
+program integer1 
+defines {
+	do {
+		let x be integer assign 10
+		let y be integer assign 2
+		print x plus y
+		print x minus y
+		print x times y
+	}
+}

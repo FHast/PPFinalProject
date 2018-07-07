@@ -1,0 +1,8 @@
+program boolean2 
+defines {
+	do {
+		let global x be boolean
+		let y be boolean assign true
+		print x equals y
+	}
+}

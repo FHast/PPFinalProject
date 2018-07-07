@@ -1,0 +1,81 @@
+program banking 
+defines {
+	let global account be integer
+	
+	function banking uses (integer balance) returns integer
+	defines {
+		global account assign balance
+		fork t1 do {
+			let i be integer assign 10
+			while (i greater 0)
+			do {
+				lock accountLock
+				global account assign global account minus 1
+				i assign i minus 1
+				unlock accountLock
+			}
+		}
+		fork t2 do {
+			let i be integer assign 15
+			while (i greater 0)
+			do {
+				lock accountLock
+				global account assign global account minus 1
+				i assign i minus 1
+				unlock accountLock
+			}
+		}
+		fork t3 do {
+			let i be integer assign 123
+			while (i greater 0)
+			do {
+				lock accountLock
+				global account assign global account plus 1
+				i assign i minus 1
+				unlock accountLock
+			}
+		}
+		fork t4 do {
+			let i be integer assign 30
+			while (i greater 0)
+			do {
+				lock accountLock
+				global account assign global account plus 1
+				i assign i minus 1
+				unlock accountLock
+			}
+		}
+		fork t5 do {
+			let i be integer assign 23
+			while (i greater 0)
+			do {
+				lock accountLock
+				global account assign global account minus 1
+				i assign i minus 1
+				unlock accountLock
+			}
+		}
+		fork t6 do {
+			let i be integer assign 50
+			while (i greater 0)
+			do {
+				lock accountLock
+				global account assign global account plus 1
+				i assign i minus 1
+				unlock accountLock
+			}
+		}
+		join t1
+		join t2
+		join t3
+		join t4
+		join t5
+		join t6
+		return global account
+	}
+
+	do {
+		
+		print call banking with (read integer)
+	}
+}
