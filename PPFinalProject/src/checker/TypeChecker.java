@@ -78,7 +78,7 @@ public class TypeChecker extends SycoraxBaseListener {
 
 	private int blockNameCounter = 0;
 
-	private static final boolean catchErrors = false;
+	private static final boolean catchErrors = true;
 
 	public Result check(ParseTree tree) throws ParseException {
 		this.result = new Result();
