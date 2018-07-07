@@ -78,7 +78,7 @@ public class TypeChecker extends SycoraxBaseListener {
 
 	private int blockNameCounter = 0;
 
-	private static final boolean catchErrors = false;
+	private static final boolean catchErrors = true;
 
 	public Result check(ParseTree tree) throws ParseException {
 		this.result = new Result();
@@ -319,7 +319,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		String name = ctx.ID().getText();
 		boolean catchable = ctx.CATCHABLE() != null;
 		boolean returns = ctx.RETURNS() != null;
-		boolean success = true;
 		Data rettype;
 		if (returns) {
 			rettype = Data.INT;
@@ -330,11 +329,12 @@ public class TypeChecker extends SycoraxBaseListener {
 		List<Data> args = new ArrayList<>();
 		List<String> vars = new ArrayList<>();
 		Func func = new Func(rettype, name, args, vars, catchable);
-		table().openFunScope(func);
-		success = success && tables.putFunction(name, func);
+		boolean success = tables.putFunction(name, func);
 		if (!success) {
 			addError(ctx.ID().getSymbol(), Errors.FUNCTION_DECL_FAIL, name);
 		}
+		
+		table().openFunScope(func);
 
 		if (returns) {
 			setData(ctx.RETURNS(), func.ret());
@@ -379,8 +379,8 @@ public class TypeChecker extends SycoraxBaseListener {
 			args.add(data);
 			vars.add(ctx.param(i).ID().getText());
 		}
-		tables.getFunction().setArgs(args);
-		tables.getFunction().setVars(vars);
+		table().getFunction().setArgs(args);
+		table().getFunction().setVars(vars);
 	}
 
 	@Override
