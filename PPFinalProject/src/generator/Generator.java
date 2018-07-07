@@ -1421,7 +1421,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		} else if (ctx.compOp().SMALLER() != null) {
 			op = new Operator(Op.Lt);
 		} else {
-			op = new Operator(Op.NEq);
+			op = new Operator(Op.Equal);
 		}
 
 		if (array) {
@@ -1491,6 +1491,13 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			emit(OpCode.Pop, r1);
 			emit(OpCode.Pop, r2);
 			emit(OpCode.Compute, op, r2, r1, reg);
+			emit(OpCode.Push, reg);
+		}
+		
+		if (ctx.compOp().UNEQUALS() != null) {
+			emit(OpCode.Pop, r1);
+			emit(OpCode.Load, new Address(Addr.ImmValue,1), r2);
+			emit(OpCode.Compute, new Operator(Op.Xor), r2, r1, reg);
 			emit(OpCode.Push, reg);
 		}
 		return ret;
