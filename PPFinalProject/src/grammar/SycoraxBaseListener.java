@@ -569,6 +569,18 @@ public class SycoraxBaseListener implements SycoraxListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterReadExpr(@NotNull SycoraxParser.ReadExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReadExpr(@NotNull SycoraxParser.ReadExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterVardefStat(@NotNull SycoraxParser.VardefStatContext ctx) { }
 	/**
 	 * {@inheritDoc}

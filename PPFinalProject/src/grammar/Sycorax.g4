@@ -73,6 +73,7 @@ expr
 	| SIZE expr							#sizeExpr
 	| CALL ID (WITH args)?				#callExpr
 	| NEGATIVE? NUM						#numExpr
+	| READ basicType					#readExpr
 	| CHAR								#charExpr
 	| STR								#strExpr
 	| TRUE								#trueExpr
@@ -87,7 +88,7 @@ intOp
 	: PLUS | MINUS | TIMES
 	;
 compOp
-	: EQUALS | SMALLER | GREATER
+	: EQUALS | SMALLER | GREATER | UNEQUALS
 	;
 	
 array

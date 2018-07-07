@@ -41,6 +41,7 @@ import grammar.SycoraxParser.ParamContext;
 import grammar.SycoraxParser.PointerStatContext;
 import grammar.SycoraxParser.PrintStatContext;
 import grammar.SycoraxParser.ProgramContext;
+import grammar.SycoraxParser.ReadExprContext;
 import grammar.SycoraxParser.ReturnStatContext;
 import grammar.SycoraxParser.SizeExprContext;
 import grammar.SycoraxParser.StrExprContext;
@@ -96,7 +97,7 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 		Target target = new Target(Tar.Abs, 0);
 		emit(OpCode.Jump, target);
 		// runtime error handling
-		writeString("Runtime error!");
+		writeString("Runtime error!\n");
 		emit(OpCode.EndProg);
 
 		Map<String, Integer> map = tables.getHeapStarts();
@@ -903,6 +904,9 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 				emit(OpCode.Jump, new Target(Tar.Abs, loop));
 				int endV = emit(OpCode.Nop);
 				endT.setTarget(endV);
+				
+				emit(OpCode.Load, new Address(Addr.ImmValue, 10), val);
+				emit(OpCode.WriteInstr, val, new Address(Addr.charIO));
 			} else {
 				emit(OpCode.Pop, size);
 
@@ -921,6 +925,9 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			Reg val = helpReg();
 			if (ch) {
 				emit(OpCode.Pop, val);
+				emit(OpCode.WriteInstr, val, new Address(Addr.charIO));
+				
+				emit(OpCode.Load, new Address(Addr.ImmValue, 10), val);
 				emit(OpCode.WriteInstr, val, new Address(Addr.charIO));
 			} else {
 				emit(OpCode.Pop, val);
@@ -1396,9 +1403,13 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 	public Integer visitCompOpExpr(CompOpExprContext ctx) {
 		int ret = emit(OpCode.Nop);
 		super.visitCompOpExpr(ctx);
+		
+		Data data = getData(ctx.expr(0));
+		boolean array = data instanceof Arr;
 
 		Reg r1 = helpReg();
 		Reg r2 = helpReg();
+		Reg r3 = helpReg();
 		Reg reg = helpReg();
 
 		Operator op;
@@ -1406,13 +1417,82 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 			op = new Operator(Op.Equal);
 		} else if (ctx.compOp().GREATER() != null) {
 			op = new Operator(Op.Gt);
-		} else {
+		} else if (ctx.compOp().SMALLER() != null) {
 			op = new Operator(Op.Lt);
+		} else {
+			op = new Operator(Op.NEq);
 		}
-		emit(OpCode.Pop, r1);
-		emit(OpCode.Pop, r2);
-		emit(OpCode.Compute, op, r2, r1, reg);
-		emit(OpCode.Push, reg);
+		
+		if (array) {
+			Reg heap = this.heap;
+			Reg h1 = helpReg();
+			emit(OpCode.Compute, new Operator(Op.Add), heap, zero, h1);
+			// size
+			emit(OpCode.Pop, reg);
+			emit(OpCode.Store, reg, new Address(Addr.IndAddr, h1));
+			emit(OpCode.Compute, new Operator(Op.Incr), h1, h1, h1);
+			
+			Target pastT = new Target(Tar.Abs, 0);
+			int loop1 = emit(OpCode.Branch, reg, new Target(Tar.Rel, 2));
+			emit(OpCode.Jump, pastT);
+			
+			emit(OpCode.Pop, r1);
+			emit(OpCode.Store, r1, new Address(Addr.IndAddr, h1));
+			emit(OpCode.Compute, new Operator(Op.Incr), h1, h1, h1);
+			emit(OpCode.Compute, new Operator(Op.Decr), reg, reg, reg);
+			emit(OpCode.Jump, new Target(Tar.Abs, loop1));
+			int pastV = emit(OpCode.Nop);
+			pastT.setTarget(pastV);
+			
+			// reset heap pointer
+			emit(OpCode.Compute, new Operator(Op.Add), heap, zero, h1);
+			emit(OpCode.Load, new Address(Addr.IndAddr, h1), reg);
+			emit(OpCode.Compute, new Operator(Op.Incr), h1, h1, h1);
+			emit(OpCode.Pop, r1);
+			
+			Target falseT = new Target(Tar.Abs, 0);
+			emit(OpCode.Compute, new Operator(Op.NEq), reg, r1, reg);
+			emit(OpCode.Branch, reg, falseT);
+			
+			//flag
+			emit(OpCode.Load, new Address(Addr.ImmValue, 1), r2);
+			
+			Target endT = new Target(Tar.Abs, 0);
+			int loop2 = emit(OpCode.Branch, r1, new Target(Tar.Rel, 2));
+			emit(OpCode.Jump, endT);
+			
+			emit(OpCode.Pop, reg);
+			emit(OpCode.Load, new Address(Addr.IndAddr, h1), r3);
+			emit(OpCode.Compute, op, reg, r3, r3);
+			emit(OpCode.Compute, new Operator(Op.And), r2, r3, r2);
+			emit(OpCode.Compute, new Operator(Op.Incr), h1, h1, h1);
+			emit(OpCode.Compute, new Operator(Op.Decr), r1, r1, r1);
+			emit(OpCode.Jump, new Target(Tar.Abs, loop2));
+			
+			int falseV = emit(OpCode.Nop);
+			falseT.setTarget(falseV);
+			
+			emit(OpCode.Load, new Address(Addr.ImmValue, 0), r2);
+			// clean array
+			int loop3 = emit(OpCode.Branch, r1, new Target(Tar.Rel, 2));
+			emit(OpCode.Jump, endT);
+			
+			emit(OpCode.Pop, reg);
+			emit(OpCode.Compute, new Operator(Op.Decr), r1, r1, r1);
+			emit(OpCode.Jump, new Target(Tar.Abs, loop3));
+			
+			
+			int endV = emit(OpCode.Nop);
+			endT.setTarget(endV);
+			
+			emit(OpCode.Push, r2);
+		
+		} else {
+			emit(OpCode.Pop, r1);
+			emit(OpCode.Pop, r2);
+			emit(OpCode.Compute, op, r2, r1, reg);
+			emit(OpCode.Push, reg);
+		}
 		return ret;
 	}
 
@@ -1441,6 +1521,53 @@ public class Generator extends SycoraxBaseVisitor<Integer> {
 
 		/** STORE SIZE ON STACK */
 		emit(OpCode.Push, reg);
+		return ret;
+	}
+	
+	@Override
+	public Integer visitReadExpr(ReadExprContext ctx) {
+		int ret = emit(OpCode.Nop);
+		
+		Data data = getData(ctx);
+		
+		Reg reg = helpReg();
+		Reg newLine = helpReg();
+		if (data instanceof Data.Char) {
+			emit(OpCode.Load, new Address(Addr.ImmValue, 10), newLine);
+			
+			writeString("input character: ");
+			
+			emit(OpCode.ReadInstr, new Address(Addr.charIO));
+			emit(OpCode.Receive, reg);
+			emit(OpCode.Branch, reg, new Target(Tar.Rel, 2));
+			emit(OpCode.Jump, new Target(Tar.Rel, (-3)));
+			emit(OpCode.Push, reg);
+			
+			int loop = emit(OpCode.ReadInstr, new Address(Addr.charIO));
+			emit(OpCode.Receive, reg);
+			emit(OpCode.Branch, reg, new Target(Tar.Rel, 2));
+			emit(OpCode.Jump, new Target(Tar.Rel, (-3)));
+			emit(OpCode.Compute, new Operator(Op.Equal), reg, newLine, reg);
+			emit(OpCode.Branch, reg, new Target(Tar.Rel, 2));
+			emit(OpCode.Jump, new Target(Tar.Abs, loop));
+			
+		} else if (data instanceof Data.Bool) {
+			emit(OpCode.ReadInstr, new Address(Addr.numberIO));
+			emit(OpCode.Receive, reg);
+			emit(OpCode.Branch, reg, new Target(Tar.Rel, 3));
+			emit(OpCode.Push, reg);
+			Target pastT = new Target(Tar.Abs, 0);
+			emit(OpCode.Jump, pastT);
+			emit(OpCode.Load, new Address(Addr.ImmValue, 1), reg);
+			emit(OpCode.Push, reg);
+			int past = emit(OpCode.Nop);
+			pastT.setTarget(past);
+		} else {
+			emit(OpCode.ReadInstr, new Address(Addr.numberIO));
+			emit(OpCode.Receive, reg);
+			emit(OpCode.Push, reg);
+		}
+		
 		return ret;
 	}
 

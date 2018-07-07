@@ -322,6 +322,13 @@ public interface SycoraxVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIntType(@NotNull SycoraxParser.IntTypeContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code readExpr}
+	 * labeled alternative in {@link SycoraxParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReadExpr(@NotNull SycoraxParser.ReadExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code vardefStat}
 	 * labeled alternative in {@link SycoraxParser#stat}.
 	 * @param ctx the parse tree

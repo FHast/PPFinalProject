@@ -50,6 +50,7 @@ import grammar.SycoraxParser.ParamsContext;
 import grammar.SycoraxParser.PointerStatContext;
 import grammar.SycoraxParser.PrintStatContext;
 import grammar.SycoraxParser.ProgramContext;
+import grammar.SycoraxParser.ReadExprContext;
 import grammar.SycoraxParser.ReturnStatContext;
 import grammar.SycoraxParser.SizeExprContext;
 import grammar.SycoraxParser.StrExprContext;
@@ -166,14 +167,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		return this.result.getType(node);
 	}
 
-	/** Convenience method to add a flow graph entry to the result. */
-	private void setEntry(ParseTree node, ParserRuleContext entry) {
-		if (entry == null) {
-			throw new IllegalArgumentException("Null flow graph entry");
-		}
-		this.result.setEntry(node, entry);
-	}
-
 	/** Returns the flow graph entry of a given expression or statement. */
 	private ParserRuleContext entry(ParseTree node) {
 		return this.result.getEntry(node);
@@ -197,7 +190,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitIntType(IntTypeContext ctx) {
 		super.exitIntType(ctx);
 		setData(ctx, Data.INT);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -206,7 +198,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitBoolType(BoolTypeContext ctx) {
 		super.exitBoolType(ctx);
 		setData(ctx, Data.BOOL);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -215,7 +206,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitCharType(CharTypeContext ctx) {
 		super.exitCharType(ctx);
 		setData(ctx, Data.CHAR);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -224,7 +214,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitIntArrType(IntArrTypeContext ctx) {
 		super.exitIntArrType(ctx);
 		setData(ctx, new Arr(Data.INT));
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -233,7 +222,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitBoolArrType(BoolArrTypeContext ctx) {
 		super.exitBoolArrType(ctx);
 		setData(ctx, new Arr(Data.BOOL));
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -242,7 +230,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitCharArrType(CharArrTypeContext ctx) {
 		super.exitCharArrType(ctx);
 		setData(ctx, new Arr(Data.CHAR));
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -251,7 +238,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitStringType(StringTypeContext ctx) {
 		super.exitStringType(ctx);
 		setData(ctx, new Arr(Data.CHAR));
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -261,10 +247,8 @@ public class TypeChecker extends SycoraxBaseListener {
 		super.exitType(ctx);
 		if (ctx.basicType() != null) {
 			setData(ctx, getData(ctx.basicType()));
-			setEntry(ctx, entry(ctx.basicType()));
 		} else {
 			setData(ctx, getData(ctx.arrayType()));
-			setEntry(ctx, entry(ctx.arrayType()));
 		}
 		setThread(ctx, tables.threadID());
 
@@ -290,7 +274,6 @@ public class TypeChecker extends SycoraxBaseListener {
 			addError(ctx, Errors.MISSING_GLOBAL, id);
 		}
 
-		setEntry(ctx, ctx);
 		setData(ctx, data);
 		setOffset(ctx, table.offset(id));
 		setDepth(ctx, table.depth(id));
@@ -323,8 +306,7 @@ public class TypeChecker extends SycoraxBaseListener {
 		if (!global && glscope) {
 			addError(ctx, Errors.MISSING_GLOBAL, id);
 		}
-
-		setEntry(ctx, ctx);
+		
 		setData(ctx, data);
 		setOffset(ctx, table.offset(id));
 		setDepth(ctx, table.depth(id));
@@ -364,7 +346,6 @@ public class TypeChecker extends SycoraxBaseListener {
 			setOffset(ctx.RETURNS(), table().offset(id));
 		}
 		setData(ctx, func);
-		setEntry(ctx, ctx);
 	}
 
 	@Override
@@ -413,7 +394,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		setData(ctx, data);
 		setOffset(ctx, table().offset(id));
 		setDepth(ctx, table().depth(id));
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -428,7 +408,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	@Override
 	public void exitVardefStat(VardefStatContext ctx) {
 		super.exitVardefStat(ctx);
-		setEntry(ctx, ctx.varDef());
 		setData(ctx, getData(ctx.varDef()));
 		setThread(ctx, tables.threadID());
 
@@ -441,7 +420,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		if (!caught) {
 			addError(ctx, Errors.EXCEPTION_NOT_CAUGHT);
 		}
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -471,7 +449,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		if (!success) {
 			addError(ctx.ID().getSymbol(), Errors.CANNOT_JOIN_UNDEFINED, id);
 		}
-		setEntry(ctx, ctx);
 		setThread(ctx, id);
 
 	}
@@ -485,7 +462,6 @@ public class TypeChecker extends SycoraxBaseListener {
 			addError(ctx.ID().getSymbol(), Errors.VARIABLE_DECL_FAIL, id);
 		}
 		setOffset(ctx, global().offset(id));
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -503,7 +479,6 @@ public class TypeChecker extends SycoraxBaseListener {
 			addError(ctx.ID().getSymbol(), Errors.CANNOT_UNLOCK_UNLOCKED, id);
 		}
 		setOffset(ctx, global().offset(id));
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -527,7 +502,6 @@ public class TypeChecker extends SycoraxBaseListener {
 			checkType(ctx.expr(), ret);
 		}
 		setData(ctx, ret);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -538,7 +512,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		Data target = getData(ctx.target());
 		checkType(ctx.expr(), target);
 		setData(ctx, target);
-		setEntry(ctx, entry(ctx.target()));
 		setThread(ctx, tables.threadID());
 
 	}
@@ -556,7 +529,6 @@ public class TypeChecker extends SycoraxBaseListener {
 			addError(ctx.ID().getSymbol(), Errors.VARIABLE_DECL_FAIL, id);
 		}
 		setData(ctx, data);
-		setEntry(ctx, ctx);
 		setOffset(ctx, table().offset(id));
 		setDepth(ctx, table().depth(id));
 		setThread(ctx, tables.threadID());
@@ -580,7 +552,6 @@ public class TypeChecker extends SycoraxBaseListener {
 			}
 		}
 		setData(ctx, data);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 	}
 
@@ -605,7 +576,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		}
 		checkType(ctx.expr(), Data.INT);
 		setData(ctx, ((Arr) data).elem());
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 	}
 
@@ -613,7 +583,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitIfstat(IfstatContext ctx) {
 		super.exitIfstat(ctx);
 		checkType(ctx.expr(), Data.BOOL);
-		setEntry(ctx, entry(ctx.expr()));
 		setThread(ctx, tables.threadID());
 
 	}
@@ -622,7 +591,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitWhileStat(WhileStatContext ctx) {
 		super.exitWhileStat(ctx);
 		checkType(ctx.expr(), Data.BOOL);
-		setEntry(ctx, entry(ctx.expr()));
 		setThread(ctx, tables.threadID());
 
 	}
@@ -631,7 +599,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitPrintStat(PrintStatContext ctx) {
 		super.exitPrintStat(ctx);
 		setData(ctx, getData(ctx.expr()));
-		setEntry(ctx, entry(ctx.expr()));
 		setThread(ctx, tables.threadID());
 
 	}
@@ -664,7 +631,6 @@ public class TypeChecker extends SycoraxBaseListener {
 			checkType(ctx.args().expr(i), args.get(i));
 		}
 		setOffset(ctx, table().size() + 2);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -672,7 +638,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	@Override
 	public void exitParExpr(ParExprContext ctx) {
 		super.exitParExpr(ctx);
-		setEntry(ctx, entry(ctx.expr()));
 		setData(ctx, getData(ctx.expr()));
 		setThread(ctx, tables.threadID());
 
@@ -683,7 +648,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		super.exitBoolOpExpr(ctx);
 		checkType(ctx.expr(0), Data.BOOL);
 		checkType(ctx.expr(1), Data.BOOL);
-		setEntry(ctx, entry(ctx.expr(0)));
 		setData(ctx, Data.BOOL);
 		setThread(ctx, tables.threadID());
 
@@ -694,7 +658,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		super.exitIntOpExpr(ctx);
 		checkType(ctx.expr(0), Data.INT);
 		checkType(ctx.expr(1), Data.INT);
-		setEntry(ctx, entry(ctx.expr(0)));
 		setData(ctx, Data.INT);
 		setThread(ctx, tables.threadID());
 
@@ -703,8 +666,13 @@ public class TypeChecker extends SycoraxBaseListener {
 	@Override
 	public void exitCompOpExpr(CompOpExprContext ctx) {
 		super.exitCompOpExpr(ctx);
-		// checkType(ctx.expr(0), getData(ctx.expr(1)));
-		setEntry(ctx, entry(ctx.expr(0)));
+		Data d1 = getData(ctx.expr(0));
+		Data d2 = getData(ctx.expr(1));
+		if (d1 instanceof Arr) {
+			if (!(d2 instanceof Arr)) {
+				addError(ctx, Errors.EXPECTED_BUT_FOUND, "Array", d2);
+			}
+		}
 		setData(ctx, Data.BOOL);
 		setThread(ctx, tables.threadID());
 
@@ -730,9 +698,15 @@ public class TypeChecker extends SycoraxBaseListener {
 			setOffset(ctx, table().offset(arr.id()));
 			setDepth(ctx, table().depth(arr.id()));
 		}
-		setEntry(ctx, entry(ctx.expr()));
 		setThread(ctx, tables.threadID());
 
+	}
+	
+	@Override
+	public void exitReadExpr(ReadExprContext ctx) {
+		setData(ctx, getData(ctx.basicType()));
+		setThread(ctx, tables.threadID());
+		
 	}
 
 	@Override
@@ -760,7 +734,6 @@ public class TypeChecker extends SycoraxBaseListener {
 			}
 		}
 		setData(ctx, data);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -794,7 +767,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		}
 		checkType(ctx.expr(), Data.INT);
 		setData(ctx, ((Arr) data).elem());
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -829,7 +801,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		setOffset(ctx, table().size() + 2);
 		setData(ctx, func.ret());
 		setData(ctx.ID(), func);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -838,7 +809,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitNumExpr(NumExprContext ctx) {
 		super.exitNumExpr(ctx);
 		setData(ctx, Data.INT);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -847,7 +817,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitCharExpr(CharExprContext ctx) {
 		super.exitCharExpr(ctx);
 		setData(ctx, Data.CHAR);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -857,7 +826,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		super.exitStrExpr(ctx);
 		Arr data = new Arr(Data.CHAR);
 		setData(ctx, data);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -866,7 +834,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitTrueExpr(TrueExprContext ctx) {
 		super.exitTrueExpr(ctx);
 		setData(ctx, Data.BOOL);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -875,7 +842,6 @@ public class TypeChecker extends SycoraxBaseListener {
 	public void exitFalseExpr(FalseExprContext ctx) {
 		super.exitFalseExpr(ctx);
 		setData(ctx, Data.BOOL);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
@@ -885,7 +851,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		super.exitNotExpr(ctx);
 		checkType(ctx.expr(), Data.BOOL);
 		setData(ctx, Data.BOOL);
-		setEntry(ctx, entry(ctx.expr()));
 		setThread(ctx, tables.threadID());
 
 	}
@@ -906,7 +871,7 @@ public class TypeChecker extends SycoraxBaseListener {
 	}
 
 	@Override
-	public void exitIdTarget(IdTargetContext ctx) { // TODO pointer
+	public void exitIdTarget(IdTargetContext ctx) { 
 		super.exitIdTarget(ctx);
 		String id = ctx.ID().getText();
 		Data data;
@@ -930,13 +895,12 @@ public class TypeChecker extends SycoraxBaseListener {
 			}
 		}
 		setData(ctx, data);
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}
 
 	@Override
-	public void exitArrayTarget(ArrayTargetContext ctx) { // TODO pointer
+	public void exitArrayTarget(ArrayTargetContext ctx) { 
 		super.exitArrayTarget(ctx);
 		String id = ctx.ID().getText();
 		Data data;
@@ -965,7 +929,6 @@ public class TypeChecker extends SycoraxBaseListener {
 		}
 		checkType(ctx.expr(), Data.INT);
 		setData(ctx, ((Arr) data).elem());
-		setEntry(ctx, ctx);
 		setThread(ctx, tables.threadID());
 
 	}

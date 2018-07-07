@@ -22,7 +22,7 @@ public class Target extends Operand {
 	@Override
 	public String toString() {
 		Object arg = type == Tar.Ind ? reg : val;
-		return String.format("(%s %s)", type, arg);
+		return String.format("(%s (%s))", type, arg);
 	}
 
 	public void setTarget(int val) {

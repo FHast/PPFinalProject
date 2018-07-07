@@ -56,12 +56,14 @@ MINUS:		M I N U S;
 TIMES:		T I M E S;
 
 EQUALS:		E Q U A L S;
+UNEQUALS:	U N E Q U A L S;
 GREATER:	G R E A T E R;
 SMALLER:	S M A L L E R;
 
 GLOBAL:		G L O B A L;
 SIZE:		S I Z E;
 PRINT:		P R I N T;
+READ:		R E A D;
 
 COMMA:  	',';
 DQUOTE: 	'"';

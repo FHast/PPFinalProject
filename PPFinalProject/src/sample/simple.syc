@@ -1,15 +1,8 @@
-program test 
+program exeption1 
 defines {
-	function test uses (integers val) returns integers catchable
-	defines {
-		print val
-		return val
-	}
-	
 	do {
-		let x be integers assign [3,4,5,6]
-		print call test with (x)
+		let x be integers assign [[1,2,3],[1,2,3]]
 	} catch {
-		print "fail"
-	}
+		print "failed"
+	} 
 }
