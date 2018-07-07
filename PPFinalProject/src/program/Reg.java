@@ -1,4 +1,4 @@
-package generator;
+package program;
 
 public class Reg extends Operand {
 	private String name;

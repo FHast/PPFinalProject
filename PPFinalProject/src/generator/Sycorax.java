@@ -16,6 +16,7 @@ import checker.Result;
 import checker.TypeChecker;
 import grammar.SycoraxLexer;
 import grammar.SycoraxParser;
+import program.Program;
 
 public class Sycorax {
 

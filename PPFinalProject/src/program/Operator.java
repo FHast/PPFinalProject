@@ -1,4 +1,4 @@
-package generator;
+package program;
 
 public class Operator extends Operand {
 	private Op operator;

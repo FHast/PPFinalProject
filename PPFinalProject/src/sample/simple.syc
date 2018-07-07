@@ -1,13 +1,7 @@
 program tests
 defines {
-	function test 
-	defines {
-		print 0
-		return
-		print 1
-	}
 	
 	do {
-		call test
+		print [1,2,3,4] unequals [1,2,3,4]
 	}
 }

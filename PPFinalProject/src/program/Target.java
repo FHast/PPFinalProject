@@ -1,4 +1,4 @@
-package generator;
+package program;
 
 public class Target extends Operand {
 	private Tar type;

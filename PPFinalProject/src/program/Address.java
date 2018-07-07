@@ -1,4 +1,4 @@
-package generator;
+package program;
 
 public class Address extends Operand {
 	private Addr type;

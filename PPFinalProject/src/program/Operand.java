@@ -1,4 +1,4 @@
-package generator;
+package program;
 
 /** Abstract supertype of all kinds of operands. */
 abstract public class Operand {

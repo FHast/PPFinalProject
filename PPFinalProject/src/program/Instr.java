@@ -1,10 +1,10 @@
-package generator;
+package program;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import generator.Operand.Type;
+import program.Operand.Type;
 
 public class Instr {
 	private OpCode opcode;

@@ -1,4 +1,4 @@
-package generator;
+package program;
 
 public class Str extends Operand {
 	private String str;

@@ -1,10 +1,10 @@
-package generator;
+package program;
 
-import static generator.Operand.Type.ADDRESS;
-import static generator.Operand.Type.OPERATOR;
-import static generator.Operand.Type.REG;
-import static generator.Operand.Type.TARGET;
-import static generator.Operand.Type.STR;
+import static program.Operand.Type.ADDRESS;
+import static program.Operand.Type.OPERATOR;
+import static program.Operand.Type.REG;
+import static program.Operand.Type.STR;
+import static program.Operand.Type.TARGET;
 
 import java.util.ArrayList;
 import java.util.Arrays;
