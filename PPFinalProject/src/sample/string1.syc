@@ -1,0 +1,11 @@
+program string1 
+defines {
+	let global str be string assign "Test"
+	do {
+		print global str
+		global str[2] assign 'i'
+		global str[3] assign 'l'
+		print global str
+		print size global str
+	}
+}

@@ -1,0 +1,17 @@
+program scope1 
+defines {
+let global x be integer assign 0
+	do {
+		let x be integer assign 1
+		do {
+			let x be integer assign x
+			do {
+				let x be integer assign x
+				do {
+					global x assign x
+				}
+			}
+		}
+		print global x
+	}
+}

@@ -1,0 +1,22 @@
+program exception2
+defines {
+	function plus4 uses (integer x) returns integer
+	defines {
+		if (x smaller 0)
+		then do {
+			fail
+		}
+		return x plus 4
+	}
+	
+	do {
+		let x be integer assign 3
+		print call plus4 with (x)
+		x assign -1
+		print call plus4 with (x)
+	} catch {
+		print "failed"
+	} finally {
+		print x
+	}
+}

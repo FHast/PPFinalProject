@@ -1,0 +1,41 @@
+program peterson
+defines {
+
+	function peterson returns integer
+	defines {
+		let global flag be booleans sized 2
+		let global turn be integer
+		let global critical be integer
+	
+		fork t1 do {
+			global flag[0] assign true
+			global turn assign 1
+			while ((global flag[1] equals true) and (global turn equals 1))
+			do { }
+			let i be integer assign 30
+			while (i greater 0)
+			do {
+				global critical assign global critical plus 1
+				i assign i minus 1
+			}
+			global flag[0] assign false
+		}
+		fork t2 do {
+			global flag[1] assign true
+			global turn assign 0
+			while ((global flag[0] equals true) and (global turn equals 0))
+			do { }
+			global critical assign global critical plus 10
+			global critical assign global critical minus 20
+			global critical assign global critical plus 100
+			global flag [1] assign false
+		}
+		join t1
+		join t2
+		return global critical
+	}
+	
+	do {
+		print call peterson
+	}
+}

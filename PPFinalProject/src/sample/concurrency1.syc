@@ -1,0 +1,21 @@
+program concurrency1 
+defines {
+	let global x be integer assign 10
+	do {
+		fork t1
+		do {
+			lock l
+			global x assign global x plus 200
+			unlock l
+		}
+		fork t2
+		do {
+			lock l
+			global x assign global x minus 100
+			unlock l
+		}
+		join t1
+		join t2
+		print global x
+	}
+}

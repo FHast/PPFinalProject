@@ -1,0 +1,7 @@
+program character2
+defines {
+	do {
+		let x be character
+		let y be character assign 2
+	}
+}

@@ -1,0 +1,7 @@
+program character3
+defines {
+	do {
+		let x be character 'a'
+		print x
+	}
+}

@@ -1,0 +1,11 @@
+program while2
+defines {
+	do {
+		let i be integer assign 5
+		while (i greater 0)
+		{
+			print i
+			i assign i minus 1
+		}
+	}
+}

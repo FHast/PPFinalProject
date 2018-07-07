@@ -1,0 +1,10 @@
+program if3
+defines {
+	do {
+		let x be integers assign [0,8,15]
+		if ((size x) greater 4)
+		else do {
+			print x[1]
+		}
+	}
+}

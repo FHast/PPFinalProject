@@ -1,0 +1,7 @@
+program string2 
+defines {
+	do {
+		let str be string assign "Test"
+		let str be string assign "Error"
+	}
+}

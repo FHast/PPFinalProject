@@ -1,0 +1,7 @@
+program integer3
+defines {
+	let x be integer assign 2
+	do {
+		x assign 4		
+	}
+}

@@ -1,0 +1,10 @@
+program boolean1 
+defines {
+	do {
+		let x be boolean
+		let y be boolean assign true
+		print x equals y
+		print x equals not y
+		print x
+	}
+}

@@ -1,0 +1,10 @@
+program character1 
+defines {
+	do {
+		let x be character
+		let global z be character assign 'z'
+		print x
+		print x equals global z
+		print x smaller global z
+	}
+}

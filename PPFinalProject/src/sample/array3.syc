@@ -1,0 +1,8 @@
+program array3
+defines {
+	do {
+		let ints be integers assign [1,2,3,4,5]
+		let s be integer assign size ints
+		print s
+	}
+}
